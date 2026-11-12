@@ -111,13 +111,13 @@
   addEventListener('hashchange', () => route(true));
   route(Boolean(location.hash));
 
-  // ---------- Profit calculator (chapter 3) ----------
+  // ---------- Network-spread calculator (chapter 4 appendix) ----------
   if (!$('ar-budget')) return;
   let state = { budget: 2000, rho: 1, auction: 'first', billing: 'render', delta: 2 };
   const money = (x) => (x < -0.00001 ? '−$' : '$') + Math.abs(x).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const plain = (x, d = 2) => x.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
 
-  // Teaching model (chapter 3, Extension B): Z ~ Uniform(0, L) in $ per billable event, i.i.d. across N opportunities.
+  // Teaching model (chapter 4 appendix, failed-display extension): Z ~ Uniform(0, L) in $ per billable event, i.i.d. across N opportunities.
   // k = 1 (first price, pay b) or 2 (ideal second price, pay Z; E[Z | Z <= b] = b/2).
   // alpha = probability a win is billed: rho for display-based ("render") billing, 1 for win-based billing.
   // Expected cost C(b) = N*alpha*b^2/(k*L); spread M(b) = (N/L)(rho*v*b - alpha*b^2/k);
