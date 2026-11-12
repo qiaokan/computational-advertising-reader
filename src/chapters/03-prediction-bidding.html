@@ -1,9 +1,9 @@
 <article class="ar-lesson" id="ar-chapter-2" data-nav="Prediction and bidding" data-time="10:20–12:00 · 100 min"><h1>From prediction to bidding and budgets</h1>
 <aside class="ar-callout ar-key"><p class="ar-callout-title">In this chapter</p><ul>
 <li>Keep three ledgers apart (publisher revenue, network spread, advertiser incremental profit) and see how a network keeps $72 while its advertiser loses money.</li>
-<li>Derive the first-price bid <x-tex>b=v-F(b)/f(b)</x-tex>: $7.50 CPM for a $15 CPM value under uniform thresholds, $10 CPM when the threshold is the higher of two uniform bids, and truthful bidding under ideal second price.</li>
-<li>Compute how a $2,000 media budget lowers the bid to $6.3246 CPM and why each extra budget dollar is then worth about $0.186 of spread (the shadow price <x-tex>\mu</x-tex>).</li>
-<li>Run a pacing controller that finds the same <x-tex>\mu</x-tex> from spend errors, and see which step sizes make it oscillate.</li>
+<li>Derive the first-price bid-shading rule: an impression worth $15 CPM gets a $7.50 CPM bid when the price to beat is uniform, but $10 CPM when it is the higher of two uniform bids; under ideal second price, bid the full value.</li>
+<li>Compute how a $2,000 media budget lowers the bid to $6.3246 CPM and why each extra budget dollar is then worth about $0.186 of spread (the budget's shadow price).</li>
+<li>Run a pacing controller that finds the same shadow price from spend errors, and see which step sizes make it oscillate.</li>
 <li>Write the censored likelihood that learns the threshold distribution from win/loss logs.</li>
 </ul></aside>
 <section id="ar-source-ledgers" aria-labelledby="ar-source-ledgers-title">
@@ -295,7 +295,7 @@ b^*&amp;=\min\Bigl\{\frac{k\rho v}{2\alpha},\ \sqrt{\frac{kBL}{N\alpha}},\ L\Big
 <li>The uniform rule <x-tex>b=v/2</x-tex> applied to this market instead: <x-tex>F(0.0075)=(0.0075/0.02)^2=0.140625</x-tex> and <x-tex>\pi_1=0.0075\times0.140625=\$0.00105469</x-tex>.</li>
 </ol>
 <p class="ar-result">Result: bid <strong>$10 CPM</strong>, shading one third of value instead of one half. Over 1,000,000 requests that earns <strong>$1,250</strong>; bidding $7.50 CPM earns $1,054.69, 15.6% less.</p>
-<p class="ar-check">Check: neighbouring bids do worse: $9 CPM gives 0.006 × 0.2025 = $0.001215 and $11 CPM gives 0.004 × 0.3025 = $0.00121 per request. With <x-tex>n</x-tex> such competitors <x-tex>F=(b/L)^n</x-tex> and <x-tex>b=nv/(n+1)</x-tex>: more competition, less shading. Under ideal second price the optimum stays <x-tex>b=v</x-tex> whatever <x-tex>F</x-tex> is.</p>
+<p class="ar-check">Check: neighbouring bids do worse: $9 CPM gives 0.006 × 0.2025 = $0.001215 and $11 CPM gives 0.004 × 0.3025 = $0.00121 per request. With <x-tex>J</x-tex> such competitors <x-tex>F=(b/L)^J</x-tex> and <x-tex>b=Jv/(J+1)</x-tex>: more competition, less shading. Under ideal second price the optimum stays <x-tex>b=v</x-tex> whatever <x-tex>F</x-tex> is.</p>
 </div></section>
 <p>In an <strong>ideal second-price auction</strong> the winner pays the threshold. Expected net profit per request is</p>
 <div class="ar-math"><x-tex display>\pi_2(b)=\int_0^b(v-z)\,dF(z),\qquad
@@ -322,8 +322,8 @@ b^*&amp;=\min\Bigl\{\frac{k\rho v}{2\alpha},\ \sqrt{\frac{kBL}{N\alpha}},\ L\Big
  "y": {"label": "Spread per 1,000,000 requests", "min": 0, "max": 6000, "ticks": [0, 1000, 2000, 3000, 4000, 5000, 6000], "format": "usd"},
  "series": [{"fn": "N*(v - x/1000)*(x/1000)/L", "label": "first price: pay b", "tone": "accent", "to": 15},
             {"fn": "(N/L)*(v*x/1000 - (x/1000)**2/2)", "label": "ideal second price: pay Z", "tone": "warm"}],
- "points": [{"x": 7.5, "y": 2812.5}, {"x": 7.5, "y": 2200, "label": "b* = $7.50", "pos": "below", "marker": false},
-            {"x": 15, "y": 5625}, {"x": 15, "y": 4700, "label": "b* = $15", "pos": "below", "marker": false}],
+ "points": [{"x": 7.5, "y": 2812.5}, {"x": 7.5, "y": 2200, "label": "b₀ = $7.50", "pos": "below", "marker": false},
+            {"x": 15, "y": 5625}, {"x": 15, "y": 4700, "label": "b₀ = $15", "pos": "below", "marker": false}],
  "caption": "First price <x-tex>N(v-b)b/L</x-tex> peaks at $7.50 CPM ($2,812.50); ideal second price <x-tex>(N/L)(vb-b^2/2)</x-tex> peaks at $15 CPM ($5,625); both with <x-tex>Z\\sim\\mathrm{Uniform}(0,L)</x-tex> and <x-tex>v=\\$0.015</x-tex>. At any bid both rules win the same share <x-tex>b/L</x-tex>, but second price charges <x-tex>b/2</x-tex> per win on average instead of <x-tex>b</x-tex>, so its optimum moves out to <x-tex>b=v</x-tex>. First-price spread falls to zero at <x-tex>b=v</x-tex> ($15 CPM). Competitors are held fixed, so the gap between the peaks does not predict what a change of auction rule would do."}</x-chart>
 <p>The advertiser's ledger is more revealing. Assume, as in the optional derivation, a contribution of <x-tex>g=\$40</x-tex> per order and a true incremental conversion probability of <x-tex>\Delta q=0.0002</x-tex> per impression (the order probability with the ad minus without it). Counting every attributed conversion as worth $40 gives 187.5 × $40 − $5,625 = $1,875, which looks profitable. Counting only incremental orders gives 375,000 × 0.0002 = 75 orders and 75 × $40 − $5,625 = <strong>−$2,625</strong>. The intermediary can make money while its customer loses money. If the gap persists, it eventually erodes the customer's budgets, renewals and the intermediary's pricing power.</p>
 <x-chart>{"title": "Network spread and advertiser incremental profit vs bid",
@@ -364,8 +364,8 @@ b^*&amp;=\min\Bigl\{\frac{k\rho v}{2\alpha},\ \sqrt{\frac{kBL}{N\alpha}},\ L\Big
             {"fn": "N*(x/1000)**2/(2*L)", "label": "ideal second price: N b²/(2L)", "tone": "warm"}],
  "hlines": [{"y": 2000, "label": "B = $2,000"}],
  "vlines": [{"x": 6.3246, "label": "$6.32", "tone": "accent"}, {"x": 8.9443, "label": "$8.94", "tone": "warm"}],
- "points": [{"x": 7.5, "y": 2812.5, "label": "b0 = $7.50", "pos": "left"},
-            {"x": 15, "y": 5625, "label": "b0 = $15", "pos": "left"}],
+ "points": [{"x": 7.5, "y": 2812.5, "label": "b₀ = $7.50", "pos": "left"},
+            {"x": 15, "y": 5625, "label": "b₀ = $15", "pos": "left"}],
  "caption": "Expected daily media cost <x-tex>Nb^2/L</x-tex> (first price) and <x-tex>Nb^2/(2L)</x-tex> (ideal second price). The dots are the budget-free optima, $2,812.50 at $7.50 CPM and $5,625 at $15 CPM; both lie above the budget line, so each rule bids where its curve crosses <x-tex>B</x-tex>. Paying the threshold halves the cost of a given bid, so the same budget affords a bid <x-tex>\\sqrt2</x-tex> times higher."}</x-chart>
 <section class="ar-worked">
 <header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>Budget-binding first-price bid and its shadow price</h4></header>
@@ -477,7 +477,7 @@ b^*&amp;=\min\Bigl\{\frac{k\rho v}{2\alpha},\ \sqrt{\frac{kBL}{N\alpha}},\ L\Big
             {"points": [[1, 0], [2, 0.1625], [3, 0.1787], [4, 0.1836], [5, 0.1851], [6, 0.1856], [7, 0.1858], [8, 0.1858], [9, 0.1858], [10, 0.1859]], "label": "η = 0.002: settles", "tone": "accent"},
             {"points": [[1, 0], [2, 0.5281], [3, 0.011], [4, 0.4996], [5, 0.0125], [6, 0.4957], [7, 0.0129], [8, 0.4948], [9, 0.013], [10, 0.4946]], "label": "η = 0.0065: oscillates", "tone": "negative"},
             {"fn": "0.1859", "label": "μ* = 0.186 (static optimum)", "tone": "ink", "dash": true}],
- "caption": "Same deterministic model as the worked example. Linearized at <x-tex>\\mu^*</x-tex>, each period multiplies the spend error by <x-tex>1-\\eta\\times\\$337.31</x-tex>: monotone convergence for <x-tex>\\eta&lt;0.00296</x-tex>, damped oscillation up to <x-tex>0.00593</x-tex>, no convergence beyond. At <x-tex>\\eta=0.0005</x-tex> the factor is 0.83, <x-tex>\\mu</x-tex> is still 0.158 after 10 periods and the day spends $2,325.97. At <x-tex>\\eta=0.0065</x-tex> the factor is −1.19 and the loop locks into a two-period cycle between <x-tex>\\mu\\approx0.01</x-tex> and <x-tex>0.49</x-tex>, alternating bids of about $7.40 and $5.02 CPM."}</x-chart>
+ "caption": "Same deterministic model as the worked example. Near <x-tex>\\mu^*</x-tex>, each period multiplies the spend error by <x-tex>1-\\eta\\times\\$337.31</x-tex>: monotone convergence for <x-tex>\\eta&lt;0.00296</x-tex>, damped oscillation up to <x-tex>0.00593</x-tex>, no convergence beyond. Starting from <x-tex>\\mu_1=0</x-tex> the first step is larger, so it already overshoots once <x-tex>\\eta&gt;0.18585/81.25=0.00229</x-tex>. At <x-tex>\\eta=0.0005</x-tex> the factor is 0.83, the multiplier in force in period 10 is still <x-tex>\\mu_{10}=0.158</x-tex>, and the day spends $2,325.97. At <x-tex>\\eta=0.0065</x-tex> the factor is −1.19 and the loop locks into a two-period cycle between <x-tex>\\mu\\approx0.01</x-tex> and <x-tex>0.49</x-tex>, alternating bids of about $7.40 and $5.02 CPM."}</x-chart>
 <p>The target trajectory <x-tex>s_t</x-tex> need not be flat over the day. If evening opportunities are worth more, hold budget back for the evening; if high-value supply is scarce, an unspent budget is not necessarily a fault. Distinguish under-delivery caused by a system failure while profitable opportunities exist from stopping because no opportunity meets the economic constraints. Forcing full spend through bid multipliers quietly turns value maximization into budget-consumption maximization.</p>
 <p>Allocating across many campaigns adds more dimensions: which advertiser gets a given opportunity, how much budget each campaign has left, whether there are <strong>guaranteed-delivery</strong> obligations (contracts that promise a fixed number of impressions), and whether the platform earns a service fee, a per-impression price or a per-conversion price. Statistical arbitrage research links CPA revenue to CPM procurement cost, but the arbitrageur still carries user-response, attribution and payment risk; “arbitrage” here does not mean risk-free profit. <a href="https://arxiv.org/pdf/1506.03837" rel="noopener noreferrer" target="_blank">Statistical Arbitrage Mining</a></p>
 <p>The next section uses two terms. A value is <strong>censored</strong> when we observe only an interval that contains it, not the value itself. The <strong>likelihood</strong> is the probability or density the model assigns to what was actually observed; for independent samples, log-likelihoods add.</p>

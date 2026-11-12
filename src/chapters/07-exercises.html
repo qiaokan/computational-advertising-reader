@@ -149,7 +149,7 @@
  "caption": "Downsampling negatives inflates every prediction. The curve is <x-tex>p=s\\,p_s/(1-p_s+s\\,p_s)</x-tex>; it lies far below the diagonal across the range that matters for ads, where true <x-tex>p</x-tex> is small and <x-tex>p\\approx s\\,p_s</x-tex>. Using <x-tex>p_s</x-tex> unconverted would overstate value roughly tenfold."}</x-chart>
 <p><strong>The higher-AUC model cannot go live as is.</strong> A full-marks answer contains:</p>
 <ul>
-<li><strong>AUC is blind to calibration.</strong> It depends only on ranking and is unchanged by any monotone transformation of the scores.</li>
+<li><strong>AUC is blind to calibration.</strong> It depends only on ranking and is unchanged by any strictly increasing transformation of the scores.</li>
 <li><strong>Bids use absolute probabilities.</strong> Value is <x-tex>v=30q</x-tex>, so doubling <x-tex>q</x-tex> doubles the value the bidder thinks it buys. In the shared example without a budget, the bid rises from <x-tex>v/2</x-tex> = $7.50 CPM to <x-tex>(2v)/2=\$0.015</x-tex> per impression = $15 CPM, where the true spread <x-tex>(0.015-b)\,b/L</x-tex> is zero: the whole $2,812.50 of spread per million requests is lost.</li>
 <li><strong>Launch checklist.</strong> Confirm the sampling correction was applied; recalibrate on matured labels; check calibration by segment (a uniform factor of 2 rarely holds everywhere); evaluate monetary loss, not ranking metrics; then run a limited online experiment.</li>
 </ul>
@@ -198,7 +198,7 @@
 <p><strong>Second price: downward bias.</strong> Full-marks points:</p>
 <ul>
 <li>A win reveals <x-tex>Z</x-tex> exactly, but only when <x-tex>Z\le b</x-tex>; training on wins alone drops every auction with <x-tex>Z&gt;b</x-tex>, truncating the sample from above.</li>
-<li>The fitted <x-tex>Z</x-tex> is biased low: it underestimates the threshold, overestimates the win rate at any bid and understates the cost of winning. The bias is worst on contested, high-value inventory, where you lose most often.</li>
+<li>The fitted <x-tex>Z</x-tex> is biased low: it underestimates the threshold and overestimates the win rate at every bid. Cost errors depend on the bid evaluated. Below the logged bid <x-tex>b</x-tex>, the predicted cost per win, <x-tex>E[Z\mid Z\le b']</x-tex>, is correct, but the inflated win rate overstates expected cost per request. Above <x-tex>b</x-tex>, the model has no data and understates the cost per win. The bias is worst on contested, high-value inventory, where you lose most often.</li>
 <li>Fix: keep losses as censored observations at <x-tex>b</x-tex> and maximize the censored likelihood (each win contributes the density <x-tex>f(Z)</x-tex>, each loss <x-tex>1-F(b)</x-tex>), or use a survival-analysis estimator.</li>
 </ul>
 <section class="ar-worked">
@@ -208,7 +208,7 @@
     <ol class="ar-steps">
       <li>Win rate: <x-tex>F(8)=8/20=40\%</x-tex>. The other 60% of auctions produce no price.</li>
       <li>Prices seen on wins: <x-tex>Z\mid Z\le 8\sim\text{Uniform}(0,8)</x-tex>, mean $4 CPM. True mean: <x-tex>20/2=\$10</x-tex> CPM.</li>
-      <li>A model fitted to those prices puts all its mass below $8 and predicts a 100% win rate at an $8 bid; the truth is 40%.</li>
+      <li>A model fitted to those prices puts all its mass below $8 and predicts a 100% win rate at an $8 bid; the truth is 40%. Below $8 it gets the cost per win right (<x-tex>b'/2</x-tex>), but its win rate <x-tex>b'/8</x-tex> is 2.5 times the true <x-tex>b'/20</x-tex>, so it overstates cost per request 2.5-fold. Above $8 it predicts $4 per win against a true <x-tex>b'/2</x-tex>.</li>
     </ol>
     <p class="ar-result">Result: <strong>the wins-only estimate of mean Z is $4 CPM against a true $10 CPM.</strong></p>
     <p class="ar-check">Check: in general the wins-only mean is <x-tex>b/2</x-tex>, which reaches the true <x-tex>L/2</x-tex> only at <x-tex>b=L</x-tex>, when you win everything and nothing is censored ✓.</p>

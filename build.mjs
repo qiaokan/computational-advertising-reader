@@ -20,10 +20,18 @@ const root = path.dirname(fileURLToPath(import.meta.url));
 const read = (p) => fs.readFileSync(path.join(root, p), 'utf8');
 const errors = [];
 
-function katexCss() {
+// Inline only the KaTeX font families the rendered math can use (each optional family is
+// triggered by a specific KaTeX class); the rest are dropped to keep the page small.
+const OPTIONAL_FONTS = {
+  KaTeX_Caligraphic: /\bmathcal\b/, KaTeX_Fraktur: /\bmathfrak\b/, KaTeX_Script: /\bmathscr\b/,
+  KaTeX_SansSerif: /\b(mathsf|textsf|mathsfit)\b/, KaTeX_Typewriter: /\b(mathtt|texttt)\b/,
+};
+function katexCss(html) {
   const dir = path.join(root, 'node_modules/katex/dist');
   return fs
     .readFileSync(path.join(dir, 'katex.min.css'), 'utf8')
+    .replace(/@font-face\{font-display:block;font-family:(KaTeX_\w+);[^}]*\}/g, (face, fam) =>
+      OPTIONAL_FONTS[fam] && !OPTIONAL_FONTS[fam].test(html) ? '' : face)
     .replace(/src:url\((fonts\/[^)]+\.woff2)\) format\("woff2"\)(?:,url\([^)]+\) format\("[^"]+"\))*/g, (_, f) =>
       `src:url(data:font/woff2;base64,${fs.readFileSync(path.join(dir, f)).toString('base64')}) format("woff2")`);
 }
@@ -72,7 +80,7 @@ const nav = chapters
   .join('\n');
 
 const out = read('src/template.html')
-  .replace('{{KATEX_CSS}}', () => katexCss())
+  .replace('{{KATEX_CSS}}', () => katexCss(chapters.map((c) => c.html).join('')))
   .replace('{{READER_CSS}}', () => read('src/css/reader.css'))
   .replace('{{CHAPTER_NAV}}', () => nav)
   .replace('{{CHAPTER_COUNT}}', String(chapters.length).padStart(2, '0'))
