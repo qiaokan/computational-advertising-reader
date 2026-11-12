@@ -39,21 +39,21 @@
 <p>After the full day you should be able to answer six questions:</p>
 <ol>
 <li>How much is a given impression worth, and to whom? (This chapter.)</li>
-<li>Which pricing product makes the platform bear conversion risk, and which makes the advertiser bear it? (<a href="#ar-risk-map">The four points</a>.)</li>
+<li>Which pricing product makes the platform bear conversion risk, and which makes the advertiser bear it? (<a href="#ar-risk-map">Billing and bidding</a>.)</li>
 <li>How should an advertiser bid under a budget? (<a href="#chapter-4">Chapter 4</a>.)</li>
 <li>Why does a model that scores better on held-out logs not necessarily make more money online? (<a href="#chapter-5">Chapter 5</a> and <a href="#chapter-6">chapter 6</a>.)</li>
 <li>How do you keep auction wins, billing and attribution from being conflated in the books? (<a href="#chapter-7">Chapter 7</a>.)</li>
 <li>What evidence would show that a model creates a durable commercial advantage? (<a href="#chapter-8">Chapter 8</a>.)</li>
 </ol>
 <h2>A fictional campaign used throughout</h2>
-<section id="ar-billed-credited-caused" aria-label="What billed, credited and caused mean">
-<p>A shopper plans to buy a pair of shoes. They open an app, see the shoe store's ad, tap it, and place the order. The store hired an ad network to deliver the ad, and the app owner supplied the slot.</p>
+<section id="ar-billed-credited-caused" aria-label="Attribution, billing, and incrementality">
+<p>A shopper taps a shoe store’s ad in an app and buys a pair of shoes. The store is the advertiser, the app owner is the publisher, and the ad network connects them.</p>
 <ul>
-<li><strong>Credited.</strong> The report assigns the order to the ad because the shopper bought after tapping it, within the reporting window.</li>
-<li><strong>Billed.</strong> If the order passes the billing checks, the store pays the network $30 under this example contract.</li>
-<li><strong>Caused.</strong> If the shopper would have placed the same order without seeing the ad, the ad added zero sales from this purchase. The report only records what happened after the ad was shown.</li>
+<li><strong>Attributed conversion.</strong> The report counts the purchase for the campaign because it follows an ad click within the campaign’s attribution window, the time allowed between the click and the purchase.</li>
+<li><strong>Billable conversion.</strong> The contract charges $30 for an attributed purchase that meets the billing rules. That $30 is the advertiser’s <strong>ad spend</strong> for this event.</li>
+<li><strong>Incremental conversions.</strong> These are the additional purchases the campaign generates. A randomized holdout experiment estimates how many extra purchases the campaign produces across a group. If this shopper would have bought the shoes anyway, their purchase adds zero incremental conversions.</li>
 </ul>
-<p>The chapters that follow show how the network buys the ad slot, how the store gets billed, and how an experiment estimates additional sales across many shoppers. You can continue to the landscape chapter now. Open the calculation below when you want the campaign inputs used in later examples.</p>
+<p>Billing follows the contract. To decide whether to keep spending, the store compares its ad spend with the contribution from incremental purchases after product and fulfillment costs. <a href="https://support.google.com/google-ads/answer/14102450?hl=en">Google Ads on attributed and incremental conversions</a> · <a href="https://support.google.com/google-ads/answer/7528254?hl=en">Google Ads on paying for conversions</a></p>
 </section>
 <details class="ar-exercise" id="ar-running-campaign-math"><summary>Optional worked example for 1,000 impressions</summary><div class="ar-answer">
 <p><strong>One campaign, with one set of numbers, runs through the whole reader.</strong> Its numbers are teaching assumptions, not AppLovin's rates or industry benchmarks.</p>
@@ -73,51 +73,51 @@
 <tr><td data-label="Symbol"><x-tex>g</x-tex></td><td data-label="Value">$40 per order</td><td data-label="Meaning">Advertiser's pre-advertising contribution per order</td></tr>
 <tr><td data-label="Symbol"><x-tex>\Delta q</x-tex></td><td data-label="Value">0.0002</td><td data-label="Meaning">Causal lift: increase in purchase probability per impression from showing the ad (assumed)</td></tr>
 <tr><td data-label="Symbol"><x-tex>v</x-tex></td><td data-label="Value">$0.015 per impression</td><td data-label="Meaning">Network's expected revenue per impression, <x-tex>v=qa</x-tex> (the advertiser's expected bill)</td></tr>
-<tr><td data-label="Symbol"><x-tex>w</x-tex></td><td data-label="Value">$0.008 per impression</td><td data-label="Meaning">Advertiser's causal contribution per impression, <x-tex>w=\Delta q\,g</x-tex></td></tr>
+<tr><td data-label="Symbol"><x-tex>w</x-tex></td><td data-label="Value">$0.008 per impression</td><td data-label="Meaning">Advertiser's incremental contribution per impression, <x-tex>w=\Delta q\,g</x-tex></td></tr>
 </tbody>
 </table></div>
 <p><strong>Simplifying assumptions</strong>, some relaxed later: every opportunity has the same <x-tex>q</x-tex> and <x-tex>\Delta q</x-tex>; every win displays the ad, so paying per win and per impression coincide (<a href="#chapter-7">chapter 7</a> drops this); <x-tex>q</x-tex> and <x-tex>\Delta q</x-tex> do not depend on the bid or on the competing bids; opportunities are independent, with no interaction between one user's repeated exposures. Amounts are US dollars per day. “Expected” means the average over many repetitions of the same day, so fractional conversion counts are expected values.</p>
 <section class="ar-worked">
 <header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>What one impression is worth, and to whom</h4></header>
 <div class="ar-worked-body">
-<p>Given: <x-tex>p_{\text{click}}=0.01</x-tex> clicks per impression, <x-tex>p_{\text{conv}}=0.05</x-tex> billable conversions per click, <x-tex>a=\$30</x-tex> per billable conversion, <x-tex>g=\$40</x-tex> per order, <x-tex>\Delta q=0.0002</x-tex> caused purchases per impression.</p>
+<p>Given: <x-tex>p_{\text{click}}=0.01</x-tex> clicks per impression, <x-tex>p_{\text{conv}}=0.05</x-tex> billable conversions per click, <x-tex>a=\$30</x-tex> per billable conversion, <x-tex>g=\$40</x-tex> per order, <x-tex>\Delta q=0.0002</x-tex> incremental purchases per impression.</p>
 <ol class="ar-steps">
 <li>Billable conversions per impression (only post-click orders are credited, so there is no no-click term): <x-tex display>q=p_{\text{click}}\,p_{\text{conv}}=0.01\times0.05=0.0005.</x-tex></li>
-<li>Billed: the network's expected revenue per impression, which is the advertiser's expected bill, <x-tex display>v=qa=0.0005\times\$30=\$0.015.</x-tex> Per 1,000 impressions this is $15, the network's <strong>eCPM</strong> (effective revenue per thousand impressions; CPM, cost per mille, is a price per 1,000 impressions).</li>
-<li>Credited: the contribution the attribution report credits to the ad, per impression: <x-tex display>qg=0.0005\times\$40=\$0.020,</x-tex> or $20 per 1,000 impressions.</li>
-<li>Caused: the contribution the ad actually adds, per impression: <x-tex display>w=\Delta q\,g=0.0002\times\$40=\$0.008,</x-tex> or $8 per 1,000 impressions.</li>
+<li>Ad spend: the network's expected revenue per impression, which is the advertiser's expected bill, <x-tex display>v=qa=0.0005\times\$30=\$0.015.</x-tex> Per 1,000 impressions this is $15, the network's <strong>eCPM</strong> (effective revenue per thousand impressions; CPM, cost per mille, is a price per 1,000 impressions).</li>
+<li>Contribution from attributed conversions per impression: <x-tex display>qg=0.0005\times\$40=\$0.020,</x-tex> or $20 per 1,000 impressions.</li>
+<li>Incremental contribution per impression: <x-tex display>w=\Delta q\,g=0.0002\times\$40=\$0.008,</x-tex> or $8 per 1,000 impressions.</li>
 <li>Expected counts per 1,000 impressions: <x-tex>1{,}000\times0.01=10</x-tex> clicks and <x-tex>1{,}000\times0.0005=0.5</x-tex> billable conversions.</li>
 </ol>
-<p class="ar-result">Result: <strong>per 1,000 impressions, the expected ad bill is $15, credited order contribution is $20, and incremental order contribution is $8.</strong> The advertiser gains $8 of contribution and pays $15, leaving a $7 expected loss.</p>
-<p class="ar-check">Check: count first, then price. 10 clicks × 0.05 = 0.5 conversions; 0.5 × $30 = $15 billed and 0.5 × $40 = $20 credited, matching steps 2–3. The credited-to-billed ratio is <x-tex>g/a=40/30=4/3</x-tex>, and $20/$15 = 4/3.</p>
+<p class="ar-result">Result: <strong>per 1,000 impressions, the expected ad bill is $15, contribution from attributed orders is $20, and incremental order contribution is $8.</strong> The advertiser gains $8 of contribution and pays $15, leaving a $7 expected loss.</p>
+<p class="ar-check">Check: count first, then price. 10 clicks × 0.05 = 0.5 conversions; 0.5 × $30 = $15 billed and 0.5 × $40 = $20 credited, matching steps 2–3. The ratio of contribution from attributed orders to ad spend is <x-tex>g/a=40/30=4/3</x-tex>, and $20/$15 = 4/3.</p>
 </div>
 </section>
 <p><strong>The causal lift <x-tex>\Delta q</x-tex> is assumed here because no routine report reveals it.</strong> It is the difference in purchase probability between showing the ad and not showing it, for the same opportunity. Attribution credits every post-click order whether or not the ad caused it; estimating <x-tex>\Delta q</x-tex> takes a randomized experiment (<a href="#chapter-6">chapter 6</a>). Here <x-tex>\Delta q&lt;q</x-tex>, so attribution over-credits the ad. In general it can also miss orders the ad did cause (here, purchases without a click), so the gap <x-tex>q-\Delta q</x-tex> is a net figure.</p>
 <section class="ar-worked">
-<header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>Three ledgers per 1,000 impressions</h4></header>
+<header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>Ad spend, publisher payment, and advertiser profit</h4></header>
 <div class="ar-worked-body">
-<p>Given: the values per 1,000 impressions above ($15 billed, $20 credited, $8 caused) and the publisher payment <x-tex>P</x-tex> per 1,000 impressions, left symbolic because the auction sets it.</p>
+<p>Given: the values per 1,000 impressions above ($15 in ad spend, $20 in contribution from attributed purchases, $8 in incremental contribution) and the publisher payment <x-tex>P</x-tex> per 1,000 impressions, left symbolic because the auction sets it.</p>
 <ol class="ar-steps">
-<li>Advertiser, as the attribution report shows it: credited contribution minus bill. <x-tex display>1{,}000\,(qg-qa)=\$20-\$15=+\$5.</x-tex></li>
-<li>Advertiser, causal ledger: caused contribution minus bill. <x-tex display>1{,}000\,(\Delta q\,g-qa)=\$8-\$15=-\$7.</x-tex></li>
+<li>Contribution from attributed purchases minus ad spend. This calculation uses the attributed count as an input. <x-tex display>1{,}000\,(qg-qa)=\$20-\$15=+\$5.</x-tex></li>
+<li>Incremental profit: incremental contribution minus ad spend. <x-tex display>1{,}000\,(\Delta q\,g-qa)=\$8-\$15=-\$7.</x-tex></li>
 <li>Network: bill collected minus media cost, <x-tex>\$15-P</x-tex>. It is positive only if <x-tex>P&lt;\$15</x-tex>, i.e. the network pays publishers less per 1,000 impressions than its eCPM.</li>
 <li>Publisher: receives <x-tex>P</x-tex>, before its own costs and any loss of user experience.</li>
-<li>Advertiser break-even on the causal ledger: <x-tex display>\begin{aligned}\Delta q\,g\ge qa&amp;\iff\Delta q\ge\Delta q^{*}=\frac{qa}{g},\\ \Delta q^{*}&amp;=\frac{0.0005\times30}{40}=0.000375.\end{aligned}</x-tex></li>
+<li>Advertiser break-even based on incremental contribution: <x-tex display>\begin{aligned}\Delta q\,g\ge qa&amp;\iff\Delta q\ge\Delta q^{*}=\frac{qa}{g},\\ \Delta q^{*}&amp;=\frac{0.0005\times30}{40}=0.000375.\end{aligned}</x-tex></li>
 </ol>
-<p class="ar-result">Result: <strong>the report says the advertiser gains $5 per 1,000 impressions; it actually loses $7.</strong> The campaign pays for itself only if <x-tex>\Delta q\ge0.000375</x-tex>, almost twice the assumed 0.0002.</p>
-<p class="ar-check">Check: payments are transfers, so they cancel when the three causal ledgers are summed: <x-tex>(\$8-\$15)+(\$15-P)+P=\$8</x-tex>, exactly the caused contribution, for any <x-tex>P</x-tex>. Summed on the attributed view, the ledgers show $20; the $12 difference is credited minus caused contribution, <x-tex>1{,}000\,(q-\Delta q)\,g=1{,}000\times0.0003\times\$40</x-tex>.</p>
+<p class="ar-result">Result: <strong>attributed purchases suggest a $5 gain per 1,000 impressions. Under the assumed incrementality, the advertiser loses $7.</strong> The campaign pays for itself only if <x-tex>\Delta q\ge0.000375</x-tex>, almost twice the assumed 0.0002.</p>
+<p class="ar-check">Check: payments are transfers, so they cancel when the advertiser’s incremental profit, the network’s receipts less media cost, and the publisher’s receipts are summed: <x-tex>(\$8-\$15)+(\$15-P)+P=\$8</x-tex>, exactly incremental contribution, for any <x-tex>P</x-tex>. Summed on the attributed view, the ledgers show $20; the $12 difference is contribution from attributed purchases minus incremental contribution, <x-tex>1{,}000\,(q-\Delta q)\,g=1{,}000\times0.0003\times\$40</x-tex>.</p>
 </div>
 </section>
-<p><strong>Attribution is blind to the one parameter that decides whether the advertiser should keep paying.</strong> If <x-tex>\Delta q</x-tex> doubles to 0.0004, the caused contribution becomes <x-tex>0.0004\times\$40=\$0.016</x-tex> per impression, $16 per 1,000, and the causal net turns to <x-tex>\$16-\$15=+\$1</x-tex> per 1,000. The bill stays $15 and the attribution report still shows +$5.</p>
-<x-chart>{"title": "Advertiser's net per 1,000 impressions vs true lift",
+<p><strong>Attribution is blind to the one parameter that decides whether the advertiser should keep paying.</strong> If <x-tex>\Delta q</x-tex> doubles to 0.0004, incremental contribution becomes <x-tex>0.0004\times\$40=\$0.016</x-tex> per impression, $16 per 1,000, and the incremental profit turns to <x-tex>\$16-\$15=+\$1</x-tex> per 1,000. The bill stays $15 and the calculation based on attributed purchases still gives +$5.</p>
+<x-chart>{"title": "Advertiser contribution less ad spend per 1,000 impressions",
  "params": {"q": 0.0005, "a": 30, "g": 40},
- "x": {"label": "Δq (caused purchases per 10,000 impressions)", "min": 0, "max": 6, "ticks": [0, 1, 2, 3, 4, 5, 6]},
+ "x": {"label": "Δq (incremental purchases per 10,000 impressions)", "min": 0, "max": 6, "ticks": [0, 1, 2, 3, 4, 5, 6]},
  "y": {"label": "$ per 1,000 impressions", "min": -15, "max": 10, "ticks": [-15, -10, -5, 0, 5, 10], "format": "usd"},
- "series": [{"fn": "1000*(x/10000*g - q*a)", "label": "causal net", "tone": "accent"},
-            {"fn": "1000*(q*g - q*a)", "label": "attribution report", "tone": "warm", "dash": true}],
+ "series": [{"fn": "1000*(x/10000*g - q*a)", "label": "incremental profit", "tone": "accent"},
+            {"fn": "1000*(q*g - q*a)", "label": "Attributed contribution less ad spend", "tone": "warm", "dash": true}],
  "vlines": [{"x": 3.75, "label": "Δq* = 3.75", "tone": "muted", "row": 0}],
  "points": [{"x": 2, "y": -7, "label": "assumed: −$7", "pos": "right"},
             {"x": 4, "y": 1, "label": "doubled: +$1", "pos": "right"}],
- "caption": "Causal net <x-tex>1{,}000\\,(\\Delta q\\,g-qa)</x-tex> rises by $4 per 1,000 impressions for each additional caused purchase per 10,000 impressions and crosses zero at <x-tex>\\Delta q^{*}=qa/g=0.000375</x-tex>. The attribution report, <x-tex>1{,}000\\,(qg-qa)=\\$5</x-tex>, is flat: it does not depend on <x-tex>\\Delta q</x-tex> at all."}</x-chart>
+ "caption": "Incremental profit <x-tex>1{,}000\\,(\\Delta q\\,g-qa)</x-tex> rises by $4 per 1,000 impressions for each additional incremental purchase per 10,000 impressions and crosses zero at <x-tex>\\Delta q^{*}=qa/g=0.000375</x-tex>. Contribution from attributed purchases less ad spend, <x-tex>1{,}000\\,(qg-qa)=\\$5</x-tex>, is flat: it does not depend on <x-tex>\\Delta q</x-tex> at all."}</x-chart>
 </div></details>
 </article>

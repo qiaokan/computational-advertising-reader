@@ -164,13 +164,13 @@
 <p>If losses are never confirmed (no loss notices and no contractual cutoff inside the period), every admitted bid holds its cap until the period ends. Use the Chapter 4 appendix network: value <x-tex>v=\$0.015</x-tex> per impression, <x-tex>N</x-tex> = 1,000,000, <x-tex>L</x-tex> = $0.02, <x-tex>B</x-tex> = $2,000, bid <x-tex>b</x-tex> = $0.006324555, every win displays.</p>
 <ol>
 <li>On the exact nano-dollar scale each bid holds 6,324,555 n$, so the budget admits <x-tex>\lfloor 2\times10^{12}/6{,}324{,}555 \rfloor = 316{,}227</x-tex> bids (316,205 at the rounded-up 6,325 µ$), about a third of the requests.</li>
-<li>Those bids win <x-tex>316{,}227\times0.316228\approx100{,}000</x-tex> impressions, costing <x-tex>316{,}227\times b^2/L\approx\$632.45</x-tex>, for a gross spread of <x-tex>(v-b)\times100{,}000\approx\$867.54</x-tex>. With prompt loss release the same bid earns <x-tex>N(v-b)\,b/L\approx\$2{,}743.42</x-tex>.</li>
+<li>Those bids win <x-tex>316{,}227\times0.316228\approx100{,}000</x-tex> impressions, costing <x-tex>316{,}227\times b^2/L\approx\$632.45</x-tex>, for a payments minus media cost of <x-tex>(v-b)\times100{,}000\approx\$867.54</x-tex>. With prompt loss release the same bid earns <x-tex>N(v-b)\,b/L\approx\$2{,}743.42</x-tex>.</li>
 <li>Best response without release. For <x-tex>b\ge B/N</x-tex>, the budget admits <x-tex>B/b</x-tex> bids that win <x-tex>(B/b)(b/L)=B/L</x-tex> impressions whatever the bid, so spread is <x-tex>(B/L)(v-b)</x-tex>, decreasing in <x-tex>b</x-tex>. For <x-tex>b&lt;B/N</x-tex>, the budget never binds and spread is <x-tex>N(b/L)(v-b)</x-tex>, increasing while <x-tex>b&lt;v/2</x-tex>. Since <x-tex>B/N=\$0.002&lt;v/2</x-tex>, the optimum is <x-tex>b=B/N</x-tex> (2 CPM), giving <x-tex>N(b/L)(v-b)=10^6\times0.1\times\$0.013=\$1{,}300</x-tex>, less than half of $2,743.42.</li>
 </ol>
-<x-chart>{"title": "Gross spread vs bid under two reservation policies",
+<x-chart>{"title": "Payments minus media cost vs bid under two reservation policies",
  "params": {"N": 1000000, "L": 0.02, "v": 0.015, "B": 2000, "bc": 0.006324555320336759},
  "x": {"label": "Bid (CPM)", "min": 0, "max": 15, "ticks": [0, 3, 6, 9, 12, 15], "format": {"prefix": "$"}},
- "y": {"label": "Expected gross spread", "min": 0, "max": 3000, "ticks": [0, 500, 1000, 1500, 2000, 2500, 3000], "format": "usd"},
+ "y": {"label": "Expected payments minus media cost", "min": 0, "max": 3000, "ticks": [0, 500, 1000, 1500, 2000, 2500, 3000], "format": "usd"},
  "series": [{"fn": "x/1000 <= bc ? N*(v - x/1000)*(x/1000)/L : (v - x/1000)*B/(x/1000)", "label": "Release losses promptly", "tone": "accent"},
             {"fn": "x/1000 <= B/N ? N*(v - x/1000)*(x/1000)/L : (v - x/1000)*B/L", "label": "Never release", "tone": "warm"}],
  "vlines": [{"x": 6.324555, "label": "6.32 CPM", "tone": "muted"}],
@@ -178,7 +178,7 @@
             {"x": 6.324555, "y": 867.54, "label": "$867.54", "pos": "right", "tone": "warm"},
             {"x": 2, "y": 1300, "label": "$1,300", "pos": "above", "tone": "warm"}],
  "caption": "Hard budget <x-tex>B=\\$2{,}000</x-tex>, every win displays. Prompt release: <x-tex>N(v-b)b/L</x-tex> until the budget binds at 6.32 CPM, then <x-tex>(v-b)B/b</x-tex>. Never release: <x-tex>N(v-b)b/L</x-tex> up to <x-tex>b=B/N</x-tex> (2 CPM), then <x-tex>(v-b)B/L</x-tex>, because locked caps stop bidding after <x-tex>B/b</x-tex> requests. Its best point, $1,300, is below half the release optimum."}</x-chart>
-<p>Measure the cost of conservative reservation as lost gross spread, not as lock contention or budget-service load.</p>
+<p>Measure the cost of conservative reservation as lost payments minus media cost, not as lock contention or budget-service load.</p>
 </div></details>
 
 <h2>Releases can change what the system optimizes</h2>

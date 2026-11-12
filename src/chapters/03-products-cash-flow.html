@@ -1,7 +1,7 @@
 <article class="ar-lesson" id="ar-chapter-2" data-nav="Products and cash flow" data-time="10:05–10:45 · 40 min"><h1>Products and cash flow</h1>
 <aside class="ar-callout ar-key"><p class="ar-callout-title">In this chapter</p><ul>
 <li>Describe any ad product by five separate choices: context, creative, how it is sold, what is billed and what is optimized.</li>
-<li>Locate the four points of a pricing product (ranked, billed, bid, judged) and say who estimates and who bears each segment between them under CPM, CPC, CPA, oCPC and oCPM.</li>
+<li>Distinguish the billable event, bidding strategy, and campaign KPI. Compare how conversion forecasts affect each party under CPM, CPC, CPA, oCPC and oCPM.</li>
 <li>Explain why CPA billing needs conversions the platform can verify, and why platforms selling oCPM or oCPC offer cost guarantees.</li>
 <li>Trace $100 of advertiser spend through net and gross revenue recognition: the same $20 gross profit shows as an 80% or a 20% gross margin.</li>
 <li>Decide whether to scale a budget by comparing the return on the <em>additional</em> spend with the break-even return, one over the contribution margin.</li>
@@ -36,7 +36,7 @@
 <tr>
 <td data-label="Dimension">Billing event</td>
 <td data-label="Example values">Impression, click, install, purchase</td>
-<td data-label="What it decides">When money is owed, and who bears the risk that a paid-for impression yields no click or conversion (<a href="#ar-risk-map">the four points</a>)</td>
+<td data-label="What it decides">When money is owed, and who bears the risk that a paid-for impression yields no click or conversion (<a href="#ar-risk-map">billing and bidding</a>)</td>
 </tr>
 <tr>
 <td data-label="Dimension">Optimization objective</td>
@@ -49,32 +49,20 @@
 <h2>The contract must define every event it pays for or optimizes</h2>
 <p><strong>“Optimize for purchases” is not yet a contract: each event and value needs an operational definition before a model can target it or an invoice can count it.</strong> Does a purchase mean an order placed, a payment completed, or an order still valid after the refund period? Is its value merchandise revenue, a commission or contribution profit? Changing one definition changes training labels, delivery and reports with no change to the model. A campaign setup is therefore an executable contract: conversion events, budget and flight dates (start and end of delivery), audiences, creatives, attribution rules, value postbacks (server-to-server messages that report each conversion and its value to the platform) and billing terms.</p>
 <p id="ar-roas-def">Definitions used later. <strong>ROAS</strong> (return on ad spend) is revenue credited to ads by the attribution rules divided by ad spend, often quoted as a percentage (300% means 3.0); <strong>iROAS</strong> (incremental ROAS) uses instead the revenue that would not have occurred without the ads. <span id="ar-d7-def">D7 ROAS</span> counts a cohort's attributed revenue in the window <x-tex>[t_0,\ t_0+168\text{ h})</x-tex>, where <x-tex>t_0</x-tex> is acquisition (for apps, the install), and is valid only once the window has closed for every user. <strong>LTV</strong> (lifetime value) must state its horizon, revenue or contribution, refunds, discounting, and whether acquisition cost is already subtracted; treating revenue LTV as profit overstates what you can afford to bid.</p>
-<h2 id="ar-risk-map">Who bears which risk: the four points</h2>
-<p><strong>Every pricing product fixes four points on the path from impression to business result, and who bears which risk follows from where they sit.</strong> Between the points lie conversion rates nobody knows exactly, and the party that estimates a rate is not always the party that pays when the estimate is wrong.</p>
-<p id="ar-billing-terms">Units: <strong>CPM</strong> (cost per mille) is a price per 1,000 impressions, <strong>CPC</strong> per click, <strong>CPI</strong> per install, <strong>CPA</strong> (cost per action) per contractually defined action such as a purchase. <strong>CTR</strong> is clicks per impression and <strong>CVR</strong> conversions per click; the platform's predictions of them are pCTR and pCVR. <strong>eCPM</strong> restates any per-event price per 1,000 impressions, <x-tex>\text{eCPM}=1000\times\text{amount}/\text{impressions}</x-tex>. In <strong>oCPM</strong> and <strong>oCPC</strong> (together <strong>oCPX</strong>) the advertiser states a target price per conversion, the platform turns it into a bid with its model, and billing stays per impression or per click.</p>
-<p>The four points, in funnel order:</p>
-<ol>
-<li><strong>Ranked:</strong> the event the auction sells and compares bids on, almost always the impression. Every bid is converted to eCPM before ranking.</li>
-<li><strong>Billed:</strong> the event on the invoice.</li>
-<li><strong>Bid:</strong> the event the advertiser attaches its price to. A performance advertiser values purchases; even under manual CPM or CPC it sets its bid by multiplying its price per purchase by one conversion rate of its own, so its bid point is effectively the purchase.</li>
-<li><strong>Judged:</strong> what the advertiser's business is measured on, such as purchases, D7 ROAS or LTV.</li>
-</ol>
-<p>Three rates connect them, rank→bill, bill→bid and bid→judged, and each estimate of them has an error. Three rules follow:</p>
-<ul>
-<li><strong>Rank→bill is the seller's risk.</strong> The platform must estimate this rate to rank in eCPM at all. If it bills at a later event, it gives away the impression and is paid only if the click or purchase follows, so it bears this error.</li>
-<li><strong>Bill→bid is the payer's risk, whoever estimates it.</strong> This rate converts a price per purchase into a price per billed event. Under CPM and CPC the advertiser estimates it implicitly, with one constant; under oCPX the platform estimates it with a model, impression by impression. Either way the advertiser pays per billed event, so the error moves its cost per purchase.</li>
-<li><strong>Bid→judged stays with the advertiser</strong> under every product, including the gap between credited and caused purchases from <a href="#chapter-1">chapter 1</a>.</li>
-</ul>
+<h2 id="ar-risk-map">Billable events, bidding strategies, and campaign KPIs</h2>
+<p>The <strong>billable event</strong> determines what triggers a charge. A <strong>bidding strategy</strong> determines how bids are set. A <strong>key performance indicator (KPI)</strong>, such as day 7 ROAS, measures the campaign against the advertiser’s goal.</p>
+<p id="ar-billing-terms">Units: <strong>CPM</strong> (cost per mille) is a price per 1,000 impressions, <strong>CPC</strong> per click, <strong>CPI</strong> per install, <strong>CPA</strong> (cost per action) per contractually defined action such as a purchase. <strong>CTR</strong> is clicks per impression and <strong>CVR</strong> is conversions per click in these examples; the platform's predictions of them are pCTR and pCVR. <strong>eCPM</strong> restates any per-event price per 1,000 impressions, <x-tex>\text{eCPM}=1000\times\text{amount}/\text{impressions}</x-tex>. In <strong>oCPM</strong> and <strong>oCPC</strong> the advertiser states a target price per conversion, the platform turns it into a bid with its model, and billing stays per impression or per click.</p>
+<p>In this model the auction sells one impression opportunity and ranks bids in eCPM. When the platform pays for impressions and charges for clicks or conversions, its receipts per impression depend on how often the billable event occurs.</p>
 <div class="ar-table-wrap"><table>
-<thead><tr><th>Product</th><th>Billed</th><th>Bid</th><th>Rank→bill</th><th>Bill→bid</th></tr></thead>
+<thead><tr><th>Pricing model</th><th>Billable event</th><th>Effect of fewer conversions</th></tr></thead>
 <tbody>
-<tr><td data-label="Product">CPM</td><td data-label="Billed">Impression</td><td data-label="Bid">Purchase, via the advertiser's constant</td><td data-label="Rank→bill">None (same point)</td><td data-label="Bill→bid">Advertiser estimates and bears</td></tr>
-<tr><td data-label="Product">CPC</td><td data-label="Billed">Click</td><td data-label="Bid">Purchase, via the advertiser's constant</td><td data-label="Rank→bill">Platform estimates (pCTR) and bears</td><td data-label="Bill→bid">Advertiser estimates and bears</td></tr>
-<tr><td data-label="Product">CPA</td><td data-label="Billed">Purchase</td><td data-label="Bid">Purchase</td><td data-label="Rank→bill">Platform estimates (pCTR × pCVR) and bears</td><td data-label="Bill→bid">None (same point)</td></tr>
-<tr><td data-label="Product">oCPC</td><td data-label="Billed">Click</td><td data-label="Bid">Purchase</td><td data-label="Rank→bill">Platform estimates (pCTR) and bears</td><td data-label="Bill→bid">Platform estimates (pCVR); advertiser bears</td></tr>
-<tr><td data-label="Product">oCPM</td><td data-label="Billed">Impression</td><td data-label="Bid">Purchase</td><td data-label="Rank→bill">None (same point)</td><td data-label="Bill→bid">Platform estimates (pCTR × pCVR); advertiser bears</td></tr>
+<tr><td data-label="Pricing model">CPM</td><td data-label="Billable event">Impression</td><td data-label="Effect of fewer conversions">A lower purchase rate raises the advertiser’s cost per purchase.</td></tr>
+<tr><td data-label="Pricing model">CPC</td><td data-label="Billable event">Click</td><td data-label="Effect of fewer conversions">A lower purchase rate per click raises the advertiser’s cost per purchase.</td></tr>
+<tr><td data-label="Pricing model">CPA pricing</td><td data-label="Billable event">Qualifying conversion</td><td data-label="Effect of fewer conversions">With a fixed charge per conversion, the platform collects less per impression when conversions fall.</td></tr>
+<tr><td data-label="Pricing model">oCPC</td><td data-label="Billable event">Click</td><td data-label="Effect of fewer conversions">The platform uses predicted conversion rates to bid toward the target. The advertiser’s actual cost per purchase can differ.</td></tr>
+<tr><td data-label="Pricing model">oCPM</td><td data-label="Billable event">Impression</td><td data-label="Effect of fewer conversions">The platform uses predicted conversion rates to bid toward the target. The advertiser’s actual cost per purchase can differ.</td></tr>
 </tbody></table></div>
-<p>The ranked point is the impression in every row, and bid→judged is the advertiser's in every row. Automated bid targets fit the same table. Google's tCPA (target cost per action), for example, bids toward an average cost per conversion while the advertiser is typically still billed per click, which makes it oCPC, and it does not promise that every conversion costs less than the target. <a href="https://support.google.com/google-ads/answer/2390684" rel="noopener noreferrer" target="_blank">Google tCPA documentation</a></p>
+<p>Google Ads calls its automated bidding strategy <strong>Target CPA</strong> and separately specifies the payment mode. Depending on campaign eligibility, a campaign can bid toward Target CPA and pay for clicks, conversions, or viewable impressions. <a href="https://support.google.com/google-ads/answer/10276703?hl=en">Google Ads on Display bidding strategies and payment modes</a></p>
 <section class="ar-worked">
   <header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>One campaign under five products</h4></header>
   <div class="ar-worked-body">
@@ -86,10 +74,10 @@
       <li>Cost per purchase, bill ÷ 0.25: a $15 bill gives $60, a $7.50 bill $30.</li>
     </ol>
     <p class="ar-result">Result: <strong>cost per purchase doubles to $60 exactly where the advertiser bears the mis-estimated rate: CPM and oCPM in both scenarios, CPC and oCPC in scenario B. Under CPA it stays $30; the platform absorbs the shortfall.</strong></p>
-    <p class="ar-check">Check against the table: the CTR error (A) is rank→bill for CPC, oCPC and CPA, but bill→bid for CPM and oCPM. The CVR error (B) is rank→bill only for CPA, and bill→bid for the other four.</p>
+    <p class="ar-check">With impression billing, fewer clicks or fewer purchases per click raise the advertiser’s cost per purchase. With click billing, fewer purchases per click raise it. With fixed per-conversion pricing, either change reduces the platform’s receipts per impression.</p>
   </div>
 </section>
-<p>Equal expected bills are a modelling convenience. Unbiased errors spread over many impressions largely average out; what a party bearing a segment protects itself against is systematic error and manipulable reports (the platform discounts pCTR on traffic it distrusts, the advertiser shades its CPM bid), so in practice expected bills differ across products.</p>
+<p>Equal expected bills are a modelling convenience. Unbiased errors spread over many impressions largely average out; both sides need to account for systematic error and manipulable reports (the platform discounts pCTR on traffic it distrusts, the advertiser shades its CPM bid), so in practice expected bills differ across products.</p>
 <h3>CPA needs a billing event the platform can verify</h3>
 <p><strong>Under CPA the conversion count sets the bill, so the platform must verify conversions itself or through a trusted third party.</strong> For apps that party is usually a mobile measurement partner (<strong>MMP</strong>, such as Adjust or AppsFlyer), which records installs and in-app events and attributes them to ads. To see why, suppose the advertiser reports only a fraction <x-tex>k</x-tex> of its conversions, <x-tex>0&lt;k&lt;1</x-tex>.</p>
 <ul>
@@ -99,8 +87,8 @@
 The restored eCPM wins the same impressions at the same price under either auction rule, so the bill is unchanged and under-reporting buys nothing.</li>
 </ul>
 <p>The CPA gain lasts only while allocation ignores the reports. With an instant, advertiser-specific model, restoring allocation needs the price <x-tex>a/k</x-tex>, and the bill is back to <x-tex>(a/k)\,k\,q=a\,q</x-tex>.</p>
-<h3>Why oCPX platforms offer cost guarantees</h3>
-<p><strong>Under oCPX the platform makes the bill→bid estimate but the advertiser pays for its errors, so several platforms selling oCPX promise to compensate cost per conversion that exceeds the target by more than a stated tolerance.</strong> In scenario B an oCPC advertiser with a $30 target paid $60 per purchase because pCVR was biased. Overruns arise even with no bias, from selection: the auction buys the impressions where the estimate is highest, so even an unbiased model overpredicts on the impressions it wins (the <a href="#ar-winners-curse">winner's curse</a>, chapter 5). Realized cost per conversion runs above target on average, and the platform must correct its estimates on won traffic or pay out.</p>
+<h3>Cost guarantees for optimized bidding</h3>
+<p><strong>With optimized bidding, a contract may include a cost guarantee that compensates the advertiser when its cost per conversion exceeds the target by a specified amount.</strong> In scenario B an oCPC advertiser with a $30 target paid $60 per purchase because pCVR was biased. Overruns arise even with no bias, from selection: the auction buys the impressions where the estimate is highest, so even an unbiased model overpredicts on the impressions it wins (the <a href="#ar-winners-curse">winner's curse</a>, chapter 5). Realized cost per conversion runs above target on average, and the platform must correct its estimates on won traffic or pay out.</p>
 <h3>Dual bids limit variance while the model learns</h3>
 <p>A new campaign's conversion model has little data, so its bids are noisy. A dual bid states two prices: one for a frequent shallow event, such as an install, whose rate the platform already estimates well, and one for the rare deep event, such as a purchase. The platform buys an impression only if both targets look met, so the shallow bid caps how far a noisy deep-event estimate can push the impression bid. The cost is volume: the rule also rejects traffic that misses the shallow target but would meet the deep one, so once deep-event data accumulate, a single deep-event bid usually buys more.</p>
 <h2>Platform margin, advertiser return and scaling are different questions</h2>
