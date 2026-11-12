@@ -1,4 +1,10 @@
 <article class="ar-lesson" id="ar-chapter-1" data-nav="Products and cash flow" data-time="09:20–10:10 · 50 min"><h1>Products and cash flow</h1>
+<aside class="ar-callout ar-key"><p class="ar-callout-title">In this chapter</p><ul>
+<li>Specify any ad product on five independent dimensions: context, creative, transaction type, billing event, objective.</li>
+<li>Price one campaign as CPM, CPC or CPA with the same expected payment, and say who absorbs click risk and conversion risk under each.</li>
+<li>Trace $100 of advertiser spend through net and gross revenue recognition, and see why an 80% and a 20% gross margin can hide identical gross profit.</li>
+<li>Decide whether to scale a budget by comparing marginal iROAS with the break-even <x-tex>1/m</x-tex>, and correct attributed ROAS with <x-tex>\kappa</x-tex>.</li>
+</ul></aside>
 <h2>Specify an ad product along five independent dimensions</h2>
 <p>People often list “search, feed, RTB, CPC, performance advertising” as if they were categories of one kind. They are not. <em>Search</em> names the user context (a results page for a typed query); a <em>feed</em> is another context, a scrolling stream of content with ads inserted between items. <em>RTB</em> (real-time bidding) names a transaction mechanism: each individual ad opportunity is auctioned in milliseconds while the page or app loads. <em>CPC</em> (cost per click) names the billing event. <em>Performance advertising</em> names the optimization goal: the advertiser pays for, and judges results by, measurable downstream actions such as installs or purchases, as opposed to <em>brand advertising</em>, which buys reach and awareness. If you force these into one mutually exclusive taxonomy, the objective function you build downstream will be wrong.</p>
 <div class="ar-table-wrap"><table>
@@ -93,8 +99,36 @@
 <li><strong>CVR</strong> (conversion rate): conversions divided by a denominator you must state. CVR per click and conversion probability per impression are different quantities; the second equals CTR times the first for post-click conversions.</li>
 <li><strong>eCPM</strong> (effective CPM): some revenue or value restated per thousand impressions, <x-tex>\text{eCPM}=1000\times\text{amount}/\text{impressions}</x-tex>. It is a unit conversion for comparing across contracts, not necessarily the price on any invoice.</li>
 </ul>
-<p>The billing event decides who bears response risk. Under CPM the advertiser pays for every impression, whether or not anyone converts; under CPA the network pays the publisher for impressions but collects only when a billable conversion occurs, so the network carries the conversion risk.</p>
-<p>Use the running example from <a href="#chapter-1">the roadmap chapter</a>: the network charges the advertiser $30 per billable conversion, and a billable conversion follows an impression with probability <x-tex>q=0.01\times0.05=0.0005</x-tex>. The network's expected revenue per impression is then <x-tex>0.0005\times\$30=\$0.015</x-tex>, an eCPM of $15. That does not mean the network bids $15 CPM in every auction; under the first-price model in <a href="#chapter-3">Prediction and bidding</a>, its optimal bid is only $7.50 CPM. Nor does it mean the advertiser is billed per impression: it still pays $30 per conversion. Valuation, bid and payment are three separate quantities.</p>
+<p>Use the running example from <a href="#chapter-1">the roadmap chapter</a>. An ad network buys impressions in auctions and charges the advertiser <x-tex>a=\$30</x-tex> per billable conversion. An impression is clicked with probability <x-tex>p_{\text{click}}=0.01</x-tex> (the CTR), and a click converts with probability <x-tex>p_{\text{conv}}=0.05</x-tex> (post-click CVR), so a billable conversion follows an impression with probability <x-tex>q=0.01\times0.05=0.0005</x-tex>. The network's expected revenue per impression is <x-tex>v=q\,a=0.0005\times\$30=\$0.015</x-tex>, an eCPM of $15. That does not mean the network bids $15 CPM; under the first-price model in <a href="#chapter-3">Prediction and bidding</a> its optimal bid is $7.50 CPM. Nor is the advertiser billed per impression: it still pays $30 per conversion. Valuation, bid and payment are three separate quantities.</p>
+<p>The billing event decides who bears <em>response risk</em>: the risk that paid-for impressions yield fewer clicks or conversions than forecast. The network's media cost is set in the auction regardless of how it bills, so any shortfall the advertiser does not pay for comes out of the network's margin.</p>
+<section class="ar-worked">
+  <header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>One campaign, three billing events</h4></header>
+  <div class="ar-worked-body">
+    <p>Given: the network has bought <x-tex>N=1{,}000{,}000</x-tex> impressions for the advertiser; forecast <x-tex>p_{\text{click}}=0.01</x-tex>, <x-tex>p_{\text{conv}}=0.05</x-tex>, <x-tex>q=0.0005</x-tex>; CPA price <x-tex>a=\$30</x-tex> per conversion. Set each price so the expected payment at the forecast is the same. Outcomes are independent across impressions.</p>
+    <ol class="ar-steps">
+      <li>Prices with equal expected payment per impression, <x-tex>q\,a=\$0.015</x-tex>: per conversion, per click, per 1,000 impressions,
+        <x-tex display>\begin{aligned}
+\text{CPA} &amp;= a = \$30\\
+\text{CPC} &amp;= p_{\text{conv}}\,a = 0.05\times\$30 = \$1.50\\
+\text{CPM} &amp;= 1000\,q\,a = \$15
+\end{aligned}</x-tex></li>
+      <li>Expected campaign payment, identical by construction: CPM <x-tex>1{,}000\times\$15</x-tex>; CPC <x-tex>10{,}000\text{ clicks}\times\$1.50</x-tex>; CPA <x-tex>500\text{ conversions}\times\$30</x-tex>; each <x-tex>\$15{,}000</x-tex>.</li>
+      <li>Sampling noise with the forecast rates correct. CPM: payment is fixed once impressions are delivered, standard deviation $0. CPC: <x-tex>\$1.50\sqrt{N p_{\text{click}}(1-p_{\text{click}})}=\$1.50\sqrt{9{,}900}\approx\$149.25</x-tex> (1.0% of the mean). CPA: <x-tex>\$30\sqrt{N q(1-q)}=\$30\sqrt{499.75}\approx\$670.65</x-tex> (4.5% of the mean).</li>
+      <li>Forecast error, which dominates sampling noise at this scale. If the true CTR is 0.005, there are 5,000 clicks and 250 conversions: the advertiser pays $15,000 under CPM, $7,500 under CPC, $7,500 under CPA. If instead the true CVR is 0.025, there are 10,000 clicks and 250 conversions: it pays $15,000, $15,000 and $7,500.</li>
+      <li>Advertiser's realized cost per conversion in those two scenarios: CPM $60 and $60; CPC $30 and $60; CPA $30 and $30.</li>
+    </ol>
+    <p class="ar-result">Result: <strong>same expected payment, different risk bearer. Under CPM the advertiser bears both click and conversion risk; under CPC the network bears click risk and the advertiser conversion risk; under CPA the network bears both.</strong></p>
+    <p class="ar-check">Check: the advertiser's payment scales with the ratio of true to forecast rates for exactly the events it pays for: CPC payment = $15,000 × (true CTR ÷ 0.01); CPA payment = $15,000 × (true <x-tex>q</x-tex> ÷ 0.0005). Both scenarios halve <x-tex>q</x-tex>, so CPA pays $7,500 in both.</p>
+  </div>
+</section>
+<x-chart>{"type": "bar", "title": "Advertiser's payment for the same 1M impressions",
+ "y": {"label": "Advertiser pays", "min": 0, "max": 16000, "ticks": [0, 4000, 8000, 12000, 16000], "format": "usd"},
+ "categories": ["Forecast holds", "CTR halves", "CVR halves"],
+ "groups": [{"label": "CPM $15", "tone": "muted", "values": [15000, 15000, 15000]},
+            {"label": "CPC $1.50", "tone": "warm", "values": [15000, 7500, 15000]},
+            {"label": "CPA $30", "tone": "accent", "values": [15000, 7500, 7500]}],
+ "caption": "Each bar is the advertiser's payment; the gap to $15,000 is absorbed by the network, whose media cost is unchanged. A bar that does not move when a rate falls means the advertiser bears that rate's risk. Prices are set so expected payment is <x-tex>N q a=\\$15{,}000</x-tex> at the forecast."}</x-chart>
+<p>Equal expected payments are a modelling convenience. A party that absorbs variance and forecast error charges for it, so in practice CPA and CPC prices carry a risk premium relative to the CPM equivalent. Shifting the billing event also shifts incentives: under CPA the network's revenue depends on the advertiser's conversion definition and reporting; under CPM the advertiser must police impression quality itself.</p>
 <p id="ar-roas-def">Define the return metrics precisely:</p>
 <ul>
 <li><strong>ROAS</strong> (return on ad spend) = revenue under an agreed definition (usually attributed revenue, i.e. revenue credited to ads by the attribution rules) ÷ ad spend. It is often quoted as a percentage: 300% means 3.0.</li>
@@ -109,35 +143,35 @@
 <section id="ar-accounting-expansion" aria-label="A complete worked example of gross margin, campaign return, and scaling">
 <p><strong>The platform's gross margin, the advertiser's campaign return and the payoff from further scaling are three different questions. A platform can hold an 80% gross margin while the advertiser earns less with every extra dollar it spends.</strong> Below, one ad budget is entered into two income statements, and then we examine how scaling changes each side's returns. Throughout, amounts are for one fixed period, “spend” means the amount billed to the advertiser in that period, and refunds, credits and taxes are ignored.</p>
 <h3>1. What is the denominator of the platform's 80% gross margin?</h3>
-<p>First, four accounting terms.</p>
+<p>Four accounting terms first.</p>
 <ul>
 <li><strong>Take rate:</strong> the amount the platform keeps after paying the publisher, divided by total advertiser spend (sometimes called gross billings).</li>
 <li><strong>Gross vs net revenue recognition:</strong> a platform that recognizes revenue <em>gross</em> books the full advertiser spend as revenue and the publisher payout as a cost. One that recognizes revenue <em>net</em> books only the amount it keeps.</li>
 <li><strong>Cost of revenue:</strong> costs directly incurred to deliver the service, such as serving infrastructure, data and payment processing. Under gross recognition it also includes the publisher payout, often called TAC (traffic acquisition cost).</li>
 <li><strong>Gross profit</strong> = recognized revenue − cost of revenue. <strong>Gross margin</strong> = gross profit ÷ recognized revenue.</li>
 </ul>
-<p>Now the example. The advertiser pays $100, the publisher receives $75 and the platform keeps $25, out of which it pays $5 of direct service costs. Assume the platform's role qualifies it for net recognition and that all $5 is classified as cost of revenue.</p>
-<div class="ar-table-wrap"><table><thead><tr><th scope="col">Where the money goes</th><th scope="col">Amount</th><th scope="col">Meaning</th></tr></thead><tbody>
-<tr><td data-label="Where the money goes">Publisher</td><td data-label="Amount">$75</td><td data-label="Meaning">Payment for supplying the ad display opportunities</td></tr>
-<tr><td data-label="Where the money goes">Platform direct service costs</td><td data-label="Amount">$5</td><td data-label="Meaning">Assumed here to be entirely cost of revenue</td></tr>
-<tr><td data-label="Where the money goes">Platform gross profit</td><td data-label="Amount"><strong>$20</strong></td><td data-label="Meaning">Before the platform's other operating expenses</td></tr>
-<tr><td data-label="Where the money goes">Total</td><td data-label="Amount">$100</td><td data-label="Meaning">Advertiser's total spend</td></tr>
-</tbody></table></div>
-<div class="ar-math"><x-tex display>\begin{aligned}
-\text{take rate} &amp;= \frac{\$25}{\$100} = 25\% \\
-\text{gross margin (net recognition)} &amp;= \frac{\$25-\$5}{\$25} = 80\% \\
-\frac{\text{platform gross profit}}{\text{advertiser spend}} &amp;= \frac{\$20}{\$100} = 20\%
-\end{aligned}</x-tex></div>
-<p>The three ratios have different denominators. The 80% is measured against the $25 of revenue the platform recognizes: each recognized dollar leaves $0.80 after cost of revenue. It does not mean the platform keeps 80% of the ad budget, nor that 80% is its final profit; R&amp;D, sales, taxes and the cost of capital still come out.</p>
-<p><strong>A contract that calls the platform an “agent” is not enough to justify net recognition.</strong> The test is whether, for each specific performance obligation, the platform controls the good or service before it passes to the customer. If it does, it is a principal and usually recognizes revenue gross; if not, it is an agent and recognizes only its fee or commission. IFRS 15, the international revenue standard, sets this test; its US GAAP counterpart, ASC 606, uses the same control principle. <a href="https://www.ifrs.org/news-and-events/updates/ifric/2022/ifric-update-april-2022/" rel="noopener noreferrer" target="_blank">IFRS Interpretations Committee on principal versus agent</a></p>
-<p>For comparison, take a business that qualifies for gross recognition with identical cash flows: it collects $100, pays the publisher $75 and incurs $5 of direct service costs, and it books both the $75 and the $5 as cost of revenue.</p>
-<div class="ar-table-wrap"><table><thead><tr><th scope="col">Metric</th><th scope="col">Net recognition</th><th scope="col">Gross recognition</th></tr></thead><tbody>
-<tr><td data-label="Metric">Recognized revenue</td><td data-label="Net recognition">$25</td><td data-label="Gross recognition">$100</td></tr>
-<tr><td data-label="Metric">Cost of revenue</td><td data-label="Net recognition">$5</td><td data-label="Gross recognition">$80</td></tr>
-<tr><td data-label="Metric">Gross profit</td><td data-label="Net recognition"><strong>$20</strong></td><td data-label="Gross recognition"><strong>$20</strong></td></tr>
-<tr><td data-label="Metric">Gross margin</td><td data-label="Net recognition">80%</td><td data-label="Gross recognition">20%</td></tr>
-</tbody></table></div>
-<p>Under gross recognition, gross margin coincides with gross profit ÷ advertiser spend (20%), because recognized revenue equals spend. A company cannot pick gross or net at will; the control test decides. But the comparison shows that <strong>before comparing two ad companies' gross margins, you must align their revenue recognition and cost classification.</strong> 80% versus 20% on its own does not show a fourfold difference in efficiency: here gross profit is identical. <a href="https://www.ifrs.org/content/dam/ifrs/meetings/2024/february/iasb/ap6b-ifrs-15-pir-principal-vs-agent-considerations.pdf" rel="noopener noreferrer" target="_blank">Summary of IFRS 15 principal-versus-agent requirements</a></p>
+<section class="ar-worked">
+  <header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>$100 of spend under net and gross recognition</h4></header>
+  <div class="ar-worked-body">
+    <p>Given, for one period: advertiser spend <x-tex>S=\$100</x-tex>; publisher payout <x-tex>P=\$75</x-tex>; the platform's direct service costs <x-tex>D=\$5</x-tex> (serving, data, payment processing), all classified as cost of revenue. Compare two platforms with identical cash flows, one that qualifies for net recognition and one that qualifies for gross recognition (the control test below decides which; neither chooses).</p>
+    <ol class="ar-steps">
+      <li>Take rate, a cash-flow ratio identical for both: <x-tex>(S-P)/S=(\$100-\$75)/\$100=25\%</x-tex>.</li>
+      <li>Net recognition: revenue <x-tex>=S-P=\$25</x-tex>; cost of revenue <x-tex>=D=\$5</x-tex>; gross profit <x-tex>=\$25-\$5=\$20</x-tex>; gross margin <x-tex>=\$20/\$25=80\%</x-tex>. The $75 payout appears in neither line.</li>
+      <li>Gross recognition: revenue <x-tex>=S=\$100</x-tex>; cost of revenue <x-tex>=P+D=\$75+\$5=\$80</x-tex> (the $75 is TAC); gross profit <x-tex>=\$100-\$80=\$20</x-tex>; gross margin <x-tex>=\$20/\$100=20\%</x-tex>.</li>
+      <li>Gross profit per dollar of advertiser spend, under both: <x-tex>\$20/\$100=20\%</x-tex>.</li>
+    </ol>
+    <p class="ar-result">Result: <strong>same cash, same $20 gross profit; reported gross margin is 80% under net recognition and 20% under gross.</strong></p>
+    <p class="ar-check">Check: the two margins share the numerator and their denominators are <x-tex>S-P</x-tex> and <x-tex>S</x-tex>, so gross margin (gross) = take rate × gross margin (net) <x-tex>=0.25\times0.80=0.20</x-tex>.</p>
+  </div>
+</section>
+<x-chart>{"type": "bar", "title": "The same transaction, two income statements",
+ "y": {"label": "Amount", "min": 0, "max": 100, "ticks": [0, 25, 50, 75, 100], "format": "usd"},
+ "categories": ["Revenue", "Cost of rev.", "Gross profit"],
+ "groups": [{"label": "Net recognition", "tone": "accent", "values": [25, 5, 20]},
+            {"label": "Gross recognition", "tone": "warm", "values": [100, 80, 20]}],
+ "caption": "Gross recognition adds the $75 publisher payout to both revenue and cost of revenue. Gross profit is unchanged; only the margin denominator moves, from $25 to $100."}</x-chart>
+<p>The 80% is measured against the $25 the platform recognizes: each recognized dollar leaves $0.80 after cost of revenue. It does not mean the platform keeps 80% of the ad budget, nor that 80% is final profit; R&amp;D, sales, taxes and the cost of capital still come out. <strong>Before comparing two ad companies' gross margins, align their revenue recognition and cost classification.</strong> Here 80% versus 20% reflects no difference in efficiency at all.</p>
+<p><strong>Calling the platform an “agent” in the contract does not by itself justify net recognition.</strong> IFRS 15, the international revenue standard, and ASC 606, its US GAAP counterpart, apply the same test. The entity identifies each specified good or service promised to the customer (for an ad platform, typically the ad placement) and asks whether it controls that good or service before it is transferred to the customer. If it does, it is a principal and recognizes revenue at the gross amount of consideration; if not, it is an agent and recognizes only its fee or commission, i.e. the consideration net of what it passes to the other party. Three indicators support, but do not replace, the control assessment: primary responsibility for fulfilling the promise; inventory risk before or after transfer (for example, buying impressions up front with no matching advertiser order); and discretion in setting the price. One company can be a principal for some offerings and an agent for others. <a href="https://www.ifrs.org/news-and-events/updates/ifric/2022/ifric-update-april-2022/" rel="noopener noreferrer" target="_blank">IFRS Interpretations Committee on principal versus agent</a>, <a href="https://www.ifrs.org/content/dam/ifrs/meetings/2024/february/iasb/ap6b-ifrs-15-pir-principal-vs-agent-considerations.pdf" rel="noopener noreferrer" target="_blank">Summary of IFRS 15 principal-versus-agent requirements</a></p>
 <h3>2. Why does the advertiser's profit fall while its sales rise?</h3>
 <p>Switch to the advertiser's ledger. Its “$300 of revenue” is what consumers pay the advertiser for goods or services. It has nothing to do with the $25 of revenue the platform recognizes.</p>
 <p>Let <x-tex>m</x-tex> be the advertiser's <strong>contribution margin</strong> before advertising: the fraction of each incremental sales dollar left after goods, fulfillment and other variable non-advertising costs, before ad spend and fixed costs. Take <x-tex>m=40\%</x-tex>, so each additional $100 of sales leaves $40 to pay for advertising and contribute to profit. Assume <x-tex>m</x-tex> is constant across volume (variable costs are linear in sales).</p>
@@ -153,23 +187,65 @@
 <p>The first $100 of spend generates $120 of contribution and so earns $20 after paying for itself. The additional $50 generates only $30 of contribution and so loses $20 on its own. The new orders are real, but what they leave after fulfillment does not cover the extra acquisition cost. Sales rise from $300 to $375 while contribution profit falls from $20 to zero.</p>
 <h3>3. Average iROAS hides the loss on the additional budget</h3>
 <p>Let <x-tex>C</x-tex> be ad spend, <x-tex>R</x-tex> the incremental sales revenue it generates, and <x-tex>m</x-tex> the contribution margin defined above. Let <x-tex>\Delta C</x-tex> be additional spend and <x-tex>\Delta R</x-tex> the additional incremental revenue it generates. Here “marginal iROAS” means the finite-increment ratio <x-tex>\Delta R/\Delta C</x-tex>; only in the limit <x-tex>\Delta C\to0</x-tex> does it become a derivative.</p>
-<p>Contribution profit is <x-tex>mR-C</x-tex>, which is non-negative exactly when <x-tex>R/C\ge 1/m</x-tex> (for <x-tex>m&gt;0</x-tex>). So the break-even iROAS is <x-tex>1/m</x-tex>: 2.5 at <x-tex>m=40\%</x-tex>, 5 at <x-tex>m=20\%</x-tex>, 1.25 at <x-tex>m=80\%</x-tex>. If <x-tex>m\le0</x-tex>, no iROAS breaks even. The threshold also assumes the revenue is truly incremental.</p>
-<div class="ar-math"><x-tex display>\begin{aligned}
-\text{break-even iROAS} &amp;= \frac{1}{m} = \frac{1}{0.4} = 2.5 \\
-\text{marginal iROAS of the additional budget} &amp;= \frac{\Delta R}{\Delta C} = \frac{\$75}{\$50} = 1.5
-\end{aligned}</x-tex></div>
-<p>When deciding whether to scale, apply the 2.5 threshold to the revenue generated by the additional budget. At 1.5, the extra $50 lowered profit by <x-tex>0.4\times\$75-\$50=-\$20</x-tex>. The cumulative iROAS, <x-tex>\$375/\$150=2.5</x-tex>, still sits exactly at break-even only because the earlier high-return spend subsidizes the later low-return spend. The trading analogue: the marginal capacity of a scaled-up strategy may no longer cover its costs, while the average return across the whole book hides the loss from the scale-up itself.</p>
+<p>Contribution profit is <x-tex>mR-C</x-tex>, which for <x-tex>C&gt;0</x-tex> and <x-tex>m&gt;0</x-tex> is non-negative exactly when <x-tex>R/C\ge 1/m</x-tex>. So the break-even iROAS is <x-tex>1/m</x-tex>: 2.5 at <x-tex>m=40\%</x-tex>, 5 at <x-tex>m=20\%</x-tex>, 1.25 at <x-tex>m=80\%</x-tex>. If <x-tex>m\le0</x-tex>, no iROAS breaks even.</p>
+<section class="ar-worked">
+  <header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>Should the advertiser add the extra $50?</h4></header>
+  <div class="ar-worked-body">
+    <p>Given: <x-tex>m=0.4</x-tex>; incremental revenue <x-tex>R=\$300</x-tex> at <x-tex>C=\$100</x-tex> and <x-tex>R=\$375</x-tex> at <x-tex>C=\$150</x-tex>, same window and revenue definition.</p>
+    <ol class="ar-steps">
+      <li>Break-even iROAS: <x-tex>1/m=1/0.4=2.5</x-tex>.</li>
+      <li>Marginal iROAS of the increment: <x-tex>\Delta R/\Delta C=(\$375-\$300)/(\$150-\$100)=\$75/\$50=1.5</x-tex>.</li>
+      <li>Profit change from the increment: <x-tex>\Delta\Pi=m\,\Delta R-\Delta C=0.4\times\$75-\$50=-\$20</x-tex>.</li>
+      <li>Average iROAS of the whole budget: <x-tex>\$375/\$150=2.5=1/m</x-tex>, so contribution profit at $150 is <x-tex>0.4\times\$375-\$150=\$0</x-tex>.</li>
+    </ol>
+    <p class="ar-result">Result: <strong>do not add the $50. It lowers contribution profit by $20, although the cumulative iROAS of 2.5 still meets the break-even threshold.</strong></p>
+    <p class="ar-check">Check: profit at $100 is <x-tex>0.4\times\$300-\$100=\$20</x-tex> and at $150 is $0, a change of −$20. Equivalently, the increment needed <x-tex>\Delta R\ge2.5\times\$50=\$125</x-tex> and delivered $75.</p>
+  </div>
+</section>
+<p>The cumulative 2.5 sits at break-even only because the early high-return spend subsidizes the late low-return spend. The trading analogue: a scaled-up strategy's marginal capacity may not cover its costs while the book's average return hides the loss from the scale-up itself.</p>
 <p>If ROAS is computed from attributed revenue <x-tex>A</x-tex> instead, you cannot apply <x-tex>1/m</x-tex> directly. For <x-tex>A&gt;0</x-tex>, define the attribution-to-incrementality ratio <x-tex>\kappa=R/A</x-tex> (true incremental revenue ÷ attributed revenue). Contribution profit is then <x-tex>m\kappa A-C</x-tex>, so for <x-tex>\kappa&gt;0</x-tex> and <x-tex>m&gt;0</x-tex> the attributed ROAS at which incremental contribution breaks even is</p>
 <div class="ar-math"><x-tex display>\frac{A}{C}=\frac{1}{m\kappa}.</x-tex></div>
 <p>The formula treats <x-tex>\kappa</x-tex> as constant over the spend range under consideration; in practice the marginal <x-tex>\kappa</x-tex> of new spend can differ from the average. <x-tex>\kappa</x-tex> must be estimated separately, usually from a randomized experiment; the attribution report cannot reveal it. It is not necessarily below 1: attribution can also miss genuinely caused sales (for example, conversions on another device or outside the attribution window).</p>
-<p>More generally, write incremental revenue as a function of spend, <x-tex>R(C)</x-tex>: the revenue difference relative to not advertising, so <x-tex>R(0)=0</x-tex>. Let <x-tex>\Pi(C)</x-tex> be contribution profit after ad spend, <x-tex>\Delta\Pi</x-tex> the change in profit caused by additional spend <x-tex>\Delta C</x-tex>, and <x-tex>R'(C)</x-tex> the marginal incremental revenue per additional dollar of spend. Hold <x-tex>m</x-tex> fixed and ignore any other volume-dependent costs:</p>
+<p>More generally, write incremental revenue as a function of spend, <x-tex>R(C)</x-tex>: the revenue difference relative to not advertising, so <x-tex>R(0)=0</x-tex>. Let <x-tex>\Pi(C)</x-tex> be contribution profit after ad spend and <x-tex>R'(C)</x-tex> the marginal incremental revenue per additional dollar. Hold <x-tex>m</x-tex> fixed and ignore other volume-dependent costs:</p>
 <div class="ar-math"><x-tex display>\begin{aligned}
 \Pi(C) &amp;= m\,R(C) - C \\
 \Delta\Pi &amp;= m\,[R(C+\Delta C) - R(C)] - \Delta C \\
 \text{scale by a finite }\Delta C\text{ iff } &amp;\ \Delta\Pi &gt; 0 \\
 \text{scale by an infinitesimal amount iff } &amp;\ m\,R'(C) &gt; 1
 \end{aligned}</x-tex></div>
-<p>If <x-tex>R</x-tex> is differentiable and concave and no other constraint (such as a budget cap) binds, an interior optimum <x-tex>C^*</x-tex> satisfies <x-tex>m\,R'(C^*)=1</x-tex>. The example supplies only three points, <x-tex>R(0)=0</x-tex>, <x-tex>R(100)=300</x-tex> and <x-tex>R(150)=375</x-tex>. That is enough to show that <strong>the $150 plan is less profitable than the $100 plan</strong>, but not that $100 is the optimal budget.</p>
+<p>If <x-tex>R</x-tex> is differentiable and concave and no other constraint (such as a budget cap) binds, the optimum <x-tex>C^*</x-tex> satisfies <x-tex>m\,R'(C^*)=1</x-tex>. The three points <x-tex>R(0)=0</x-tex>, <x-tex>R(100)=300</x-tex>, <x-tex>R(150)=375</x-tex> prove that the $150 plan is less profitable than the $100 plan, but not that $100 is optimal. Concavity adds a bracket: the chord slopes 3 on <x-tex>[0,100]</x-tex> and 1.5 on <x-tex>[100,150]</x-tex> give <x-tex>R'(0)\ge3&gt;2.5</x-tex> and <x-tex>R'(150)\le1.5&lt;2.5</x-tex>, so <x-tex>0&lt;C^*&lt;150</x-tex>. Since <x-tex>R'(100)</x-tex> can lie anywhere in <x-tex>[1.5,3]</x-tex>, the data cannot say whether <x-tex>C^*</x-tex> is above or below $100. Pinning it down requires a functional form.</p>
+<section class="ar-worked">
+  <header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>An assumed concave curve through the three points</h4></header>
+  <div class="ar-worked-body">
+    <p>Given: assume <x-tex>R(C)=\alpha C-\beta C^2</x-tex> (dollars), the simplest concave form with <x-tex>R(0)=0</x-tex>, fitted through <x-tex>R(100)=\$300</x-tex> and <x-tex>R(150)=\$375</x-tex>; <x-tex>m=0.4</x-tex>. This is an illustration, not an estimate.</p>
+    <ol class="ar-steps">
+      <li>Fit: <x-tex>100\alpha-10{,}000\beta=300</x-tex> and <x-tex>150\alpha-22{,}500\beta=375</x-tex>. Subtracting 1.5 times the first from the second gives <x-tex>-7{,}500\beta=-75</x-tex>, so <x-tex>\beta=0.01</x-tex> and <x-tex>\alpha=4</x-tex>: <x-tex>R(C)=4C-0.01C^2</x-tex>, increasing for <x-tex>C&lt;\$200</x-tex>.</li>
+      <li>Marginal and average iROAS: <x-tex>R'(C)=4-0.02C</x-tex>; <x-tex>R(C)/C=4-0.01C</x-tex>. The marginal falls twice as fast as the average.</li>
+      <li>Optimum: <x-tex>m\,R'(C^*)=1\Rightarrow 4-0.02C^*=2.5\Rightarrow C^*=\$75</x-tex>. Then <x-tex>R(75)=\$300-\$56.25=\$243.75</x-tex> and <x-tex>\Pi(75)=0.4\times\$243.75-\$75=\$22.50</x-tex>.</li>
+      <li>Average iROAS reaches <x-tex>1/m</x-tex> where <x-tex>4-0.01C=2.5</x-tex>, i.e. at <x-tex>C=\$150</x-tex>, exactly where <x-tex>\Pi=0</x-tex>.</li>
+    </ol>
+    <p class="ar-result">Result: <strong>under this curve the optimal budget is $75, with profit $22.50; the $100 plan earns $20 and the $150 plan $0.</strong> The average iROAS at the optimum is 3.25, so a “healthy” average says nothing about whether you are at the optimum.</p>
+    <p class="ar-check">Check: for a quadratic the chord slope equals the derivative at the interval midpoint, so the chord on <x-tex>[100,150]</x-tex> is <x-tex>R'(125)=4-2.5=1.5</x-tex>, matching the previous example; and <x-tex>C^*=75</x-tex> lies inside the bracket <x-tex>(0,150)</x-tex>.</p>
+  </div>
+</section>
+<x-chart>{"title": "Incremental revenue vs spend: where profit peaks",
+ "params": {"m": 0.4},
+ "x": {"label": "Ad spend C ($)", "min": 0, "max": 200, "ticks": [0, 50, 100, 150, 200], "format": {"prefix": "$"}},
+ "y": {"label": "Incremental revenue ($)", "min": 0, "max": 500, "ticks": [0, 100, 200, 300, 400, 500], "format": "usd"},
+ "series": [{"fn": "4*x - 0.01*x*x", "label": "R(C) = 4C − 0.01C²", "tone": "accent"},
+            {"fn": "x/m", "label": "R = C/m (zero profit)", "tone": "muted", "dash": true},
+            {"fn": "x/m + 56.25", "label": "slope 1/m = 2.5, tangent at C*", "tone": "warm", "dash": true, "from": 20, "to": 150}],
+ "vlines": [{"x": 75, "label": "C*", "tone": "warm"}],
+ "points": [{"x": 75, "y": 243.75, "tone": "warm"}, {"x": 100, "y": 300}, {"x": 150, "y": 375}],
+ "caption": "Profit is <x-tex>m\\,[R(C)-C/m]</x-tex>: 0.4 times the vertical gap between the curve and the zero-profit line. The gap is widest where the curve's slope equals <x-tex>1/m</x-tex> (<x-tex>C^*=\\$75</x-tex>) and closes at $150, where the average iROAS falls to 2.5. The other two dots are the $100 and $150 plans. Plotted: the assumed <x-tex>R(C)=4C-0.01C^2</x-tex> fitted through the chapter's three points."}</x-chart>
+<x-chart>{"title": "Average vs marginal iROAS",
+ "x": {"label": "Ad spend C ($)", "min": 0, "max": 200, "ticks": [0, 50, 100, 150, 200], "format": {"prefix": "$"}},
+ "y": {"label": "iROAS", "min": 0, "max": 4, "ticks": [0, 1, 2, 3, 4], "format": {"decimals": 1}},
+ "series": [{"fn": "4 - 0.01*x", "label": "average R(C)/C", "tone": "accent"},
+            {"fn": "4 - 0.02*x", "label": "marginal R′(C)", "tone": "warm"}],
+ "hlines": [{"y": 2.5, "label": "break-even 1/m = 2.5", "tone": "muted"}],
+ "vlines": [{"x": 75, "label": "C* = $75", "tone": "warm"}, {"x": 150, "label": "average = 1/m", "tone": "accent"}],
+ "caption": "Scale while the <em>marginal</em> curve is above 2.5; it crosses at $75. The average crosses only at $150, where all the profit earned up to $75 has been given back. Plotted: <x-tex>R(C)/C=4-0.01C</x-tex> and <x-tex>R'(C)=4-0.02C</x-tex>."}</x-chart>
 <h3>4. Platform gross profit can grow while customer profit falls</h3>
 <p>Now combine the two ledgers. Assume additionally that the platform always keeps 25% of the budget, that its direct service costs are always 5% of the budget, and that it keeps recognizing revenue net.</p>
 <div class="ar-table-wrap"><table><thead><tr><th scope="col">Metric</th><th scope="col">Ad budget $100</th><th scope="col">Ad budget $150</th></tr></thead><tbody>

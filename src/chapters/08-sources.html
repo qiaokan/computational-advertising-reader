@@ -1,49 +1,125 @@
 <article class="ar-lesson" id="ar-chapter-7" data-nav="Sources and errata" data-time="Reference"><h1>Sources, errata, and glossary</h1>
+<aside class="ar-callout ar-key"><p class="ar-callout-title">In this chapter</p><ul>
+<li><strong>Erratum.</strong> The RTB monograph’s budget-constrained second-price bid counts the win rate twice. The correct coefficient is <x-tex>\sqrt{6LB/N}</x-tex>, valid for <x-tex>B/N\le L/6</x-tex>; the published one overspends the budget by at least 18% wherever the correct one applies (43.6% in the running example).</li>
+<li><strong>Sources.</strong> What to read next, and what each source is good for.</li>
+<li><strong>Glossary.</strong> The reader’s canonical definitions of ad-tech terms, alphabetical.</li>
+<li><strong>Review record.</strong> What was checked in each editorial pass, and what was not.</li>
+</ul></aside>
 <h2>An erratum in the RTB monograph’s second-price example</h2>
-<p>The monograph “Display Advertising with Real-Time Bidding (RTB) and Behavioural Targeting” (arXiv v2: 122 pages, version dated July 15, 2017; the PDF title page says July 18) is a sound end-to-end account of RTB. One worked example in Section 5.3.4, however, gets its budget equation wrong: it counts the win probability twice. This section re-derives the example and quantifies the error. <a href="https://arxiv.org/abs/1610.03013" rel="noopener noreferrer" target="_blank">arXiv metadata</a></p>
+<p>The monograph “Display Advertising with Real-Time Bidding (RTB) and Behavioural Targeting” by Wang, Zhang and Yuan (arXiv:1610.03013v2, 122 pages; arXiv date July 15, 2017, title page July 18) is a sound end-to-end account of RTB. One worked example in its Section 5.3.4 gets the budget equation wrong: it counts the win probability twice. This section re-derives the example, locates the slip and sizes the error. Equation and page numbers below refer to v2 and were checked against the PDF. <a href="https://arxiv.org/abs/1610.03013" rel="noopener noreferrer" target="_blank">arXiv metadata</a></p>
 <h3>Symbols</h3>
-<p>Notation follows the “Prediction and bidding” chapter. Where the monograph uses a different symbol, it is given in brackets.</p>
+<p>Notation follows <a href="#chapter-3">Prediction and bidding</a>. The monograph’s symbol, where different, is in brackets.</p>
 <ul>
-<li><x-tex>Z</x-tex>: the <strong>competitive threshold</strong>, the highest competing bid for one bid request. We win if our bid is at least <x-tex>Z</x-tex> [monograph: market price <x-tex>z</x-tex>].</li>
-<li><x-tex>L&gt;0</x-tex>: the upper bound of <x-tex>Z</x-tex>. We assume <x-tex>Z\sim\mathrm{Uniform}(0,L)</x-tex> [monograph: <x-tex>l</x-tex>].</li>
-<li><x-tex>b\ge 0</x-tex>: our bid for one request. <x-tex>Z</x-tex>, <x-tex>L</x-tex> and <x-tex>b</x-tex> are all in dollars per impression (multiply by 1,000 for CPM).</li>
-<li><x-tex>F(b)=P(Z\le b)</x-tex>: the win probability at bid <x-tex>b</x-tex>, and <x-tex>f=F'</x-tex> its density [monograph: <x-tex>w(b)</x-tex> and <x-tex>p_z</x-tex>].</li>
-<li><x-tex>\mathbf{1}\{Z\le b\}</x-tex>: the win indicator, 1 on a win and 0 on a loss. <x-tex>E[\cdot]</x-tex> is expectation over <x-tex>Z</x-tex>, and also over <x-tex>r</x-tex> where an integral over <x-tex>r</x-tex> is written.</li>
-<li><x-tex>r\in[0,1]</x-tex>: the <strong>predicted click-through rate (pCTR)</strong> of the request, i.e. the probability that a won impression is clicked. Here <x-tex>r</x-tex> is a probability, not money. (In the SAM paper cited in the “Prediction and bidding” chapter, <x-tex>r</x-tex> is the reward per conversion; that chapter renames it <x-tex>a</x-tex>.)</li>
-<li><x-tex>b(r)</x-tex>: the <strong>bidding function</strong>, which maps a request’s pCTR to a bid.</li>
-<li><x-tex>N</x-tex>: the number of bid requests the campaign receives over its lifetime [monograph: <x-tex>T</x-tex>]. <x-tex>B</x-tex>: the total media budget in dollars [monograph: <x-tex>B</x-tex>].</li>
-<li><x-tex>C(b)=E[Z\,\mathbf{1}\{Z\le b\}]</x-tex>: the expected payment <em>per request</em>, counting zero on a loss, as in the “Prediction and bidding” chapter. <x-tex>c(b)</x-tex> is the monograph’s cost function; its Eq. 5.5 defines it as the expected payment <em>given a win</em>, <x-tex>c(b)=E[Z\mid Z\le b]</x-tex>, so <x-tex>C(b)=c(b)\,F(b)</x-tex>.</li>
-<li><x-tex>\lambda&gt;0</x-tex>: the Lagrange multiplier on the budget [monograph: <x-tex>\lambda</x-tex>]. The objective here counts clicks, so <x-tex>\lambda</x-tex> is in clicks per dollar and <x-tex>1/\lambda</x-tex> is in dollars per click.</li>
+<li><x-tex>Z</x-tex>: the <strong>competitive threshold</strong>, the highest competing bid on one bid request. We win if our bid is at least <x-tex>Z</x-tex> [market price <x-tex>z</x-tex>].</li>
+<li><x-tex>L&gt;0</x-tex>: the upper bound of <x-tex>Z</x-tex>, with <x-tex>Z\sim\mathrm{Uniform}(0,L)</x-tex> [<x-tex>l</x-tex>].</li>
+<li><x-tex>b\ge 0</x-tex>: our bid on one request. <x-tex>Z</x-tex>, <x-tex>L</x-tex> and <x-tex>b</x-tex> are dollars per impression (×1,000 for CPM).</li>
+<li><x-tex>F(b)=P(Z\le b)</x-tex>: the win rate at bid <x-tex>b</x-tex>; <x-tex>f=F'</x-tex> [<x-tex>w(b)</x-tex>, <x-tex>p_z</x-tex>].</li>
+<li><x-tex>r\in[0,1]</x-tex>: the request’s <strong>predicted click-through rate</strong> (pCTR), the probability that a won impression is clicked. Here <x-tex>r</x-tex> is a probability, not money. (In the SAM paper cited in <a href="#chapter-3">Prediction and bidding</a>, <x-tex>r</x-tex> is the reward per conversion; that chapter renames it <x-tex>a</x-tex>.)</li>
+<li><x-tex>b(r)</x-tex>: the <strong>bidding function</strong>, mapping pCTR to a bid.</li>
+<li><x-tex>N</x-tex>: bid requests over the campaign’s life [<x-tex>T</x-tex>]. <x-tex>B</x-tex>: total media budget in dollars. <x-tex>B/N</x-tex> is the budget per request.</li>
+<li><x-tex>C(b)=E[Z\,\mathbf{1}\{Z\le b\}]</x-tex>: expected payment <em>per request</em>, counting zero on a loss, as in <a href="#chapter-3">Prediction and bidding</a>. <x-tex>\mathbf{1}\{\cdot\}</x-tex> is the indicator; <x-tex>E</x-tex> is over <x-tex>Z</x-tex>. The monograph’s cost function <x-tex>c(b)</x-tex> (Eq. 5.5) is the expected payment <em>given a win</em>, <x-tex>c(b)=E[Z\mid Z\le b]</x-tex>, so <x-tex>C(b)=c(b)\,F(b)</x-tex>.</li>
+<li><x-tex>\lambda&gt;0</x-tex>: the Lagrange multiplier on the budget. The objective counts clicks, so <x-tex>\lambda</x-tex> is clicks per dollar and <x-tex>1/\lambda</x-tex> is dollars per click.</li>
 </ul>
 <h3>Model and correct solution</h3>
-<p>Assumptions (the monograph’s special case): an ideal second-price auction, so the winner pays <x-tex>Z</x-tex>, with no floor price, fees or bid increments; every win yields one billable impression; <x-tex>r\sim\mathrm{Uniform}(0,1)</x-tex>, independent of <x-tex>Z</x-tex>; and a risk-neutral buyer. For <x-tex>0\le b\le L</x-tex>:</p>
-<div class="ar-math"><x-tex display>F(b)=\frac{b}{L},\qquad
-c(b)=E[Z\mid Z\le b]=\frac{b}{2},\qquad
-C(b)=E[Z\,\mathbf{1}\{Z\le b\}]=\int_0^b \frac{z}{L}\,dz=\frac{b^2}{2L}.</x-tex></div>
-<p>The objective is to maximize expected clicks subject to expected spend equal to the budget (the monograph’s Eq. 5.11):</p>
-<div class="ar-math"><x-tex display>\max_{b(\cdot)}\; N\int_0^1 r\,F\bigl(b(r)\bigr)\,dr
-\quad\text{s.t.}\quad
-N\int_0^1 C\bigl(b(r)\bigr)\,dr=B.</x-tex></div>
-<p>The Lagrangian separates across <x-tex>r</x-tex>. Maximizing <x-tex>rF(b)-\lambda C(b)</x-tex> pointwise gives the first-order condition <x-tex>(r-\lambda b)\,f(b)=0</x-tex>, so <x-tex>b(r)=r/\lambda</x-tex> as long as <x-tex>r/\lambda\le L</x-tex>. This is the monograph’s Eq. 5.32, and it is the second-price rule <x-tex>b=v/\lambda</x-tex> from the “Prediction and bidding” chapter with value <x-tex>v=r</x-tex> measured in clicks. A linear bid is therefore <em>derived</em> here, not assumed. Expected clicks equal <x-tex>N/(3\lambda L)</x-tex>, which rise as <x-tex>\lambda</x-tex> falls, so the budget binds and the equality constraint is justified. Substituting into the constraint:</p>
-<div class="ar-math"><x-tex display>N\int_0^1 \frac{(r/\lambda)^2}{2L}\,dr=\frac{N}{6\lambda^2L}=B
-\;\Longrightarrow\;
-\frac{1}{\lambda^*}=\sqrt{\frac{6LB}{N}},\qquad
-b^*(r)=r\sqrt{\frac{6LB}{N}}.</x-tex></div>
-<p>The closed form holds only when no bid exceeds <x-tex>L</x-tex>, i.e. <x-tex>1/\lambda^*\le L</x-tex>, which is equivalent to <x-tex>B/N\le L/6</x-tex>. For <x-tex>L/6&lt;B/N&lt;L/2</x-tex> the optimal bid is <x-tex>\min(r/\lambda,L)</x-tex>, and <x-tex>\lambda</x-tex> solves a different budget equation. For <x-tex>B/N\ge L/2</x-tex> the budget never binds, because bidding <x-tex>L</x-tex> on every request costs <x-tex>E[Z]=L/2</x-tex> per request.</p>
+<p>The monograph’s special case: an ideal second-price auction (the winner pays <x-tex>Z</x-tex>; no floor, fees or bid increments); every win is one billable impression; <x-tex>r\sim\mathrm{Uniform}(0,1)</x-tex>, independent of <x-tex>Z</x-tex>; a risk-neutral buyer that maximizes expected clicks subject to expected spend <x-tex>=B</x-tex>. Nothing assumes the bid is linear in <x-tex>r</x-tex>; linearity falls out of the first-order condition.</p>
+<section class="ar-worked">
+  <header class="ar-worked-head"><span class="ar-worked-tag">Derivation</span><h4>Budget-constrained click maximization under second price</h4></header>
+  <div class="ar-worked-body">
+    <p>Given: <x-tex>Z\sim\mathrm{Uniform}(0,L)</x-tex> in dollars per impression; pCTR <x-tex>r\sim\mathrm{Uniform}(0,1)</x-tex>, independent of <x-tex>Z</x-tex>; <x-tex>N</x-tex> requests; budget <x-tex>B</x-tex> dollars.</p>
+    <ol class="ar-steps">
+      <li>Win rate and costs for <x-tex>0\le b\le L</x-tex>. The per-request cost integrates the payment over winning thresholds only; it already contains the win probability.
+        <div class="ar-math"><x-tex display>\begin{aligned}
+F(b)&amp;=\frac{b}{L},\\
+c(b)&amp;=E[Z\mid Z\le b]=\frac{b}{2},\\
+C(b)&amp;=\int_0^b z\,\frac{dz}{L}=\frac{b^2}{2L}\\
+&amp;=c(b)\,F(b).
+\end{aligned}</x-tex></div>
+        For <x-tex>b&gt;L</x-tex> the bid always wins and <x-tex>C(b)=E[Z]=L/2</x-tex>, so bidding above <x-tex>L</x-tex> is equivalent to bidding <x-tex>L</x-tex>.</li>
+      <li>The program (the monograph’s Eq. 5.11 with <x-tex>u(r)=r</x-tex>):
+        <div class="ar-math"><x-tex display>\begin{aligned}
+&amp;\max_{b(\cdot)}\; N\int_0^1 r\,F\bigl(b(r)\bigr)\,dr\\
+&amp;\text{s.t.}\quad N\int_0^1 C\bigl(b(r)\bigr)\,dr=B.
+\end{aligned}</x-tex></div></li>
+      <li>The Lagrangian separates across <x-tex>r</x-tex>. Maximize <x-tex>rF(b)-\lambda C(b)</x-tex> pointwise. Since <x-tex>C'(b)=b\,f(b)</x-tex>, the derivative is <x-tex>(r-\lambda b)\,f(b)</x-tex>: positive below <x-tex>r/\lambda</x-tex>, negative above. So
+        <div class="ar-math"><x-tex display>b(r)=\min\!\left(\frac{r}{\lambda},\,L\right).</x-tex></div>
+        This is the monograph’s Eq. 5.32 and the second-price rule <x-tex>b=v/\lambda</x-tex> of <a href="#chapter-3">Prediction and bidding</a>, with value <x-tex>v=r</x-tex> measured in clicks.</li>
+      <li>The budget binds. With <x-tex>r/\lambda\le L</x-tex> for all <x-tex>r</x-tex>, expected clicks are <x-tex>N\int_0^1 r\cdot\frac{r}{\lambda L}\,dr=\frac{N}{3\lambda L}</x-tex>, decreasing in <x-tex>\lambda</x-tex>; so the optimum spends the whole budget and the equality constraint is right.</li>
+      <li>Solve the budget equation, writing <x-tex>c^*=1/\lambda^*</x-tex> for the bid coefficient:
+        <div class="ar-math"><x-tex display>\begin{aligned}
+N\int_0^1 \frac{(r c^*)^2}{2L}\,dr&amp;=\frac{N (c^*)^2}{6L}=B\\
+\Longrightarrow\quad c^*=\frac{1}{\lambda^*}&amp;=\sqrt{\frac{6LB}{N}}.
+\end{aligned}</x-tex></div></li>
+      <li>Validity. The step-5 integral assumed no bid exceeds <x-tex>L</x-tex>, i.e. <x-tex>c^*\le L</x-tex>, which is <x-tex>6LB/N\le L^2</x-tex>, i.e. <x-tex>B/N\le L/6</x-tex>. For <x-tex>L/6&lt;B/N&lt;L/2</x-tex> the bid <x-tex>\min(rc,L)</x-tex> costs <x-tex>L/2-L^2/(3c)</x-tex> per request, so <x-tex>c=L^2/\bigl(3(L/2-B/N)\bigr)</x-tex>; it equals <x-tex>L</x-tex> at <x-tex>B/N=L/6</x-tex>, so the two regimes join continuously. For <x-tex>B/N\ge L/2</x-tex> the budget never binds: bidding <x-tex>L</x-tex> everywhere costs <x-tex>E[Z]=L/2</x-tex> per request.</li>
+    </ol>
+    <p class="ar-result">Result: <strong><x-tex>b^*(r)=r\sqrt{6LB/N}</x-tex> for <x-tex>B/N\le L/6</x-tex></strong> (dollars per impression; the coefficient is dollars per click).</p>
+    <p class="ar-check">Check: (i) Units: <x-tex>L</x-tex> and <x-tex>B/N</x-tex> are both dollars, so <x-tex>\sqrt{6LB/N}</x-tex> is dollars, per click because <x-tex>r</x-tex> is clicks per impression. (ii) Marginal cost: spend <x-tex>S=N c^2/(6L)</x-tex> and clicks <x-tex>K=N c/(3L)</x-tex> give <x-tex>dS/dK=c</x-tex>, so at the optimum the last click costs exactly <x-tex>1/\lambda^*</x-tex>, as a shadow price should. (iii) Numerical double integration of <x-tex>E[Z\,\mathbf{1}\{Z\le rc^*\}]</x-tex> over <x-tex>(r,Z)</x-tex>, a Monte Carlo run, and a grid search over linear coefficients all reproduce the closed form and the optimum.</p>
+  </div>
+</section>
 <h3>Where the monograph goes wrong</h3>
-<p>The monograph’s budget constraint (Eqs. 5.11 and 5.33) is <x-tex>N\int c(b(r))\,F(b(r))\,dr=B</x-tex>. That is correct, because Eq. 5.5 defines <x-tex>c</x-tex> as the conditional payment, so <x-tex>cF=C</x-tex>. But Eq. 5.35 (PDF page 58) evaluates <x-tex>c(b)</x-tex> as <x-tex>\int_0^b z/L\,dz=b^2/(2L)</x-tex>, without dividing by <x-tex>F(b)</x-tex>. That expression is <x-tex>C(b)</x-tex>, not <x-tex>c(b)</x-tex>. Eq. 5.36 (page 59) then multiplies it by <x-tex>F(b)=b/L</x-tex> again, so the per-request cost becomes <x-tex>b^3/(2L^2)</x-tex>. With <x-tex>b=r/\lambda</x-tex>:</p>
-<div class="ar-math"><x-tex display>\int_0^1\frac{(r/\lambda)^3}{2L^2}\,dr=\frac{1}{8\lambda^3L^2}=\frac{B}{N}
-\;\Longrightarrow\;
-\lambda_{\mathrm{paper}}=\frac12\left(\frac{N}{BL^2}\right)^{1/3},\qquad
-\frac{1}{\lambda_{\mathrm{paper}}}=2\left(\frac{L^2B}{N}\right)^{1/3}.</x-tex></div>
-<p>These are the monograph’s Eqs. 5.37 and 5.38 (subscript “paper” marks the published value). The linear form <x-tex>b=r/\lambda</x-tex> is unaffected; only the coefficient is wrong. The monograph’s first-price result in the same section, <x-tex>b(r)=r\sqrt{3LB/N}</x-tex> (Eq. 5.29), uses the per-request cost <x-tex>bF(b)=b^2/L</x-tex> correctly, so the slip is confined to the second-price case. <a href="https://arxiv.org/pdf/1610.03013v2#page=54" rel="noopener noreferrer" target="_blank">Page with Eq. 5.5</a>, <a href="https://arxiv.org/pdf/1610.03013v2#page=58" rel="noopener noreferrer" target="_blank">page with Eq. 5.35</a>, <a href="https://arxiv.org/pdf/1610.03013v2#page=59" rel="noopener noreferrer" target="_blank">page with Eqs. 5.36–5.38</a></p>
+<p>The monograph’s budget constraint (Eqs. 5.11 and 5.33, PDF pp. 56 and 58) is <x-tex>N\int c(b(r))\,F(b(r))\,dr=B</x-tex>. That is correct: Eq. 5.5 (p. 54) defines <x-tex>c</x-tex> as the conditional payment, so <x-tex>cF=C</x-tex>. But Eq. 5.35 (p. 58) evaluates <x-tex>c(b)</x-tex> as <x-tex>\int_0^b z/L\,dz=b^2/(2L)</x-tex>, dropping Eq. 5.5’s denominator <x-tex>F(b)</x-tex>. That is <x-tex>C(b)</x-tex>, not <x-tex>c(b)</x-tex>. Eq. 5.36 (p. 59) then multiplies by <x-tex>F(b)=b/L</x-tex> again, making the per-request cost <x-tex>b^3/(2L^2)</x-tex>. With <x-tex>b=r/\lambda</x-tex>:</p>
+<div class="ar-math"><x-tex display>\begin{aligned}
+\int_0^1\frac{(r/\lambda)^3}{2L^2}\,dr&amp;=\frac{1}{8\lambda^3L^2}=\frac{B}{N}\\
+\Longrightarrow\quad \lambda_{\mathrm{paper}}&amp;=\frac12\left(\frac{N}{BL^2}\right)^{1/3},\\
+c_{\mathrm{paper}}=\frac{1}{\lambda_{\mathrm{paper}}}&amp;=2\left(\frac{L^2B}{N}\right)^{1/3}.
+\end{aligned}</x-tex></div>
+<p>These are Eqs. 5.37 and 5.38. The linear form <x-tex>b=r/\lambda</x-tex> survives; only the coefficient is wrong. The first-price result in the same section, <x-tex>b(r)=r\sqrt{3LB/N}</x-tex> (Eq. 5.29, p. 58), uses the per-request cost <x-tex>b\,F(b)=b^2/L</x-tex> correctly, so the slip is confined to the second-price case. <a href="https://arxiv.org/pdf/1610.03013v2#page=54" rel="noopener noreferrer" target="_blank">Page with Eq. 5.5</a>, <a href="https://arxiv.org/pdf/1610.03013v2#page=58" rel="noopener noreferrer" target="_blank">page with Eq. 5.35</a>, <a href="https://arxiv.org/pdf/1610.03013v2#page=59" rel="noopener noreferrer" target="_blank">page with Eqs. 5.36–5.38</a></p>
+<aside class="ar-callout ar-warn"><p class="ar-callout-title">Pitfall: conditional vs per-request cost</p><p>“Expected cost” has two meanings: given a win, <x-tex>E[Z\mid Z\le b]</x-tex>, and per request, <x-tex>E[Z\,\mathbf{1}\{Z\le b\}]</x-tex>. They differ by a factor <x-tex>F(b)</x-tex>. A budget constraint needs the per-request one: the win rate enters exactly once. Units will not catch a second factor of <x-tex>F</x-tex>, which is dimensionless; scaling will. Under a uniform threshold, per-request second-price spend must grow as <x-tex>b^2</x-tex>; a formula that grows as <x-tex>b^3</x-tex> has counted the win rate twice.</p></aside>
 <h3>Size of the error</h3>
-<p>At the published coefficient, the true expected spend per request is <x-tex>(1/\lambda_{\mathrm{paper}})^2/(6L)</x-tex>. Dividing by the budget per request gives the overspend factor</p>
-<div class="ar-math"><x-tex display>\frac{(1/\lambda_{\mathrm{paper}})^2/(6L)}{B/N}=\frac{2}{3}\left(\frac{LN}{B}\right)^{1/3}.</x-tex></div>
-<p>The published formula keeps every bid at or below <x-tex>L</x-tex> exactly when <x-tex>B/N\le L/8</x-tex>, and on that whole range the factor is at least <x-tex>\tfrac23\cdot 8^{1/3}=\tfrac43</x-tex>. Wherever the formula applies, it overspends by at least 33%, and the overspend grows as the budget tightens. Boundary effects cannot explain the gap.</p>
-<p><strong>Check with the “Prediction and bidding” chapter’s numbers:</strong> <x-tex>L=\$0.02</x-tex> per impression ($20 CPM), <x-tex>N=1{,}000{,}000</x-tex> requests and <x-tex>B=\$2{,}000</x-tex>, so <x-tex>B/N=\$0.002\le L/8=\$0.0025</x-tex>. The correct coefficient is <x-tex>\sqrt{6\times0.02\times0.002}=\$0.015492</x-tex> per click: a request with pCTR <x-tex>r</x-tex> gets a bid of <x-tex>r\times\$15.49</x-tex> CPM, and expected spend is exactly $2,000. The published coefficient is <x-tex>2(0.02^2\times0.002)^{1/3}=\$0.018566</x-tex> per click, and its true expected spend is $2,872.58, or 1.436 times the budget. With the unitless values <x-tex>L=1</x-tex>, <x-tex>B/N=0.01</x-tex>, the coefficients are 0.244949 and 0.430887 and the overspend factor is 3.094. The main text derives its budget results independently and does not reuse this example.</p>
+<p>Bidding with <x-tex>c_{\mathrm{paper}}</x-tex>, the true expected spend per request is <x-tex>c_{\mathrm{paper}}^2/(6L)</x-tex> as long as <x-tex>c_{\mathrm{paper}}\le L</x-tex>. Divided by the budget per request:</p>
+<div class="ar-math"><x-tex display>\begin{aligned}
+\frac{c_{\mathrm{paper}}^2/(6L)}{B/N}&amp;=\frac{4\,(L^2B/N)^{2/3}}{6L\,B/N}\\
+&amp;=\frac{2}{3}\left(\frac{LN}{B}\right)^{1/3}.
+\end{aligned}</x-tex></div>
+<p>The published coefficient keeps every bid at or below <x-tex>L</x-tex> exactly when <x-tex>8L^2B/N\le L^3</x-tex>, i.e. <x-tex>B/N\le L/8</x-tex>. The factor decreases in <x-tex>B/N</x-tex>, so on that range it is at least <x-tex>\tfrac23\cdot 8^{1/3}=\tfrac43</x-tex>. On <x-tex>L/8&lt;B/N\le L/6</x-tex> some published bids exceed <x-tex>L</x-tex>; true spend is then <x-tex>L/2-L^2/(3c_{\mathrm{paper}})</x-tex> per request, and the factor keeps falling to <x-tex>3-6^{1/3}\approx1.183</x-tex> at <x-tex>B/N=L/6</x-tex>. <strong>Wherever the correct closed form applies, the published one overspends by at least 18%, and by more as the budget tightens.</strong> This is not a boundary effect.</p>
+<x-chart>{"title": "True expected spend: published vs correct coefficient",
+ "params": {"L": 0.02},
+ "x": {"label": "Budget per 1,000 requests, 1,000·B/N ($)", "min": 0, "max": 4, "ticks": [0, 1, 2, 3, 4], "format": {"prefix": "$"}},
+ "y": {"label": "Expected spend per 1,000 requests", "min": 0, "max": 5, "ticks": [0, 1, 2, 3, 4, 5], "format": "usd"},
+ "series": [{"fn": "x", "label": "budget: spend = B", "tone": "muted", "dash": true},
+            {"fn": "x", "label": "correct √(6LB/N): spend = B", "tone": "accent", "to": 3.3333},
+            {"fn": "1000*(min(2*cbrt(L*L*x/1000), L)**3/(12*L*cbrt(L*L*x/1000)) + (1 - min(2*cbrt(L*L*x/1000), L)/(2*cbrt(L*L*x/1000)))*L/2)", "label": "published 2(L²B/N)^(1/3)", "tone": "negative", "from": 0.01}],
+ "areas": [{"fn": "1000*(min(2*cbrt(L*L*x/1000), L)**3/(12*L*cbrt(L*L*x/1000)) + (1 - min(2*cbrt(L*L*x/1000), L)/(2*cbrt(L*L*x/1000)))*L/2)", "fn2": "x", "from": 0.01, "to": 4, "tone": "negative", "label": "overspend"}],
+ "vlines": [{"x": 2.5, "label": "L/8", "tone": "muted", "row": 0},
+            {"x": 3.3333, "label": "L/6", "tone": "muted", "row": 1}],
+ "points": [{"x": 2, "y": 2.8726, "label": "$2.87 vs $2 (1.436×)", "pos": "left", "tone": "negative"},
+            {"x": 3.3333, "y": 3.9429, "label": "1.183×", "pos": "above", "tone": "negative"}],
+ "caption": "Running-example threshold <x-tex>L=\\$0.02</x-tex>. The correct coefficient spends exactly the budget up to its validity limit <x-tex>B/N=L/6</x-tex> (\\$3.33 per 1,000 requests). The published coefficient overspends everywhere on that range; the shaded gap is the overspend. Its ratio to the budget, <x-tex>\\tfrac23(LN/B)^{1/3}</x-tex>, grows without bound as the budget shrinks, is <x-tex>4/3</x-tex> at <x-tex>L/8</x-tex>, and is 1.183 at <x-tex>L/6</x-tex>. Plotted: true spend per 1,000 requests of the bid <x-tex>\\min(rc,L)</x-tex>, <x-tex>1000\\,\\bigl[m^3/(6Lc)+(1-m/c)\\,L/2\\bigr]</x-tex> with <x-tex>c=2(L^2B/N)^{1/3}</x-tex> and <x-tex>m=\\min(c,L)</x-tex>; this is <x-tex>c^2/(6L)</x-tex> below <x-tex>L/8</x-tex> and <x-tex>L/2-L^2/(3c)</x-tex> above."}</x-chart>
+<section class="ar-worked">
+  <header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>The erratum at the running example’s numbers</h4></header>
+  <div class="ar-worked-body">
+    <p>Given: threshold bound <x-tex>L=\$0.02</x-tex> per impression ($20 CPM); <x-tex>N=1{,}000{,}000</x-tex> requests; media budget <x-tex>B=\$2{,}000</x-tex>; pCTR <x-tex>r\sim\mathrm{Uniform}(0,1)</x-tex> as in the monograph’s special case. Values are carried unrounded and rounded only for display.</p>
+    <ol class="ar-steps">
+      <li>Budget per request and validity: <x-tex>B/N=\$0.002</x-tex>. This is below <x-tex>L/6=\$0.00333</x-tex>, so the correct closed form applies, and below <x-tex>L/8=\$0.0025</x-tex>, so no published bid exceeds <x-tex>L</x-tex> either.</li>
+      <li>Correct coefficient:
+        <x-tex display>\begin{aligned}
+c^*&amp;=\sqrt{6LB/N}=\sqrt{6\times0.02\times0.002}\\
+&amp;=\sqrt{0.00024}=\$0.015492
+\end{aligned}</x-tex>
+        per click. A request with pCTR <x-tex>r</x-tex> gets a bid of <x-tex>r\times\$15.49</x-tex> CPM.</li>
+      <li>Published coefficient:
+        <x-tex display>\begin{aligned}
+c_{\mathrm{paper}}&amp;=2(L^2B/N)^{1/3}\\
+&amp;=2\,(0.0004\times0.002)^{1/3}\\
+&amp;=2\times(8\times10^{-7})^{1/3}\\
+&amp;=2\times0.0092832=\$0.018566
+\end{aligned}</x-tex>
+        per click: a bid of <x-tex>r\times\$18.57</x-tex> CPM, 19.8% higher.</li>
+      <li>True expected spend at the published coefficient:
+        <x-tex display>\begin{aligned}
+N\,\frac{c_{\mathrm{paper}}^2}{6L}&amp;=10^6\times\frac{4\times(8\times10^{-7})^{2/3}}{0.12}\\
+&amp;=10^6\times\frac{3.44710\times10^{-4}}{0.12}\\
+&amp;=\$2{,}872.58.
+\end{aligned}</x-tex></li>
+      <li>Clicks. Expected clicks are <x-tex>Nc/(3L)</x-tex>: 258,199 at <x-tex>c^*</x-tex> and 309,439 at <x-tex>c_{\mathrm{paper}}</x-tex>. The extra 51,240 clicks cost $872.58, or $0.0170 each, above the optimum’s marginal cost of <x-tex>1/\lambda^*=\$0.0155</x-tex> per click.</li>
+      <li>With a hard cap at $2,000 and requests arriving evenly, the published bidder runs out after <x-tex>2000/2872.58=69.6\%</x-tex> of the flight, so it collects 69.6% of 309,439 clicks: exactly <x-tex>2B/c_{\mathrm{paper}}=215{,}443</x-tex>, against the optimum’s <x-tex>2B/c^*=258{,}199</x-tex>: 16.6% fewer clicks for the same money.</li>
+    </ol>
+    <p class="ar-result">Result: <strong>the published coefficient spends $2,872.58 in expectation against a $2,000 budget (1.436×); under a hard cap it delivers 16.6% fewer clicks than the correct one.</strong></p>
+    <p class="ar-check">Check: the overspend formula gives <x-tex>\tfrac23(LN/B)^{1/3}=\tfrac23\times10^{1/3}=\tfrac23\times2.15443=1.436290</x-tex>, and <x-tex>1.436290\times\$2{,}000=\$2{,}872.58</x-tex>, matching step 4. The click shortfall is <x-tex>1-c^*/c_{\mathrm{paper}}=1-0.015492/0.018566=16.6\%</x-tex>. Unitless case <x-tex>L=1</x-tex>, <x-tex>B/N=0.01</x-tex> (below <x-tex>L/8</x-tex>): coefficients 0.244949 and 0.430887, overspend factor <x-tex>\tfrac23\times100^{1/3}=3.094</x-tex>.</p>
+  </div>
+</section>
+<p>The main text derives its budget results independently and does not reuse this example.</p>
 <h2>Where to read next</h2>
-<p>For the full RTB picture, read Chapters 2, 3, 5 and 7 of the RTB monograph. For how industrial click prediction defines and calibrates probabilities, read Google’s 2013 click-prediction paper. To build a real integration, work from OpenRTB and your counterparties’ contracts. To judge whether advertising creates value for customers, read the randomized advertising experiments. In every paper, record the explicit assumptions; they matter more than the model names.</p>
+<p>For the full RTB picture, read the RTB monograph’s Chapters 2 (how RTB works), 3 (auctions and the bid landscape), 5 (bidding strategies) and 7 (attribution). For how production click models define and calibrate probabilities, read Google’s 2013 click-prediction paper. To build an integration, work from OpenRTB and your counterparties’ contracts. To judge whether advertising creates value for the advertiser, read the randomized experiments. In every paper, write down the explicit assumptions; they matter more than the model names.</p>
 <div class="ar-table-wrap"><table>
 <thead>
 <tr>
@@ -102,7 +178,7 @@ b^*(r)=r\sqrt{\frac{6LB}{N}}.</x-tex></div>
 </tr>
 </tbody>
 </table></div>
-<p>The public table of contents of the third edition of “Computational Advertising: Market and Technology of Internet Commercial Monetization” (in Chinese) was used only to check that this reader’s product scope does not omit major topics such as guaranteed contracts, search, feeds and systems. Only public metadata and the table of contents were consulted; <strong>the paid full text was not read</strong>, and this reader is not a summary of that book. <a href="https://www.dedao.cn/ebook/detail?id=donM9vjLM8m6d5YQ7lvJGVz2Xgaqb3pB480nBRyejENkP1KZo9rD4OApxpxkY7Ke" rel="noopener noreferrer" target="_blank">Dedao e-book table of contents</a>, <a href="https://detail.youzan.com/show/goods?alias=3f2qrgpf0m0jly7&amp;from_source=gbox_seo" rel="noopener noreferrer" target="_blank">publisher’s third-edition listing</a></p>
+<p>For the third edition of “Computational Advertising: Market and Technology of Internet Commercial Monetization” (in Chinese), only the public table of contents and metadata were consulted, to check that this reader’s scope does not omit a major topic such as guaranteed contracts, search, feeds or systems. <strong>The paid full text was not read</strong>, and this reader is not a summary of that book. <a href="https://www.dedao.cn/ebook/detail?id=donM9vjLM8m6d5YQ7lvJGVz2Xgaqb3pB480nBRyejENkP1KZo9rD4OApxpxkY7Ke" rel="noopener noreferrer" target="_blank">Dedao e-book table of contents</a>, <a href="https://detail.youzan.com/show/goods?alias=3f2qrgpf0m0jly7&amp;from_source=gbox_seo" rel="noopener noreferrer" target="_blank">publisher’s third-edition listing</a></p>
 <h2 id="glossary">Glossary</h2>
 <p>This is the reader’s canonical glossary, in alphabetical order. Definitions give the sense used in this reader; individual contracts and platforms may define a term differently, and the contract wins.</p>
 <div class="ar-table-wrap"><table>
@@ -135,7 +211,7 @@ b^*(r)=r\sqrt{\frac{6LB}{N}}.</x-tex></div>
 <tr><td data-label="Term">burl</td><td data-label="Definition">OpenRTB billing notice URL: the exchange calls it when the impression becomes billable under the exchange’s policy.</td></tr>
 <tr><td data-label="Term">Calibration</td><td data-label="Definition">The property that predicted probabilities match observed frequencies (among requests with pCTR 2%, about 2% are clicked); bidding needs it because bids multiply value by probability.</td></tr>
 <tr><td data-label="Term">Campaign</td><td data-label="Definition">An advertiser’s unit of budget, objective, schedule and targeting.</td></tr>
-<tr><td data-label="Term">Censoring (winning prices)</td><td data-label="Definition">Partial observation of the competitive threshold: on a win in a second-price auction it is observed, on a loss we know only that it exceeded our bid, so regression on wins alone is biased.</td></tr>
+<tr><td data-label="Term">Censoring (winning prices)</td><td data-label="Definition">Partial observation of the competitive threshold: on a win in a second-price auction it is observed (in first price, a win shows only that it was at most our bid); on a loss we know only that it exceeded our bid. Regression on wins alone is therefore biased.</td></tr>
 <tr><td data-label="Term">Clearing price</td><td data-label="Definition">The price the auction winner actually pays.</td></tr>
 <tr><td data-label="Term">Competitive threshold</td><td data-label="Definition">The highest competing bid for an opportunity (or the floor, if higher): the bid needed to win, written <x-tex>Z</x-tex>. The RTB monograph calls it the market price.</td></tr>
 <tr><td data-label="Term">Contribution</td><td data-label="Definition">In this reader, pre-advertising contribution per order: sales revenue minus cost of goods, fulfillment and other variable non-advertising costs.</td></tr>
@@ -155,10 +231,11 @@ b^*(r)=r\sqrt{\frac{6LB}{N}}.</x-tex></div>
 <tr><td data-label="Term">First-price auction</td><td data-label="Definition">An auction in which the winner pays its own bid.</td></tr>
 <tr><td data-label="Term">Floor price</td><td data-label="Definition">The seller’s minimum acceptable price for an opportunity; bids below it lose. Also called a reserve price.</td></tr>
 <tr><td data-label="Term">Ghost ads</td><td data-label="Definition">An experiment design that logs, for control users, the impressions the campaign would have won, so the effect on users who would actually be exposed can be estimated without placebo ads.</td></tr>
-<tr><td data-label="Term">Gross spread</td><td data-label="Definition">A term defined in this reader: an ad network’s collections from advertisers minus its media procurement cost.</td></tr>
+<tr><td data-label="Term">Gross spread</td><td data-label="Definition">A term defined in this reader: an ad network’s collections from advertisers minus its media procurement cost (<x-tex>M=A-C</x-tex> in <a href="#chapter-3">Prediction and bidding</a>); it is before the network’s other costs, so it is not profit.</td></tr>
 <tr><td data-label="Term">Gross vs net revenue</td><td data-label="Definition">Revenue recognition: a platform that controls the service before it reaches the customer (a principal under IFRS 15 and ASC 606) books the full advertiser spend as revenue (gross); an agent books only its fee (net).</td></tr>
-<tr><td data-label="Term">GSP</td><td data-label="Definition">Generalized second-price auction for several ranked slots, as in search ads: each winner pays roughly the minimum bid needed to keep its position. Bidding one’s value is not an equilibrium in general.</td></tr>
+<tr><td data-label="Term">GSP</td><td data-label="Definition">Generalized second-price auction for several ranked slots, as in search ads: each winner pays the minimum bid needed to keep its position, i.e. the next-ranked bid (quality-weighted where quality scores apply). Bidding one’s value is not a dominant strategy and in general not an equilibrium.</td></tr>
 <tr><td data-label="Term">Guaranteed delivery</td><td data-label="Definition">A contract that commits the seller to deliver a fixed volume of qualifying impressions, with a remedy for shortfall.</td></tr>
+<tr><td data-label="Term">Hard cap</td><td data-label="Definition">A spend limit that must hold on every realized path, not just in expectation; enforced by reserving each bid’s maximum possible cost before the bid is sent. Pacing and expected-budget constraints do not guarantee it.</td></tr>
 <tr><td data-label="Term">Holdout</td><td data-label="Definition">A randomly selected group withheld from ads (or from a campaign or feature) to serve as the control when measuring incrementality.</td></tr>
 <tr><td data-label="Term">IAB</td><td data-label="Definition">Interactive Advertising Bureau, the industry body whose Tech Lab publishes OpenRTB, ads.txt and sellers.json.</td></tr>
 <tr><td data-label="Term">IDFA</td><td data-label="Definition">Identifier for Advertisers: the per-device iOS advertising identifier, readable only after ATT consent.</td></tr>
@@ -184,17 +261,19 @@ b^*(r)=r\sqrt{\frac{6LB}{N}}.</x-tex></div>
 <tr><td data-label="Term">Rewarded video</td><td data-label="Definition">A video ad the user opts into in exchange for an in-app reward.</td></tr>
 <tr><td data-label="Term">ROAS</td><td data-label="Definition">Return on ad spend: attributed revenue divided by ad spend. It ignores cost of goods and does not measure incrementality.</td></tr>
 <tr><td data-label="Term">RPM</td><td data-label="Definition">Revenue per 1,000 ad requests (also called request eCPM); if each filled request yields one impression, RPM = fill rate × impression eCPM.</td></tr>
-<tr><td data-label="Term">RTB</td><td data-label="Definition">Real-time bidding: an auction run separately for each ad opportunity while the user’s page or app waits, typically within about 100 ms.</td></tr>
+<tr><td data-label="Term">RTB</td><td data-label="Definition">Real-time bidding: an auction run separately for each ad opportunity while the user’s page or app waits, within a deadline the exchange sets per request (OpenRTB <code>tmax</code>, commonly on the order of 100 ms).</td></tr>
 <tr><td data-label="Term">SDK</td><td data-label="Definition">Software development kit: a library embedded in an app, e.g. by an ad network, mediation platform or MMP.</td></tr>
 <tr><td data-label="Term">Second-price auction</td><td data-label="Definition">An auction in which the winner pays the highest competing bid, or the floor if higher. “Ideal second-price” in this reader ignores floors, bid increments and fees.</td></tr>
 <tr><td data-label="Term">sellers.json / SupplyChain object</td><td data-label="Definition">sellers.json is a file each SSP or exchange publishes listing the sellers it pays; the OpenRTB SupplyChain object lists every intermediary a bid request passed through.</td></tr>
 <tr><td data-label="Term">Settlement</td><td data-label="Definition">The final, contractually checked computation of who owes whom.</td></tr>
+<tr><td data-label="Term">Shadow price</td><td data-label="Definition">The increase in the optimal objective per extra unit of a constrained resource, given by the constraint’s Lagrange multiplier; for a budget, extra value (or clicks) per extra budget dollar. Written <x-tex>\lambda</x-tex> or <x-tex>\mu</x-tex> in this reader.</td></tr>
 <tr><td data-label="Term">SKAdNetwork</td><td data-label="Definition">Apple’s earlier privacy-preserving install-attribution API (SKAN), succeeded by AdAttributionKit.</td></tr>
 <tr><td data-label="Term">SSP</td><td data-label="Definition">Supply-side platform: software that sells a publisher’s inventory to many buyers and exchanges and manages floor prices.</td></tr>
 <tr><td data-label="Term">Statistical arbitrage</td><td data-label="Definition">Here, buying impressions on CPM while selling outcomes on CPA: profitable in expectation, but exposed to conversion, attribution and payment risk.</td></tr>
-<tr><td data-label="Term">Take rate</td><td data-label="Definition">The platform’s net revenue divided by the gross advertiser spend that flows through it.</td></tr>
+<tr><td data-label="Term">Take rate</td><td data-label="Definition">The amount the platform keeps after paying publishers, divided by the total advertiser spend that flows through it.</td></tr>
 <tr><td data-label="Term">tCPA</td><td data-label="Definition">Target CPA: the average cost per action an advertiser asks the bidder to aim for; a bidding goal, not a billing price.</td></tr>
-<tr><td data-label="Term">TOT / CACE</td><td data-label="Definition">Treatment effect on the treated / complier average causal effect: the effect on users actually exposed; with one-sided noncompliance, the ITT divided by the exposure rate in the treatment group.</td></tr>
+<tr><td data-label="Term">tmax</td><td data-label="Definition">OpenRTB bid-request field: the maximum time, in milliseconds, the exchange allows for bids to arrive, including network latency.</td></tr>
+<tr><td data-label="Term">TOT / CACE</td><td data-label="Definition">Treatment effect on the treated / complier average causal effect: the effect on users actually exposed; with one-sided noncompliance and the exclusion restriction (assignment affects outcomes only through exposure), the ITT divided by the exposure rate in the treatment group.</td></tr>
 <tr><td data-label="Term">tROAS</td><td data-label="Definition">Target ROAS: the return on ad spend an advertiser asks the bidder to aim for; a bidding goal, not a billing contract.</td></tr>
 <tr><td data-label="Term">View-through conversion</td><td data-label="Definition">A conversion credited to an impression that was not clicked; a click-through conversion follows a click.</td></tr>
 <tr><td data-label="Term">Waterfall</td><td data-label="Definition">A mediation method that calls demand sources one at a time in a configured priority order until one fills the request.</td></tr>

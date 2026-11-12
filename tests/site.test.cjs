@@ -14,6 +14,7 @@ assert.doesNotMatch(html, /<script\b[^>]*\bsrc=/, 'no external scripts');
 assert.doesNotMatch(html, /<link\b[^>]*rel="stylesheet"/, 'no external stylesheets');
 assert.doesNotMatch(html, /<iframe\b/, 'no iframe wrapper');
 assert.doesNotMatch(html, /<x-tex\b/, 'all TeX rendered at build time');
+assert.doesNotMatch(html, /<x-chart\b/, 'all charts rendered at build time');
 
 // Eight chapters, only the first visible without JavaScript.
 const articles = [...html.matchAll(/<article class="ar-lesson" id="ar-chapter-(\d)"[^>]*>/g)];
@@ -40,6 +41,11 @@ for (const [table] of html.matchAll(/<table>[\s\S]*?<\/table>/g)) {
       check(label !== undefined && strip(label) === heads[i], `data-label "${label}" ≠ header "${heads[i]}"`);
     });
   }
+}
+
+// Every chart has a caption telling the reader what to notice.
+for (const [fig] of html.matchAll(/<figure class="ar-figure ar-chart">[\s\S]*?<\/figure>/g)) {
+  check(/<figcaption>/.test(fig), `chart without caption: ${strip((fig.match(/ar-figtitle[^>]*>([^<]*)/) || [])[1] || fig.slice(0, 80))}`);
 }
 
 // House style.
