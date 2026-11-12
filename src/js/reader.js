@@ -48,7 +48,8 @@
     const list = $('ar-outline');
     list.textContent = '';
     if (observer) observer.disconnect();
-    const heads = [...lessons[chapter].querySelectorAll('h2[id]')];
+    const heads = [...lessons[chapter].querySelectorAll('h2[id]')]
+      .filter((h) => !h.closest('#ar-network-spread-appendix'));
     const items = new Map();
     for (const h of heads) {
       const li = document.createElement('li');
@@ -95,7 +96,9 @@
     else if (hash && (target = document.getElementById(hash)) && root.contains(target)) {
       const owner = target.closest('.ar-lesson');
       if (owner) showChapter(lessons.indexOf(owner));
-      if (target.tagName === 'DETAILS') target.open = true;
+      for (let el = target; el && root.contains(el); el = el.parentElement) {
+        if (el.tagName === 'DETAILS') el.open = true;
+      }
     } else showChapter(Number(store.get('ar-chapter')) || 0);
     setMenu(false);
     if (!scroll) return;

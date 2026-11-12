@@ -8,7 +8,7 @@ Live site: https://computational-advertising-reader.vercel.app
 
 1. A one-day learning roadmap and the running example
 2. Products, contracts, and cash flow
-3. Prediction, auctions, bidding, and budgets (with a threshold explorer and profit calculator)
+3. Advertiser value, auctions and budgets (advertiser calculator; optional network-spread appendix)
 4. Attribution, causal experiments, and data
 5. Real-time serving, billing, and budget systems
 6. AppLovin and Axon case study
@@ -23,6 +23,7 @@ src/chapters/NN-*.html   one <article> per chapter
 src/css/reader.css       theme (light/dark tokens, layout, components)
 src/js/reader.js         chapter routing, outline, theme toggle, profit calculator
 src/js/threshold.js      bid/win-probability explorer (chapter 3)
+src/js/advertiser.js     advertiser incremental-contribution calculator (main lesson)
 scripts/charts.mjs       build-time SVG charts from <x-chart> JSON specs (curves sampled from formulas)
 docs/AUTHORING.md        notation, units, components (callouts, worked examples, charts, timelines)
 build.mjs                assembles dist/index.html, renders TeX and charts, inlines the KaTeX fonts in use
@@ -43,10 +44,12 @@ Authoring conventions in chapter files (full guide: `docs/AUTHORING.md`):
 npm install
 npm run build     # writes dist/index.html
 node build.mjs --only 03 --out /tmp/ch3.html   # preview one chapter
-npm test          # dist up to date + static site checks + threshold explorer
+npm test          # build, site, threshold, advertiser math/UI and appendix-link checks
 python3 -m http.server 8000 --directory dist
 ```
 
 The page is a single self-contained HTML file with no external requests (KaTeX fonts are inlined). Vercel serves `dist/` directly with no build step, so commit `dist/index.html` after building. Vercel's Git integration deploys every push to `main` to production and every other branch to a preview URL.
 
 All examples are synthetic unless explicitly attributed. Mathematical review covers the stated assumptions; it does not validate their applicability to any real advertising market.
+
+Chapter 3 keeps the payment contracts explicit: the original fixed-CPA campaign has negative advertiser value at the default inputs; the positive-value bidding lesson is a separate direct/pass-through auction-buying contract with no fees. Network-spread maximization and its calculator are in a closed optional appendix.

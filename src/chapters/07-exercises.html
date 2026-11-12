@@ -1,14 +1,14 @@
 <article class="ar-lesson" id="ar-chapter-6" data-nav="Exercises" data-time="16:10–17:00 · 50 min"><h1>Comprehensive exercises and answers</h1>
-<aside class="ar-callout ar-key"><p class="ar-callout-title">How to use this set</p><p><strong>Time:</strong> 50 minutes. Answer all ten questions closed-book in 30, then mark yourself against the collapsed answers in 20. <strong>Scoring:</strong> 10 points each. Questions 2–6 are calculations, marked on the numbers and on naming the right party, unit and assumption; each answer shows a full worked solution. Questions 1 and 7–10 are conceptual, marked against the listed points a full-marks answer must contain. <strong>Pass mark</strong> (this reader's own, not an industry standard): 80 or more, with no conceptual error on Questions 2, 6 or 8. <strong>Sources:</strong> Q1 <a href="#chapter-2">chapter 2</a>; Q2–Q4 and Q7 <a href="#chapter-3">chapter 3</a>; Q5 and Q6 <a href="#chapter-4">chapter 4</a>; Q8 <a href="#chapter-5">chapter 5</a>; Q9 chapters 3–4; Q10 <a href="#chapter-6">chapter 6</a>.</p></aside>
+<aside class="ar-callout ar-key"><p class="ar-callout-title">How to use this set</p><p><strong>Time:</strong> 50 minutes. Answer all ten questions closed-book in 30, then mark yourself against the collapsed answers in 20. <strong>Scoring:</strong> 10 points each. Questions 2–6 are calculations, marked on the numbers and on naming the right party, unit and assumption; each answer shows a full worked solution. Questions 1 and 7–10 are conceptual, marked against the listed points a full-marks answer must contain. <strong>Pass mark</strong> (this reader's own, not an industry standard): 80 or more, with no conceptual error on Questions 3, 4, 6 or 8. <strong>Sources:</strong> Q1 <a href="#chapter-2">chapter 2</a>; Q2–Q4 and Q7 <a href="#chapter-3">chapter 3</a>; Q5 and Q6 <a href="#chapter-4">chapter 4</a>; Q8 <a href="#chapter-5">chapter 5</a>; Q9 chapters 3–4; Q10 <a href="#chapter-6">chapter 6</a>.</p></aside>
 <h2>Ten questions, 100 points</h2>
-<p><strong>Shared parameters for Questions 2–4.</strong> The running campaign from “A fictional campaign used throughout” (<a href="#chapter-1">A one-day learning roadmap</a>), worked through in <a href="#chapter-3">From prediction to bidding and budgets</a>.</p>
+<p><strong>CPA-contract parameters for Questions 2, 5 and 9.</strong> The running campaign from “A fictional campaign used throughout” (<a href="#chapter-1">A one-day learning roadmap</a>), worked through in the <a href="#ar-network-spread-appendix">optional network-spread appendix</a>. Questions 3–4 separately specify the main advertiser direct-buying contract.</p>
 <ul>
 <li><strong>Opportunities.</strong> <x-tex>N=1{,}000{,}000</x-tex> statistically identical bid opportunities (bid requests from publishers). Every auction win yields exactly one successful impression; display failures are ignored here (<a href="#chapter-5">Real-time advertising systems</a> relaxes this).</li>
 <li><strong>Contracts.</strong> The ad network sells to the advertiser on CPA terms: it charges <x-tex>a=\$30</x-tex> per <em>billable attributed conversion</em>, a conversion that the agreed attribution rules credit to the ad and that the contract makes payable. It buys impressions from publishers in first-price auctions: the winner pays its own bid, per impression.</li>
 <li><strong>Conversion probability.</strong> Each impression produces a billable attributed conversion with probability <x-tex>q=0.0005</x-tex>, the same for every opportunity and independent of the bid and of competition. The network's expected collections per impression are <x-tex>v=qa=\$0.015</x-tex>.</li>
-<li><strong>Advertiser economics.</strong> Pre-advertising contribution per order is <x-tex>g=\$40</x-tex>: sales revenue minus goods, fulfillment and other per-order variable costs, before ad spend and fixed costs. The true causal lift is <x-tex>\Delta q=0.0002</x-tex>: for the same opportunity, showing the ad raises the probability of an order by 0.0002 compared with not showing it. Not every attributed conversion is caused by the ad, so <x-tex>\Delta q&lt;q</x-tex>.</li>
+<li><strong>Advertiser economics.</strong> Pre-advertising contribution per order is <x-tex>g=\$40</x-tex>: sales revenue minus goods, fulfillment and other per-order variable costs, before ad spend and fixed costs. The true causal lift is <x-tex>\Delta q=0.0002</x-tex>: for the same opportunity, showing the ad raises the probability of an order by 0.0002 compared with not showing it. Here <x-tex>\Delta q&lt;q</x-tex> is a property of the given numbers. The two probabilities measure different events and neither bounds the other in general; attribution can both credit nonincremental orders and miss incremental ones.</li>
 <li><strong>Competition.</strong> The competitive threshold <x-tex>Z</x-tex> is the highest competing bid for an opportunity, in dollars per impression, with <x-tex>Z\sim\text{Uniform}(0,L)</x-tex>, <x-tex>L=\$0.02</x-tex>, independently across opportunities. A bid <x-tex>b</x-tex> wins when <x-tex>b\ge Z</x-tex>, so the win rate is <x-tex>F(b)=b/L</x-tex> for <x-tex>0\le b\le L</x-tex>.</li>
-<li><strong>Objective.</strong> Unless a question says otherwise, the network picks one uniform bid <x-tex>b</x-tex> for all opportunities to maximize expected <em>media gross spread</em>: expected collections from the advertiser minus expected payments to publishers. There is no budget except in Question 4, which adds a media budget <x-tex>B=\$2{,}000</x-tex> on expected media cost over the <x-tex>N</x-tex> opportunities.</li>
+<li><strong>Objective.</strong> In the optional network-spread appendix, the network picks one uniform bid <x-tex>b</x-tex> for all opportunities to maximize expected <em>media gross spread</em>: expected collections from the advertiser minus expected payments to publishers. That appendix uses a network media budget, which is not the advertiser spend cap in Questions 3–4.</li>
 <li><strong>Units.</strong> “Spend”, “bill” and “collections” mean expected values. CPM is a price per thousand impressions; eCPM (effective CPM) expresses any expected amount per impression as an amount per thousand impressions. Dollars per impression × 1,000 = CPM.</li>
 </ul>
 <details class="ar-exercise"><summary><strong>Question 1: Product dimensions.</strong> An ad runs in a mobile game's rewarded video slot (a video the player chooses to watch in exchange for an in-game reward), and the impression is bought in a real-time auction. The publisher charges the buyer per impression. The advertiser has set a target CPA (tCPA) of $30, the average cost per conversion the bidding algorithm aims for (<a href="#chapter-2">Products and cash flow</a>). Can you conclude that the advertiser pays only when a conversion happens? Which two terms of the advertiser's contract would you need to see to settle it?</summary><div class="ar-answer"><span class="ar-answerlabel">Reference answers and scoring points</span>
@@ -42,89 +42,20 @@
 <li><strong>The gap is a separate risk.</strong> A $7 loss per thousand impressions is a churn risk. Track it as its own metric or constraint (an incremental-CPA or iROAS guardrail), not by rewriting the receivables forecast.</li>
 </ul>
 <p>Scoring: 2 points for each number; 4 points for distinguishing the two objectives.</p></div></details>
-<details class="ar-exercise"><summary><strong>Question 3: First-price bidding.</strong> With <x-tex>v=0.015</x-tex>, <x-tex>Z\sim\text{Uniform}(0,0.02)</x-tex> and no budget, derive the optimal uniform bid, the win rate, and the expected media spend and network collections over <x-tex>N=1{,}000{,}000</x-tex> requests. Then give one condition under which the rule “bid half the value” fails.</summary><div class="ar-answer"><span class="ar-answerlabel">Reference answers and scoring points</span>
-<section class="ar-worked">
-  <header class="ar-worked-head"><span class="ar-worked-tag">Worked solution</span><h4>Unconstrained first-price bid</h4></header>
-  <div class="ar-worked-body">
-    <p>Given: value <x-tex>v=\$0.015</x-tex> per impression, <x-tex>Z\sim\text{Uniform}(0,L)</x-tex> with <x-tex>L=\$0.02</x-tex>, <x-tex>N=1{,}000{,}000</x-tex> requests, first price (a win costs <x-tex>b</x-tex>), no budget.</p>
-    <ol class="ar-steps">
-      <li>Expected spread per request = margin on a win × win probability: <x-tex display>\begin{aligned}m(b)&amp;=(v-b)\,\frac{b}{L}\\ &amp;=\frac{(0.015-b)\,b}{0.02}.\end{aligned}</x-tex></li>
-      <li>First-order condition, with <x-tex>b^*</x-tex> in dollars per impression: <x-tex display>\begin{aligned}m'(b)&amp;=\frac{v-2b}{L}=0\\ \Rightarrow\; b^{*}&amp;=\frac{v}{2}=\frac{0.015}{2}\\ &amp;=\$0.0075=\$7.50\ \text{CPM}.\end{aligned}</x-tex> <x-tex>m''(b)=-2/L&lt;0</x-tex>, and <x-tex>b^*=0.0075\le L=0.02</x-tex>, so this interior point is the maximum.</li>
-      <li>Win rate: <x-tex>F(b^*)=0.0075/0.02=0.375</x-tex>, i.e. <x-tex>0.375\times 1{,}000{,}000=375{,}000</x-tex> impressions.</li>
-      <li>Media spend: <x-tex>375{,}000\times\$0.0075=\$2{,}812.50</x-tex>.</li>
-      <li>Network collections: <x-tex>375{,}000\times\$0.015=\$5{,}625.00</x-tex>.</li>
-      <li>Gross spread: <x-tex>\$5{,}625.00-\$2{,}812.50=\$2{,}812.50</x-tex>.</li>
-    </ol>
-    <p class="ar-result">Result: <strong>bid $7.50 CPM, win rate 37.5%, media spend $2,812.50, collections $5,625.00</strong> (gross spread $2,812.50).</p>
-    <p class="ar-check">Check: <x-tex>N\,m(b^*)=10^6\times(0.0075\times 0.0075/0.02)=10^6\times 0.0028125=\$2{,}812.50</x-tex> ✓. At the optimum the margin <x-tex>v-b^*</x-tex> equals the price <x-tex>b^*</x-tex>, so spend and spread are equal.</p>
-  </div>
-</section>
-<x-chart>{"title": "Expected spread vs bid (first price, no budget)",
- "params": {"L": 0.02, "v": 0.015},
- "x": {"label": "Bid b ($ CPM)", "min": 0, "max": 16, "ticks": [0, 4, 8, 12, 16], "format": {"prefix": "$"}},
- "y": {"label": "Spread per 1,000 requests", "min": 0, "max": 3.2, "ticks": [0, 0.8, 1.6, 2.4, 3.2], "format": "usd2"},
- "series": [{"fn": "1000*(v - x/1000)*(x/1000)/L", "label": "m(b) × 1,000", "tone": "accent", "to": 15}],
- "vlines": [{"x": 7.5, "label": "b* = v/2 = $7.50"}, {"x": 15, "label": "v = $15", "tone": "muted"}],
- "points": [{"x": 7.5, "y": 2.8125, "label": "$2.81", "pos": "left"}],
- "caption": "Plotted: <x-tex>1000\\,(v-b)\\,b/L</x-tex> with <x-tex>b</x-tex> converted from CPM. The parabola is zero at <x-tex>b=0</x-tex> (never win) and at <x-tex>b=v</x-tex> (win at zero margin), so its peak sits halfway. The $2.81 per 1,000 requests times 1,000 gives the $2,812.50 spread over a million requests."}</x-chart>
-<p><strong>When “bid half the value” fails.</strong> The rule relies on a threshold uniform from zero and no other constraint. Any one of these, with its reason, earns full marks:</p>
-<ul>
-<li>The threshold distribution is not uniform; the condition becomes <x-tex>b^*=v-F(b^*)/f(b^*)</x-tex>.</li>
-<li>Uniform but not from zero: for <x-tex>Z\sim\text{Uniform}(c,L)</x-tex> with <x-tex>c&lt;v</x-tex>, <x-tex>m(b)=(v-b)(b-c)/(L-c)</x-tex> and <x-tex>b^*=(v+c)/2</x-tex>.</li>
-<li><x-tex>v/2&gt;L</x-tex>: the bid is capped at <x-tex>L</x-tex>, which already wins every auction.</li>
-<li>A budget binds (Question 4), or a floor price (the seller's minimum accepted price) or fees on top of the bid change the payment.</li>
-<li>Value is correlated with the threshold (e.g. contested inventory converts better or worse), so <x-tex>v</x-tex> cannot be pulled out as a constant.</li>
-</ul>
-<p>Scoring: derivation 4 points, numbers 4 points, failure condition 2 points.</p></div></details>
-<details class="ar-exercise"><summary><strong>Question 4: Whose budget?</strong> Add a media budget of $2,000 that caps the network's expected media cost over the <x-tex>N</x-tex> opportunities. Find the optimal first-price uniform bid and the advertiser's expected bill. If the advertiser then says it also has a hard budget of $2,000 on its own bill, is that bid still acceptable? Bonus: suppose instead that the advertiser's <em>expected</em> bill is capped at $2,000, while the $2,000 media budget stays in place. Find the optimal uniform bid. Does it guarantee that the actual bill never exceeds $2,000?</summary><div class="ar-answer"><span class="ar-answerlabel">Reference answers and scoring points</span>
-<section class="ar-worked">
-  <header class="ar-worked-head"><span class="ar-worked-tag">Worked solution</span><h4>Bid under a $2,000 media budget</h4></header>
-  <div class="ar-worked-body">
-    <p>Given: <x-tex>N=1{,}000{,}000</x-tex>, <x-tex>L=\$0.02</x-tex>, <x-tex>v=\$0.015</x-tex>, <x-tex>q=0.0005</x-tex>, <x-tex>a=\$30</x-tex>, media budget <x-tex>B=\$2{,}000</x-tex> on expected media cost.</p>
-    <ol class="ar-steps">
-      <li>Expected media cost = requests × win rate × price: <x-tex display>C(b)=N\cdot\frac{b}{L}\cdot b=\frac{Nb^2}{L}.</x-tex></li>
-      <li>Is the budget binding? At the unconstrained optimum <x-tex>b=v/2=0.0075</x-tex>: <x-tex>C=10^6\times 0.0075^2/0.02=\$2{,}812.50&gt;\$2{,}000</x-tex>. Yes.</li>
-      <li>Spread <x-tex>m(b)</x-tex> rises on <x-tex>[0,v/2]</x-tex>, so the best feasible bid is the largest one with <x-tex>C(b)=B</x-tex>: <x-tex display>\begin{aligned}b^*&amp;=\sqrt{\frac{BL}{N}}=\sqrt{\frac{2000\times 0.02}{1{,}000{,}000}}\\ &amp;=\sqrt{4\times10^{-5}}\approx\$0.0063246\\ &amp;=\$6.3246\ \text{CPM}.\end{aligned}</x-tex> In general <x-tex>b^*=\min\bigl(v/2,\ \sqrt{BL/N},\ L\bigr)</x-tex>.</li>
-      <li>Win rate <x-tex>0.0063246/0.02=31.623\%</x-tex>: about 316,228 impressions and <x-tex>316{,}228\times 0.0005\approx 158.11</x-tex> expected attributed conversions.</li>
-      <li>Advertiser's expected bill: <x-tex>158.11\times\$30\approx\$4{,}743.42</x-tex>. Gross spread: <x-tex>\$4{,}743.42-\$2{,}000=\$2{,}743.42</x-tex>.</li>
-    </ol>
-    <p class="ar-result">Result: <strong>bid ≈ $6.32 CPM; advertiser's expected bill ≈ $4,743.42</strong> (media cost $2,000, gross spread ≈ $2,743.42).</p>
-    <p class="ar-check">Check: bill ÷ media cost = <x-tex>v/b^* = 0.015/0.0063246\approx 2.3717</x-tex>, and <x-tex>2000\times 2.3717\approx \$4{,}743.4</x-tex> ✓. Same numbers as the chapter 3 calculator.</p>
-  </div>
-</section>
-<p><strong>The advertiser's $2,000 hard budget rules this bid out.</strong> Points for full marks:</p>
-<ul>
-<li>The expected bill alone, $4,743.42, is more than double the cap.</li>
-<li>The media budget limits what the network pays publishers; it does not limit what the network bills the advertiser. They are two parties' budgets on two different cash flows.</li>
-<li>A cap on the advertiser's bill must be enforced on the CPA receivables side, including conversions still to come from impressions already bought.</li>
-</ul>
-<x-chart>{"title": "Two budgets, two cash flows",
- "params": {"L": 0.02, "v": 0.015, "N": 1000000},
- "x": {"label": "Bid b ($ CPM)", "min": 0, "max": 10, "ticks": [0, 2, 4, 6, 8, 10], "format": {"prefix": "$"}},
- "y": {"label": "Expected $ over N requests", "min": 0, "max": 8000, "ticks": [0, 2000, 4000, 6000, 8000], "format": "usd"},
- "series": [{"fn": "N*(x/1000)**2/L", "label": "media cost Nb²/L", "tone": "accent"},
-            {"fn": "N*v*(x/1000)/L", "label": "advertiser bill Nvb/L", "tone": "warm"}],
- "hlines": [{"y": 2000, "label": "$2,000 cap", "tone": "muted"}],
- "vlines": [{"x": 2.6667, "label": "$2.67 (bill cap)", "tone": "warm"}, {"x": 6.3246, "label": "$6.32 (media)", "tone": "accent"}, {"x": 7.5, "label": "v/2 = $7.50", "tone": "muted", "row": 2}],
- "points": [{"x": 6.3246, "y": 2000, "tone": "accent"}, {"x": 6.3246, "y": 4743.42, "label": "bill $4,743", "pos": "left", "tone": "warm"}, {"x": 2.6667, "y": 2000, "tone": "warm"}],
- "caption": "Each budget meets a different curve. The media budget binds where cost <x-tex>Nb^2/L</x-tex> reaches $2,000, at $6.32 CPM, below the unconstrained $7.50; there the bill <x-tex>Nvb/L</x-tex> is already $4,743. A $2,000 cap on the expected bill binds much earlier, at $2.67 CPM (the bonus)."}</x-chart>
-<section class="ar-worked">
-  <header class="ar-worked-head"><span class="ar-worked-tag">Bonus solution</span><h4>Capping the advertiser's expected bill</h4></header>
-  <div class="ar-worked-body">
-    <p>Given: as above, plus a cap of $2,000 on the advertiser's expected bill; the $2,000 media budget stays.</p>
-    <ol class="ar-steps">
-      <li>Expected bill = requests × win rate × collections per impression: <x-tex display>A(b)=N\cdot\frac{b}{L}\cdot v=\frac{Nvb}{L}.</x-tex></li>
-      <li><x-tex>A(b)\le 2000</x-tex> gives <x-tex display>\begin{aligned}b&amp;\le\frac{2000\,L}{Nv}=\frac{2000\times 0.02}{1{,}000{,}000\times 0.015}\\ &amp;=\frac{40}{15{,}000}\approx\$0.0026667\\ &amp;=\$2.67\ \text{CPM}.\end{aligned}</x-tex></li>
-      <li>Media budget at that bid: <x-tex>C=10^6\times 0.0026667^2/0.02\approx\$355.56\le\$2{,}000</x-tex>, so it is slack. Spread still rises in <x-tex>b</x-tex> here (<x-tex>0.0026667&lt;v/2</x-tex>), so <x-tex>b^*\approx\$0.0026667</x-tex>.</li>
-      <li>Win rate 13.33%: about 133,333 impressions, 66.67 expected conversions, bill $2,000, gross spread <x-tex>\$2{,}000-\$355.56=\$1{,}644.44</x-tex>.</li>
-      <li>Is the actual bill capped? The conversion count is <x-tex>K\sim\text{Binomial}(N,\,F(b^*)\,q)</x-tex> with mean 66.67, essentially Poisson(66.67): standard deviation <x-tex>\sqrt{66.67}\approx 8.16</x-tex> conversions, about $245. The bill exceeds $2,000 exactly when <x-tex>K\ge 67</x-tex>, which has probability ≈ 50.0%.</li>
-    </ol>
-    <p class="ar-result">Result: <strong>bid ≈ $2.67 CPM. No guarantee: the actual bill exceeds $2,000 about half the time.</strong></p>
-    <p class="ar-check">Check: a Poisson distribution's median is within 1 of its mean, so a cap set at the mean is breached about half the time ✓. To cut the overrun probability to 5%, expected conversions must fall to about 54.13 (bid ≈ $2.17 CPM, expected bill ≈ $1,624).</p>
-  </div>
-</section>
-<p>Conversions also arrive with a lag after impressions are bought. A true hard cap needs either an earlier stop that leaves room for conversions still in flight, or a contract term under which conversions beyond the cap are not billed and the network absorbs them. The bonus is not scored.</p>
-<p>Scoring: calculation 6 points; identifying whose budget each constraint is 4 points.</p></div></details>
+<details class="ar-exercise"><summary><strong>Question 3: Advertiser first-price bidding.</strong> Use the direct/pass-through contract in <a href="#ar-advertiser-contract">Chapter 3</a>, not the CPA billing contract in Question 2. The advertiser pays the exact auction cost with no fees. Every win displays. Let <x-tex>N=10^6</x-tex>, <x-tex>Z\sim\mathrm{Uniform}(0,L)</x-tex> with <x-tex>L=\$0.02</x-tex> per impression, and advertiser incremental contribution <x-tex>w=\Delta qg=0.0002\times\$40=\$0.008</x-tex> per impression, independent of competition and bid. The advertiser chooses one bid <x-tex>b</x-tex> to maximize incremental contribution after ad spend. Without a budget, find the bid, expected impressions, ad spend and objective value. Explain why this is not the $7.50 CPM network-spread answer.</summary><div class="ar-answer">
+<p>First-price cost per win is <x-tex>b</x-tex>; win probability is <x-tex>F(b)=b/L</x-tex>. Define <x-tex>J(b)</x-tex> as advertiser incremental contribution after cost:</p>
+<div class="ar-math"><x-tex display>J(b)=\frac NL(wb-b^2),\qquad J'(b)=\frac NL(w-2b),\qquad J''(b)=-\frac{2N}{L}&lt;0.</x-tex></div>
+<p>The stationary point is the global maximum: <x-tex>b=w/2=\$0.004</x-tex> per impression, or $4 CPM, within <x-tex>[0,L]</x-tex>. Expected impressions are <x-tex>10^6(0.004/0.02)=200{,}000</x-tex>; advertiser spend is <x-tex>200{,}000\times0.004=\$800</x-tex>; incremental contribution before spend is <x-tex>200{,}000\times0.008=\$1{,}600</x-tex>; after spend it is $800. The appendix's $7.50 CPM bid uses network receipts <x-tex>v=qa=\$0.015</x-tex> under CPA billing and maximizes a different party's ledger. Substituting that value for <x-tex>w</x-tex> changes the economic question.</p>
+<p>Scoring: objective and contract 4 points; bid and ledger 4 points; distinction from network spread 2 points.</p></div></details>
+<details class="ar-exercise"><summary><strong>Question 4: An advertiser's budget is a cap.</strong> Keep Question 3's direct-buying contract and value. What happens to the optimal first-price bid with a $2,000 expected ad-spend cap? What if the cap is $500? Then find the ideal second-price bid and advertiser outcome under the $2,000 cap. Do these expected-budget solutions guarantee a realized hard spending limit?</summary><div class="ar-answer">
+<p>For first price, let <x-tex>B</x-tex> be the advertiser's expected-spend cap. The best feasible bid is <x-tex>b_1^*=\min\{w/2,\sqrt{BL/N},L\}</x-tex>.</p>
+<ol class="ar-steps">
+<li>At $2,000 the budget is slack: the $4 CPM profit-maximizing bid costs only $800. Expected incremental contribution after spend stays $800; the bidder does not force another $1,200 of spend.</li>
+<li>At $500 the budget binds: <x-tex>b_1^*=\sqrt{500\times0.02/10^6}=\$0.00316227766</x-tex> per impression ($3.1623 CPM). Expected impressions are 158,113.88; contribution before ad spend is <x-tex>158{,}113.883008\times0.008=\$1{,}264.911064</x-tex>; after $500 spend the objective is $764.91.</li>
+<li>For ideal second price, <x-tex>b_2^*=\min\{w,\sqrt{2BL/N},L\}</x-tex>. At $2,000 it bids $8 CPM, wins 400,000 impressions in expectation, and spends <x-tex>10^6(0.008)^2/(2\times0.02)=\$1{,}600</x-tex>. Incremental contribution is $3,200 before spend and $1,600 after spend. The budget is slack.</li>
+</ol>
+<p>All amounts above use unrounded inputs and are expected values. A realized hard cap needs separate reservation and settlement controls (<a href="#chapter-5">Chapter 5</a>). A $30 CPA contract would create a different advertiser bill; it cannot be inserted into these direct-cost equations without changing the model.</p>
+<p>Scoring: $2,000 first-price case 3 points; $500 case 3 points; second price 2 points; hard-budget distinction 2 points.</p></div></details>
 <details class="ar-exercise"><summary><strong>Question 5: Calibration and sampling.</strong> A conversion model is trained on downsampled data: every positive example is kept, and each negative is kept independently with probability 10%, regardless of its features (<a href="#chapter-4">Attribution, experiments, and data</a>). Training applies no weight correction, and the model is calibrated on the sampled distribution. For some feature vector it outputs 0.5. What is the true conversion probability? Separately: a new model has a higher AUC than the current one, but its predicted probabilities are about twice the observed conversion rates across the board. Can it go live as is?</summary><div class="ar-answer"><span class="ar-answerlabel">Reference answers and scoring points</span>
 <section class="ar-worked">
   <header class="ar-worked-head"><span class="ar-worked-tag">Worked solution</span><h4>Undoing negative downsampling</h4></header>
@@ -150,10 +81,10 @@
 <p><strong>The higher-AUC model cannot go live as is.</strong> A full-marks answer contains:</p>
 <ul>
 <li><strong>AUC is blind to calibration.</strong> It depends only on ranking and is unchanged by any strictly increasing transformation of the scores.</li>
-<li><strong>Bids use absolute probabilities.</strong> Value is <x-tex>v=30q</x-tex>, so doubling <x-tex>q</x-tex> doubles the value the bidder thinks it buys. In the shared example without a budget, the bid rises from <x-tex>v/2</x-tex> = $7.50 CPM to <x-tex>(2v)/2=\$0.015</x-tex> per impression = $15 CPM, where the true spread <x-tex>(0.015-b)\,b/L</x-tex> is zero: the whole $2,812.50 of spread per million requests is lost.</li>
+<li><strong>Bids use absolute probabilities.</strong> The network’s expected receipts per impression are <x-tex>v=30q</x-tex>, so doubling <x-tex>q</x-tex> doubles the value the bidder thinks it buys. In the shared example without a budget, the bid rises from <x-tex>v/2</x-tex> = $7.50 CPM to <x-tex>(2v)/2=\$0.015</x-tex> per impression = $15 CPM, where the true spread <x-tex>(0.015-b)\,b/L</x-tex> is zero: the whole $2,812.50 of spread per million requests is lost.</li>
 <li><strong>Launch checklist.</strong> Confirm the sampling correction was applied; recalibrate on matured labels; check calibration by segment (a uniform factor of 2 rarely holds everywhere); evaluate monetary loss, not ranking metrics; then run a limited online experiment.</li>
 </ul>
-<p>Second-order point: under a binding budget a pacing multiplier would absorb a perfectly uniform factor for one campaign (the Question 4 bid is set by the budget, not by <x-tex>v</x-tex>), but across campaigns and segments with different errors it misallocates spend. Scoring: number 4 points; calibration and launch logic 6 points.</p></div></details>
+<p>Second-order point: under a binding budget a pacing multiplier would absorb a perfectly uniform factor for one campaign (the appendix’s $6.3246 CPM network bid is set by its binding $2,000 media budget, not by <x-tex>v</x-tex>), but across campaigns and segments with different errors it misallocates spend. Scoring: number 4 points; calibration and launch logic 6 points.</p></div></details>
 <details class="ar-exercise"><summary><strong>Question 6: Incremental profit.</strong> This is the experiment from <a href="#chapter-4">Attribution, experiments, and data</a>. An eligible population is randomly split into a treatment group (the campaign may deliver) and a control group (it may not), 100,000 users each. Over the same matured window, treatment has 1,200 purchases and control 1,000. The attribution system credits 500 of the treatment purchases to the ad. Ad spend is $5,000. Net revenue per purchase is $50 (sales revenue after refunds and other adjustments, before goods, fulfillment and other costs), and the pre-advertising contribution rate is 40% of net revenue. Assume randomization and event definitions are correct and that the groups do not affect each other. Compute attributed ROAS (attributed revenue ÷ ad spend), incremental ROAS (iROAS: incremental revenue ÷ ad spend) and incremental contribution profit (incremental contribution − ad spend). Then explain why you cannot just compare the treatment users who actually saw the ad with the control group.</summary><div class="ar-answer"><span class="ar-answerlabel">Reference answers and scoring points</span>
 <section class="ar-worked">
   <header class="ar-worked-head"><span class="ar-worked-tag">Worked solution</span><h4>Attributed versus incremental returns</h4></header>

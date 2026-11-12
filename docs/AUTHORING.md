@@ -7,7 +7,7 @@ Chapters live in `src/chapters/NN-*.html`, one `<article class="ar-lesson">` eac
 - **Reader:** fluent in CS, probability, optimization, distributed systems and trading; new to ad tech. Never explain basic math or engineering. Always define ad-domain terms and modelling assumptions.
 - **Define before use.** Every symbol and acronym is defined at or before first use in the chapter, or linked to its definition (`<a href="#chapter-N">`, `<a href="#glossary">`, or any element id).
 - **Units.** US dollars. Say whether a price is per impression, per click, per conversion or per 1,000 impressions (CPM). Never mix CPM and per-unit prices in one formula.
-- **Notation shared across chapters:** `N` opportunities (bid requests), `B` budget, `b` bid (per impression), `Z` highest competing bid, `L` upper bound of `Z` when `Z ~ Uniform(0, L)`, `F`/`f` CDF/density of `Z`, `q` billable conversion probability per impression, `a` CPA paid by the advertiser, `v = q·a` network value per impression, `g` advertiser contribution per order, `Δq` true incremental conversion probability, `ρ` display-success probability, `λ`/`μ` multipliers, `m` the advertiser's contribution margin (break-even iROAS = `1/m`), `P` publisher payment per 1,000 impressions. `N` counts bid opportunities, not impressions won. If a chapter needs one of these letters for something else (e.g. a delay CDF or a logging policy), pick another letter or say explicitly that the symbol is local. Running example: `N = 1,000,000`, `L = $0.02`, `q = 0.0005`, `a = $30`, `g = $40`, `Δq = 0.0002`, `B = $2,000`.
+- **Notation shared across chapters:** `N` opportunities (bid requests), `B` advertiser total-spend cap in the Chapter 3 main line; network publisher-payment budget in the optional appendix and Chapter 5 (state the owner locally), `b` bid (per impression), `Z` highest competing bid, `L` upper bound of `Z` when `Z ~ Uniform(0, L)`, `F`/`f` CDF/density of `Z`, `q` billable conversion probability per impression, `a` CPA paid by the advertiser, `v = q·a` network receipts per impression; `w = Δq·g` advertiser incremental contribution per impression, `g` advertiser contribution per order, `Δq` true incremental conversion probability, `ρ` display-success probability, `λ`/`μ` appendix multipliers and `μ_A` the main-line advertiser budget multiplier, `m` the advertiser's contribution margin (break-even iROAS = `1/m`), `P` publisher payment per 1,000 impressions. `N` counts bid opportunities, not impressions won. If a chapter needs one of these letters for something else (e.g. a delay CDF or a logging policy), pick another letter or say explicitly that the symbol is local. Running example: `N = 1,000,000`, `L = $0.02`, `q = 0.0005`, `a = $30`, `g = $40`, `Δq = 0.0002`, `B = $2,000`.
 - **Every number must be reproducible** from numbers stated earlier on the page. Round only at the end and say so.
 
 ## Math
@@ -95,7 +95,7 @@ Rules:
 
 ### Existing components
 
-Tables (`<div class="ar-table-wrap"><table>…` with `<td data-label="Column header">` equal to the column's `<th>` text), flow maps (`ar-map`/`ar-flow`/`ar-node`), exercises (`<details class="ar-exercise">` + `ar-answer`), the threshold explorer and the profit calculator in chapter 3.
+Tables (`<div class="ar-table-wrap"><table>…` with `<td data-label="Column header">` equal to the column's `<th>` text), flow maps (`ar-map`/`ar-flow`/`ar-node`), exercises (`<details class="ar-exercise">` + `ar-answer`), the threshold explorer and two calculators in chapter 3: advertiser incremental contribution in the main line, network spread in the optional appendix.
 
 ## Previewing one chapter
 
@@ -103,3 +103,7 @@ Tables (`<div class="ar-table-wrap"><table>…` with `<td data-label="Column hea
 node build.mjs --validate                       # whole site, no write
 node build.mjs --only 03 --out /tmp/ch3.html    # one chapter to a scratch file
 ```
+
+## Decision-maker and contract in the bidding lesson
+
+Chapter 3 main line optimizes advertiser incremental contribution after advertising costs under a direct/pass-through buying contract with zero fees: `w = Δq·g = $0.008` per impression. It explicitly contrasts the original CPA contract, under which the advertiser should buy zero impressions at the stated defaults. The original `v = q·a = $0.015` network-spread model, figures, and calculator remain in a closed optional appendix. Never interchange `w` and `v`, advertiser spend and network procurement budgets, or the two contracts.

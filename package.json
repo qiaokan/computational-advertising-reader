@@ -4,7 +4,7 @@
   "description": "An interactive guide to computational advertising: products, algorithms, measurement, and systems.",
   "scripts": {
     "build": "node build.mjs",
-    "test": "node build.mjs --check && node tests/site.test.cjs && node tests/threshold-explorer.test.cjs"
+    "test": "node build.mjs --check && node tests/site.test.cjs && node tests/threshold-explorer.test.cjs && node tests/advertiser-objective.test.cjs && node tests/appendix-links.test.cjs"
   },
   "devDependencies": {
     "katex": "^0.16.47"

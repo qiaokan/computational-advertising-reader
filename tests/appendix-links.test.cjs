@@ -1,0 +1,15 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+const path=require('node:path');
+const source=fs.readFileSync(path.join(__dirname,'../src/js/reader.js'),'utf8');
+const route=source.match(/  function route\(scroll\) \{[\s\S]*?\n  \}/)[0];
+const lesson={};
+const outer={tagName:'DETAILS',open:false,parentElement:lesson};
+const inner={tagName:'DETAILS',open:false,parentElement:outer};
+const target={tagName:'H2',parentElement:inner,closest(){return lesson;},scrollIntoView(){this.scrolled=true;}};
+const state={};
+const context={location:{hash:'#appendix-deep-heading'},document:{getElementById(){return target;}},root:{contains(el){return el!==lesson;}},lessons:[lesson],showChapter(i){state.chapter=i;},setMenu(){},store:{get(){return null;}},$(){return target;}};
+vm.runInNewContext(route,context);context.route(true);
+assert.equal(state.chapter,0);assert(outer.open);assert(inner.open);assert(target.scrolled);
+console.log('PASS: direct appendix-heading links reveal all closed ancestor disclosures.');
