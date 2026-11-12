@@ -43,6 +43,6 @@ npm test          # dist up to date + static site checks + threshold explorer
 python3 -m http.server 8000 --directory dist
 ```
 
-The page is a single self-contained HTML file with no external requests (KaTeX fonts are inlined). Vercel serves `dist/` directly with no build step, so commit `dist/index.html` after building. The production branch is `main`.
+The page is a single self-contained HTML file with no external requests (KaTeX fonts are inlined). Vercel serves `dist/` directly with no build step, so commit `dist/index.html` after building. Vercel's Git integration deploys every push to `main` to production and every other branch to a preview URL.
 
 All examples are synthetic unless explicitly attributed. Mathematical review covers the stated assumptions; it does not validate their applicability to any real advertising market.
