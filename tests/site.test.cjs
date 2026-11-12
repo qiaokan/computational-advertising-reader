@@ -21,6 +21,10 @@ const articles = [...html.matchAll(/<article class="ar-lesson" id="ar-chapter-(\
 assert.deepEqual(articles.map((m) => m[1]), ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
 assert.deepEqual(articles.map((m) => /\shidden\b/.test(m[0])), [false, true, true, true, true, true, true, true, true, true]);
 
+// Every chapter except the reference chapter opens with a plain-words gist.
+const lessons = html.split(/<article class="ar-lesson"/).slice(1);
+lessons.slice(0, -1).forEach((a, i) => check(/<p class="ar-gist">/.test(a), `chapter ${i + 1} has no ar-gist paragraph`));
+
 // Unique ids; every in-page link resolves.
 const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
 const dupes = ids.filter((id, i) => ids.indexOf(id) !== i);
@@ -56,4 +60,4 @@ if (failures.length) {
   console.error(`FAIL (${failures.length}):\n- ` + [...new Set(failures)].join('\n- '));
   process.exit(1);
 }
-console.log('PASS: self-contained page, ten chapters, unique ids, resolvable links, table labels, house style.');
+console.log('PASS: self-contained page, ten chapters, chapter gists, unique ids, resolvable links, table labels, house style.');
