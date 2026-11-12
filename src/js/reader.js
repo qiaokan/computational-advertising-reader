@@ -28,6 +28,18 @@
   const setMenu = (open) => { root.classList.toggle('ar-menu-open', open); menu.setAttribute('aria-expanded', String(open)); };
   menu.addEventListener('click', () => setMenu(!root.classList.contains('ar-menu-open')));
 
+  // ---------- Reading progress (current chapter) ----------
+  const bar = $('ar-progress');
+  const progress = () => {
+    const el = lessons.find((l) => !l.hidden);
+    if (!el || !bar) return;
+    const r = el.getBoundingClientRect();
+    const total = r.height - innerHeight * 0.6;
+    bar.style.transform = `scaleX(${Math.max(0, Math.min(1, total > 0 ? -r.top / total : 1))})`;
+  };
+  addEventListener('scroll', progress, { passive: true });
+  addEventListener('resize', progress);
+
   // ---------- Chapters, outline, and deep links ----------
   let chapter = 0;
   let observer = null;
@@ -71,6 +83,7 @@
     $('ar-next-title').textContent = chapter < last ? meta[chapter + 1].title : 'End of reader';
     document.title = `${meta[chapter].title} · Computational Advertising`;
     buildOutline();
+    progress();
     store.set('ar-chapter', String(chapter));
   }
 

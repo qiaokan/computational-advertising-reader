@@ -2,16 +2,19 @@
 //   node build.mjs          write dist/index.html
 //   node build.mjs --check     fail if dist/index.html is stale or any TeX is invalid
 //   node build.mjs --validate  only check that every chapter assembles and all TeX renders (no write)
+//   node build.mjs --only 03 --out /tmp/ch3.html   preview one chapter (prefix match) to another file
 //
 // Authoring conventions (src/chapters/*.html):
 //   <x-tex>a+b</x-tex>          inline math (TeX, HTML-escaped: write &lt; for <)
 //   <x-tex display>…</x-tex>    display math
 //   <!-- script: name.js -->    inline src/js/name.js at this position
+//   <x-chart>{…}</x-chart>      build-time SVG chart (spec in scripts/charts.mjs; see docs/AUTHORING.md)
 // Every <h2> without an id gets a stable slug id for deep links and the page outline.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import katex from 'katex';
+import { renderCharts } from './scripts/charts.mjs';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const read = (p) => fs.readFileSync(path.join(root, p), 'utf8');
@@ -50,6 +53,7 @@ function chapter(file, index) {
     used.add(id);
     return `<h2 id="${id}">${inner}</h2>`;
   });
+  html = renderCharts(html, file, errors);
   html = renderTex(html, file);
   const tag = html.match(/<article\b[^>]*>/)[0];
   const attr = (n) => (tag.match(new RegExp(`${n}="([^"]*)"`)) || [])[1] || '';
@@ -58,7 +62,9 @@ function chapter(file, index) {
   return { html, nav: attr('data-nav'), time: attr('data-time'), title };
 }
 
-const files = fs.readdirSync(path.join(root, 'src/chapters')).filter((f) => f.endsWith('.html')).sort();
+const argVal = (k) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : null; };
+const only = argVal('--only');
+const files = fs.readdirSync(path.join(root, 'src/chapters')).filter((f) => f.endsWith('.html') && (!only || f.startsWith(only))).sort();
 const chapters = files.map(chapter);
 const pad = (i) => String(i + 1).padStart(2, '0');
 const nav = chapters
@@ -75,10 +81,11 @@ const out = read('src/template.html')
   .replace('{{READER_JS}}', () => read('src/js/reader.js'));
 
 if (errors.length) {
-  console.error(`TeX errors (${errors.length}):\n` + errors.join('\n'));
+  console.error(`Build errors (${errors.length}):\n` + errors.join('\n'));
   process.exit(1);
 }
-const target = path.join(root, 'dist/index.html');
+const target = argVal('--out') ? path.resolve(argVal('--out')) : path.join(root, 'dist/index.html');
+if (only && !argVal('--out') && !process.argv.includes('--validate')) { console.error('--only requires --out (never overwrite dist with a partial build)'); process.exit(1); }
 if (process.argv.includes('--validate')) {
   console.log('PASS: all chapters assemble and all TeX renders.');
 } else if (process.argv.includes('--check')) {
@@ -90,5 +97,5 @@ if (process.argv.includes('--validate')) {
 } else {
   fs.mkdirSync(path.dirname(target), { recursive: true });
   fs.writeFileSync(target, out);
-  console.log(`Wrote dist/index.html (${(out.length / 1024).toFixed(0)} KB, ${chapters.length} chapters).`);
+  console.log(`Wrote ${path.relative(root, target)} (${(out.length / 1024).toFixed(0)} KB, ${chapters.length} chapters).`);
 }
