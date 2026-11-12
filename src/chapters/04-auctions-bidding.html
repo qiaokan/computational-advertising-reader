@@ -1,26 +1,25 @@
-<article class="ar-lesson" id="ar-chapter-3" data-nav="Prediction and bidding" data-time="10:20–12:00 · 100 min"><h1>From advertiser value to bidding and budgets</h1>
+<article class="ar-lesson" id="ar-chapter-3" data-nav="Auctions and bidding" data-time="11:00–12:20 · 80 min"><h1>Auctions and bidding: from advertiser value to a bid</h1>
 <aside class="ar-callout ar-key"><p class="ar-callout-title">In this chapter</p><ul>
-<li>Choose the decision-maker, payment contract and objective before choosing a bid.</li>
-<li>Compute the advertiser's incremental contribution per impression, and distinguish it from a network's expected receipts.</li>
-<li>Derive advertiser-profit-maximizing bids: $4 CPM in first price and $8 CPM in ideal second price for the direct-buying example.</li>
-<li>See why a $2,000 budget can remain partly unspent, and how a $500 budget changes the answer.</li>
-<li>Keep response prediction, causal value and auction-price learning separate. An optional appendix studies a network maximizing its own spread.</li>
+<li>Name the decision-maker, contract and objective first: under the running $30 CPA contract the advertiser should buy nothing.</li>
+<li>Derive the win probability from the distribution of the highest competing bid: a $6 CPM bid wins 30% of auctions.</li>
+<li>Derive the advertiser's best bid when it pays the auction price: $4 CPM in first price, $8 CPM in second price.</li>
+<li>Treat a budget as a cap, not a target: $2,000 leaves money unspent, while $500 lowers the bids to $3.16 and $4.47 CPM.</li>
+<li>Read the general rules: bid shading, the budget multiplier and pacing as a feedback loop.</li>
 </ul></aside>
+<p class="ar-gist"><strong>The gist.</strong> An auction decides whose ad is shown and what the winner pays. A buyer must first know what an impression is worth to it under its contract; for an advertiser, that is the extra profit the ad causes. Then comes one trade-off: a higher bid wins more often, but in a first-price auction it also raises the price of every win, so the best bid sits below value. In a second-price auction the winner pays the runner-up's price, so bidding your value is best. A budget is a limit, not a goal; a sensible campaign can leave money unspent. Pacing is the feedback loop that keeps spending on track through the day.</p>
 <h2 id="ar-advertiser-objective">Start with whose money and whose objective</h2>
-<p><strong>The main decision-maker is the advertiser, or a buying agent instructed to act for it.</strong> The objective here is to maximize expected <strong>incremental contribution after advertising costs</strong>: contribution from sales caused by advertising, minus the advertiser's entire ad bill. Contribution is sales revenue less goods, fulfillment and other variable non-advertising costs; company fixed costs are outside this model. Spending the budget is a constraint, not a separate goal.</p>
+<p><strong>The decision-maker here is the advertiser (or an agent buying for it), and its objective is incremental contribution after advertising costs.</strong> Contribution is revenue minus goods, fulfillment and other variable costs; “incremental” counts only sales the ads caused.</p>
 <div class="ar-math"><x-tex display>\text{Advertiser objective}=\text{incremental sales contribution}-\text{total advertising bill}.</x-tex></div>
-<p>An ad network's <strong>spread</strong> is a different ledger: advertiser payments collected minus publisher payments made, before the network's other costs. Optimizing that ledger does not automatically optimize the advertiser's outcome. The <a href="#ar-network-spread-appendix">optional network-spread appendix</a> explains the $7.50 and $6.3246 CPM network-spread examples, including the calculator. Those are network-optimal bids under a particular contract, not general advertiser recommendations or claims about Axon's internal objective.</p>
-<h3>The existing CPA contract: first check whether buying anything makes sense</h3>
-<p>Keep the contract from <a href="#chapter-1">Chapter 1</a>: the advertiser pays <x-tex>a=\$30</x-tex> per billable attributed order. Let <x-tex>q=0.0005</x-tex> be the probability of such an order per successful impression; let <x-tex>\Delta q=0.0002</x-tex> be the true increase in purchase probability caused by showing the ad; and let <x-tex>g=\$40</x-tex> be contribution per additional order. These probabilities and contribution are teaching inputs, held constant as the bid changes. Attribution assigns billing credit; it does not establish causation.</p>
+<p>Take the contract from <a href="#chapter-1">Chapter 1</a>: the advertiser pays <x-tex>a=\$30</x-tex> per billable attributed order. Per successful impression, a billable order occurs with probability <x-tex>q=0.0005</x-tex>; the ad causes an extra order with probability <x-tex>\Delta q=0.0002</x-tex>; each extra order is worth <x-tex>g=\$40</x-tex> of contribution. These are teaching inputs, fixed as the bid changes.</p>
 <div class="ar-math"><x-tex display>\begin{aligned}
 \text{Incremental contribution per impression}&amp;=\Delta q\,g=0.0002\times40=\$0.008,\\
-\text{Advertiser bill per impression, in expectation}&amp;=q\,a=0.0005\times30=\$0.015,\\
+\text{Expected bill per impression}&amp;=q\,a=0.0005\times30=\$0.015,\\
 \text{Advertiser gain per impression}&amp;=0.008-0.015=-\$0.007.
 \end{aligned}</x-tex></div>
-<p>Let <x-tex>D</x-tex> be the expected number of successful impressions. Under this fixed-CPA contract the advertiser's expected incremental contribution after its bill is <x-tex>D(\Delta qg-qa)=-0.007D</x-tex>. If it can stop the campaign, <strong>the advertiser's optimum is zero impressions</strong>. Lowering the network's publisher payments does not lower the advertiser's fixed $30 CPA price. No derivative of network spread can turn this contract into a profitable one for the advertiser. Renegotiating the price, improving causal lift or stopping are economic choices that precede bid optimization.</p>
+<p>With <x-tex>D</x-tex> expected impressions the advertiser gains <x-tex>D(\Delta q\,g-q\,a)=-0.007D</x-tex>, so <strong>its best choice is zero impressions</strong>. No bid fixes a contract that loses on every impression; renegotiating, raising causal lift or stopping come first. A reselling network keeps a different ledger, its <strong>spread</strong> (collections minus publisher payments), and can profit while the advertiser loses. The <a href="#ar-network-spread-appendix">optional network-spread appendix</a> works that case, including its $7.50 and $6.3246 CPM bids.</p>
 <h2 id="ar-advertiser-contract">A separate worked contract: the advertiser pays the auction cost</h2>
-<p>To study a useful positive-value bidding decision, we now explicitly change the payment arrangement. <strong>The advertiser buys impressions directly, or its agent passes through the exact auction cost with no service fee, markup or other charge.</strong> It does not pay the $30 CPA invoice in this worked example. The causal lift and per-order contribution stay the same. This is an analytical baseline, not a description of AppLovin's contracts.</p>
-<p>All prices below are US dollars per impression unless marked CPM (price per 1,000 impressions). Assume each auction win displays successfully, no floor or extra fees, risk-neutral decisions based on expected contribution, and fixed competition. Each opportunity has the same causal lift and value, independent of its competitive threshold and our bid. There are no cross-impression interactions. We assume causal lift is known; <a href="#chapter-6">Chapter 4</a> explains the measurement problem.</p>
+<p><strong>To study a bid worth making, change the contract: the advertiser buys impressions directly and pays exactly the auction price, with no fee or markup.</strong> It no longer pays the $30 CPA; causal lift and contribution per order are unchanged. This is an analytical baseline, not AppLovin's contract.</p>
+<p>Assumptions: prices are dollars per impression unless marked CPM (per 1,000 impressions); every win displays; no floor or fees; expected-value decisions; competitors ignore our bid; every opportunity has the same value, unrelated to competing bids; causal lift is known (<a href="#chapter-6">Chapter 6</a> covers measuring it).</p>
 <div class="ar-table-wrap"><table><thead><tr><th scope="col">Symbol</th><th scope="col">Meaning</th><th scope="col">Value</th></tr></thead><tbody>
 <tr><td data-label="Symbol"><x-tex>N</x-tex></td><td data-label="Meaning">Number of auction opportunities, before winning any</td><td data-label="Value">1,000,000 per day</td></tr>
 <tr><td data-label="Symbol"><x-tex>b</x-tex></td><td data-label="Meaning">Uniform bid chosen for every opportunity</td><td data-label="Value">Decision variable, dollars per impression</td></tr>
@@ -29,271 +28,191 @@
 <tr><td data-label="Symbol"><x-tex>w</x-tex></td><td data-label="Meaning">Advertiser incremental contribution per impression, before ad spend</td><td data-label="Value"><x-tex>w=\Delta qg=\$0.008</x-tex> ($8 per 1,000 impressions)</td></tr>
 <tr><td data-label="Symbol"><x-tex>B</x-tex></td><td data-label="Meaning">Advertiser's expected total advertising-spend cap</td><td data-label="Value">$2,000 per day initially</td></tr>
 </tbody></table></div>
-<p><strong>Keep the two values separate:</strong> <x-tex>w=\Delta qg</x-tex> is advertiser contribution; <x-tex>v=qa</x-tex> in the appendix is a network's expected collection under CPA billing. The advertiser's direct-buying bid below uses <x-tex>w</x-tex>, not <x-tex>v</x-tex>.</p>
+<p>The bid uses the advertiser's value <x-tex>w</x-tex>, never the appendix's <x-tex>v=q\,a</x-tex> (a network's expected CPA collection).</p>
 <section id="ar-threshold-math" aria-labelledby="ar-threshold-title">
 <h2 id="ar-threshold-title">Why does a $6 CPM bid win 30% of opportunities?</h2>
-<p>Two questions are separate: <strong>what price must we beat in one auction?</strong> and <strong>how often does a fixed bid beat it across many auctions?</strong> The first defines the competitive threshold; the second needs a probability model.</p>
-<h4>1. One auction: our bid against the highest competing bid</h4>
-<p>Assume every opportunity has at least one competing bid, and let <x-tex>Z</x-tex> be the highest of them. A <strong>floor price</strong> (reserve price) is the seller's minimum acceptable price; this model has none. <x-tex>Z</x-tex> is then the <strong>competitive threshold</strong>. We choose our bid <x-tex>b</x-tex>. If competitors bid $3, $5 and $9 CPM, then <x-tex>Z</x-tex> = $9 CPM: a $6 CPM bid loses and a $10 CPM bid wins. Our own bid is not part of the maximum that defines <x-tex>Z</x-tex>.</p>
+<p><strong>We win when our bid beats the highest competing bid, so the win probability is the chance that this competing bid falls below ours.</strong> If competitors bid $3, $5 and $9 CPM, the price to beat is <x-tex>Z</x-tex> = $9 CPM: a $6 CPM bid loses and a $10 CPM bid wins. <x-tex>Z</x-tex> is called the <strong>competitive threshold</strong>. With no <strong>floor price</strong> (a seller's minimum price) and at least one competitor,</p>
 <div class="ar-math"><x-tex display>Z=\max\{\text{competing bids}\},\qquad \text{win}\iff b\ge Z.</x-tex></div>
-<p>Ties go to us (<x-tex>b\ge Z</x-tex> wins). Under the continuous distribution below an exact tie has probability zero, so the convention affects no result; with discrete price increments, real tie-breaking rules can matter. The threshold decides <em>whether</em> we win, not necessarily <em>what we pay</em>: in the default first-price auction the winner pays its own bid.</p>
-<h4>2. Many auctions: treat the unknown threshold as random</h4>
-<p>Different opportunities draw different competitors and bids, so <x-tex>Z</x-tex> varies across auctions, and the bidder does not know the next value in advance. The teaching model assumes <x-tex>Z\sim\mathrm{Uniform}(0,L)</x-tex> (<x-tex>\sim</x-tex> reads “is distributed as”): price intervals of equal length are equally likely. We further assume every opportunity's threshold has this same distribution and that our own bidding does not move it (we are a price taker). The assumption concerns the <em>highest</em> competing bid, not each competitor's bid.</p>
-<p>On the $0–20 CPM range, each $2-wide interval has probability 2/20 = 10%; the intervals $0–2 and $12–14 are equally likely.</p>
-<h4>3. We win exactly when the threshold falls below our bid</h4>
-<p>For a fixed <x-tex>b</x-tex> we win exactly when <x-tex>Z\in[0,b]</x-tex>, an interval of length <x-tex>b</x-tex> inside a range of length <x-tex>L</x-tex>. Let <x-tex>F</x-tex> be the cumulative distribution function (CDF) of <x-tex>Z</x-tex>, so <x-tex>F(b)</x-tex> is the <strong>win probability</strong> at bid <x-tex>b</x-tex>:</p>
-<div class="ar-math"><x-tex display>F(b)=P(Z\le b)=\frac{b-0}{L-0}=\frac{b}{L},\qquad 0\le b\le L.</x-tex></div>
-<p>The denominator is the whole price range, not our bid. A $6 CPM bid wins against thresholds in $0–6 (length 6) and loses against thresholds in $6–20 (length 14): probabilities 6/20 = 30% and 14/20 = 70%.</p>
+<p>Ties (probability zero below) go to us. The threshold decides <em>whether</em> we win; the auction rule decides what we pay.</p>
+<p><x-tex>Z</x-tex> varies across auctions and is unknown in advance, so model it as random: <x-tex>Z\sim\mathrm{Uniform}(0,L)</x-tex>, meaning equal-length price intervals in $0–20 CPM are equally likely, on every opportunity, whatever we bid. We win exactly when <x-tex>Z</x-tex> lands in <x-tex>[0,b]</x-tex>, an interval of length <x-tex>b</x-tex> out of <x-tex>L</x-tex>. So the cumulative distribution function (CDF) of <x-tex>Z</x-tex> is the <strong>win probability</strong>:</p>
+<div class="ar-math"><x-tex display>F(b)=P(Z\le b)=\frac{b}{L},\qquad 0\le b\le L.</x-tex></div>
+<p>A $6 CPM bid wins against thresholds in $0–6 and loses against $6–20: 6/20 = 30% and 14/20 = 70%. For <x-tex>b\ge L</x-tex>, <x-tex>F=1</x-tex>, so bidding above <x-tex>L</x-tex> buys nothing.</p>
 <div id="ar-threshold-explorer" class="ar-threshold-explorer">
 <label for="ar-threshold-bid"><strong>Try a fixed bid:</strong> <output id="ar-threshold-quote" for="ar-threshold-bid">$6.0 CPM</output></label>
 <input id="ar-threshold-bid" type="range" min="0" max="20" step="0.5" value="6" aria-describedby="ar-threshold-explorer-note">
 <div id="ar-threshold-chart" class="ar-threshold-track" role="img" aria-label="Uniform threshold range from 0 to 20 CPM. The winning interval from 0 to 6 occupies 30% of the range."><div id="ar-threshold-fill" class="ar-threshold-fill" style="width:30%"></div><div id="ar-threshold-marker" class="ar-threshold-marker" style="left:30%"></div></div>
 <div class="ar-threshold-axis" aria-hidden="true"><span>$0</span><span>$5</span><span>$10</span><span>$15</span><span>$20 CPM</span></div>
 <p id="ar-threshold-result" aria-live="polite">Win: thresholds $0–6.0 CPM → 6 / 20 = <strong>30%</strong>. Lose: thresholds above $6.0 CPM → <strong>70%</strong>.</p>
-<p id="ar-threshold-explorer-note">This explorer chooses a bid only to illustrate its win probability. The advertiser calculator below chooses a bid to maximize advertiser incremental contribution after ad spend.</p>
+<p id="ar-threshold-explorer-note">This explorer only shows the win probability of a bid. The advertiser calculator below chooses the bid.</p>
 </div>
-<p>Outside the range, <x-tex>F(b)=0</x-tex> for <x-tex>b&lt;0</x-tex> and <x-tex>F(b)=1</x-tex> for <x-tex>b\ge L</x-tex>. Bidding above <x-tex>L</x-tex> buys no extra win probability and, under first-price, only raises the payment, so such bids are dominated.</p>
-<h4>4. CPM and per-event prices give the same probability</h4>
-<p>Every price in a comparison must use the same unit. Internally <x-tex>b</x-tex>, <x-tex>Z</x-tex> and <x-tex>L</x-tex> are in dollars per impression (the billable event in this direct-buying contract); a CPM quote is 1,000 times that. The subscript CPM marks a quote, not a different quantity:</p>
-<div class="ar-math"><x-tex display>\begin{aligned}
-b_{\text{CPM}}&amp;=1000\,b,\qquad L_{\text{CPM}}=1000\,L,\\
-\frac{b}{L}&amp;=\frac{\$0.006}{\$0.02}=\frac{\$6\ \text{CPM}}{\$20\ \text{CPM}}=0.30.
-\end{aligned}</x-tex></div>
-<p>The factor 1,000 cancels. Dividing a $6 CPM quote by $0.02 per event mixes units and gives 300, which is not a probability.</p>
-<p>The seller’s billing terms fix what a billable event is: a win under <strong>win-based billing</strong>, a successful impression under <strong>display-based billing</strong>. Here every win displays successfully, so the two counts coincide. Switching the billing basis changes ad spend; it does not change the win event <x-tex>Z\le b</x-tex>.</p>
-<h4>5. From win probability to expected wins</h4>
-<p>Let <x-tex>W</x-tex> be the number of opportunities won. With the same bid and the same marginal threshold distribution on every opportunity, linearity of expectation gives</p>
+<p>Keep units consistent: <x-tex>\$0.006/\$0.02=\$6\ \text{CPM}/\$20\ \text{CPM}=0.30</x-tex>, whereas $6 CPM divided by $0.02 gives a meaningless 300.</p>
+<p>Across <x-tex>N</x-tex> opportunities, linearity of expectation (no independence needed) gives expected wins <x-tex>W</x-tex>:</p>
 <div class="ar-math"><x-tex display>\mathbb E[W]=N\,F(b)=1{,}000{,}000\times0.30=300{,}000\ \text{wins}.</x-tex></div>
-<p>Linearity needs no independence. Dependence across opportunities (for example, one competitor bidding on correlated traffic) changes only how widely the realized count fluctuates around 300,000. With successful display on every win, these wins are also 300,000 expected impressions.</p>
-<details class="ar-exercise"><summary>Optional: the density derivation, and what changes outside this model</summary><div class="ar-answer">
-<p>The uniform threshold has density <x-tex>f(z)=1/L</x-tex> on <x-tex>[0,L]</x-tex> and 0 elsewhere, where <x-tex>z</x-tex> denotes a possible value of <x-tex>Z</x-tex>. The total area is <x-tex>L\cdot(1/L)=1</x-tex>. Integrating the density over the winning interval recovers the CDF:</p>
-<div class="ar-math"><x-tex display>F(b)=\int_0^b f(z)\,dz=\int_0^b\frac{1}{L}\,dz=\frac{b}{L},\qquad 0\le b\le L.</x-tex></div>
-<p>In a non-uniform market the win probability is still <x-tex>F(b)=P(Z\le b)</x-tex>, but not <x-tex>b/L</x-tex>: if 80% of thresholds lie below $6 CPM, a $6 CPM bid wins 80%, not 30%. Floor prices, discrete bids, heterogeneous opportunity types and competitors that react to our bids each need a different model. Note also that the maximum of <x-tex>n</x-tex> independent <x-tex>\mathrm{Uniform}(0,L)</x-tex> competing bids has CDF <x-tex>(b/L)^n</x-tex>, so uniform individual bids do not produce a uniform threshold.</p>
+<details class="ar-exercise"><summary>Optional: the density view, and what changes outside this model</summary><div class="ar-answer">
+<p>The uniform threshold has density <x-tex>f(z)=1/L</x-tex> on <x-tex>[0,L]</x-tex>, so <x-tex>F(b)=\int_0^b f(z)\,dz=b/L</x-tex>. In other markets the win probability is still <x-tex>F(b)=P(Z\le b)</x-tex>, just not <x-tex>b/L</x-tex>: if 80% of thresholds lie below $6 CPM, a $6 CPM bid wins 80%. Uniform individual bids do not give a uniform threshold: the maximum of <x-tex>n</x-tex> independent <x-tex>\mathrm{Uniform}(0,L)</x-tex> bids has CDF <x-tex>(b/L)^n</x-tex>. Floor prices, discrete bid steps, varied opportunity types and competitors who react to us each need their own model. Correlation across opportunities leaves <x-tex>\mathbb E[W]</x-tex> unchanged and only widens the spread of the realized count.</p>
 </div></details>
 </section>
 
 <!-- script: threshold.js -->
 <h2 id="ar-advertiser-first-price">First-price bidding: maximize the advertiser's contribution after cost</h2>
-<p>In first price, a winner pays its own bid <x-tex>b</x-tex>. Define <x-tex>J_1(b)</x-tex> as the advertiser's expected incremental contribution after ad spend across all <x-tex>N</x-tex> opportunities, and <x-tex>C_1(b)</x-tex> as its expected ad spend. A loss creates neither contribution nor cost in this model.</p>
-<div class="ar-math"><x-tex display>\begin{aligned}
-\text{Expected impressions}&amp;=NF(b),\\
-\text{Expected incremental contribution}&amp;=NF(b)w,\\
-C_1(b)&amp;=NF(b)b,\\
-J_1(b)&amp;=NF(b)(w-b).
-\end{aligned}</x-tex></div>
-<p>The factor <x-tex>w-b</x-tex> is the advertiser's expected gain on one won impression. The factor <x-tex>NF(b)</x-tex> is how many impressions it expects to buy. A larger bid buys more impressions but raises the price on every first-price win. We optimize their product because we have explicitly chosen advertiser contribution after cost as the objective.</p>
-<section class="ar-worked"><header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>Compare bids before differentiating</h4></header><div class="ar-worked-body">
-<p>Given the direct-buying contract above: <x-tex>N=10^6</x-tex>, <x-tex>L=0.02</x-tex>, <x-tex>w=0.008</x-tex>, and <x-tex>B=\$2{,}000</x-tex>. The following are expected amounts; the contribution column is before ad spend.</p>
+<p><strong>In a first-price auction the winner pays its own bid, so a higher bid buys more wins but pays more on each; here the best bid is $4 CPM, half the $8 CPM value.</strong> A loss yields neither contribution nor cost. Let <x-tex>C_1(b)</x-tex> be expected ad spend and <x-tex>J_1(b)</x-tex> expected incremental contribution after spend:</p>
+<div class="ar-math"><x-tex display>C_1(b)=NF(b)\,b,\qquad J_1(b)=NF(b)\,(w-b).</x-tex></div>
+<p><x-tex>w-b</x-tex> is the gain per won impression; <x-tex>NF(b)</x-tex> is the expected number won.</p>
+<section class="ar-worked"><header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>Compare bids before optimizing</h4></header><div class="ar-worked-body">
+<p>Given the direct-buying contract: <x-tex>N=10^6</x-tex>, <x-tex>L=0.02</x-tex>, <x-tex>w=0.008</x-tex>, <x-tex>B=\$2{,}000</x-tex>. Amounts are expected values; the contribution column is before ad spend.</p>
 <div class="ar-table-wrap"><table><thead><tr><th scope="col">Bid</th><th scope="col">Impressions</th><th scope="col">Incremental contribution</th><th scope="col">Ad spend</th><th scope="col">After-spend contribution</th></tr></thead><tbody>
 <tr><td data-label="Bid">$2 CPM</td><td data-label="Impressions">100,000</td><td data-label="Incremental contribution">$800</td><td data-label="Ad spend">$200</td><td data-label="After-spend contribution">$600</td></tr>
 <tr><td data-label="Bid">$4 CPM</td><td data-label="Impressions">200,000</td><td data-label="Incremental contribution">$1,600</td><td data-label="Ad spend">$800</td><td data-label="After-spend contribution"><strong>$800</strong></td></tr>
 <tr><td data-label="Bid">$6 CPM</td><td data-label="Impressions">300,000</td><td data-label="Incremental contribution">$2,400</td><td data-label="Ad spend">$1,800</td><td data-label="After-spend contribution">$600</td></tr>
 <tr><td data-label="Bid">$8 CPM</td><td data-label="Impressions">400,000</td><td data-label="Incremental contribution">$3,200</td><td data-label="Ad spend">$3,200 (over budget)</td><td data-label="After-spend contribution">$0</td></tr>
 </tbody></table></div>
-<p class="ar-result">Among these bids, $4 CPM delivers the greatest advertiser contribution after cost. The derivative below checks all bids in the continuous range, not just these four candidates.</p>
+<p class="ar-result">Among these, $4 CPM gives the most contribution after cost; the algebra below covers every bid.</p>
 </div></section>
-<p>Using the uniform win probability, the objective becomes <x-tex>J_1(b)=(N/L)(wb-b^2)</x-tex>. The squared cost arises from multiplying the number of wins <x-tex>Nb/L</x-tex> by the first-price payment <x-tex>b</x-tex>. First find the budget-free maximum, denoted <x-tex>b_0</x-tex>; the subscript 0 means “before applying the spend cap.” Primes below are derivatives with respect to <x-tex>b</x-tex>.</p>
-<div class="ar-math"><x-tex display>J_1'(b)=\frac NL(w-2b)=0\quad\Longrightarrow\quad b_0=\frac w2=\$0.004=\$4\ \mathrm{CPM},\qquad J_1''(b)=-\frac{2N}{L}&lt;0.</x-tex></div>
-<p>The same result follows without calculus by completing the square: </p>
-<div class="ar-math"><x-tex display>J_1(b)=\frac NL\left[\left(\frac w2\right)^2-\left(b-\frac w2\right)^2\right].</x-tex></div>
-<p>The first term is fixed. The squared term is nonnegative and vanishes only at <x-tex>b=w/2</x-tex>, so that bid gives the largest contribution when feasible. The negative second derivative establishes strict concavity, so this is the unique global maximum on <x-tex>[0,L]</x-tex> when it lies inside that interval, as it does here. Equivalently, the first derivative is positive below $4 CPM and negative above it: raising the bid first helps the advertiser, then hurts. Differentiation solves the selected objective; it cannot choose whose objective is appropriate. The rule <x-tex>b=w/2</x-tex> relies on the uniform threshold distribution starting at zero. It is not a general first-price rule: changing the win-probability function changes the optimum.</p>
-<x-chart>{"title":"Advertiser contribution after ad spend vs first-price bid","params":{"N":1000000,"L":0.02,"w":0.008},"x":{"label":"Bid b ($ CPM)","min":0,"max":8,"ticks":[0,2,4,6,8],"format":{"prefix":"$"}},"y":{"label":"Expected contribution after ad spend ($)","min":0,"max":1000,"ticks":[0,250,500,750,1000],"format":"usd"},"series":[{"fn":"N*(x/1000)/L*(w-x/1000)","label":"advertiser objective J₁(b)","tone":"accent"}],"vlines":[{"x":4,"label":"optimum: $4 CPM"}],"points":[{"x":4,"y":800,"label":"$800","pos":"above"}],"caption":"The plotted objective is advertiser incremental contribution minus its direct auction bill, <x-tex>J_1=NF(b)(w-b)</x-tex>. The maximum is $800 at $4 CPM. Bids above $6.3246 CPM exceed the $2,000 cap; that region is shown only to explain the shape of the budget-free objective."}</x-chart>
+<p>Substitute <x-tex>F(b)=b/L</x-tex> and complete the square:</p>
+<div class="ar-math"><x-tex display>J_1(b)=\frac NL\bigl(wb-b^2\bigr)=\frac NL\left[\left(\frac w2\right)^2-\left(b-\frac w2\right)^2\right].</x-tex></div>
+<p>The squared term is never negative, so <x-tex>J_1</x-tex> is largest at <x-tex>b_0=w/2=\$0.004</x-tex> ($4 CPM), where <x-tex>J_1=(N/L)(w/2)^2=\$800</x-tex>. (subscript 0: before the budget). <x-tex>J_1</x-tex> falls as the bid moves away from <x-tex>w/2</x-tex> in either direction. The halving comes from the uniform distribution, not from first price itself.</p>
+<details class="ar-exercise"><summary>Optional: the same optimum by calculus</summary><div class="ar-answer">
+<p><x-tex>J_1'(b)=(N/L)(w-2b)</x-tex> is zero at <x-tex>b=w/2</x-tex>, and <x-tex>J_1''(b)=-2N/L&lt;0</x-tex>, so <x-tex>J_1</x-tex> is strictly concave and <x-tex>w/2</x-tex> is its unique maximum on <x-tex>[0,L]</x-tex>.</p>
+</div></details>
+<x-chart>{"title":"Advertiser contribution after ad spend vs first-price bid","params":{"N":1000000,"L":0.02,"w":0.008},"x":{"label":"Bid b ($ CPM)","min":0,"max":8,"ticks":[0,2,4,6,8],"format":{"prefix":"$"}},"y":{"label":"Expected contribution after ad spend ($)","min":0,"max":1000,"ticks":[0,250,500,750,1000],"format":"usd"},"series":[{"fn":"N*(x/1000)/L*(w-x/1000)","label":"advertiser objective J₁(b)","tone":"accent"}],"vlines":[{"x":4,"label":"optimum: $4 CPM"}],"points":[{"x":4,"y":800,"label":"$800","pos":"above"}],"caption":"The advertiser objective <x-tex>J_1=NF(b)(w-b)</x-tex> peaks at $800 at $4 CPM and is symmetric around it. Bids above $6.3246 CPM would exceed the $2,000 cap; that part is shown only for the curve's shape."}</x-chart>
 <h2 id="ar-advertiser-budget">The budget restricts the choice; it does not require full spend</h2>
-<p>A bid is <strong>feasible</strong> if it meets both the price range and the advertiser's spend cap: <x-tex>0\le b\le L</x-tex> and <x-tex>C_1(b)\le B</x-tex>. With uniform thresholds, <x-tex>C_1(b)=Nb^2/L</x-tex>, so the budget allows bids up to <x-tex>\sqrt{BL/N}</x-tex>. Let <x-tex>b_1^*</x-tex> be the advertiser's best feasible first-price bid. For the nonnegative value in this model,</p>
-<div class="ar-math"><x-tex display>b_1^*=\min\left\{\frac w2,\sqrt{\frac{BL}{N}},L\right\}.</x-tex></div>
+<p><strong>A budget removes bids that cost too much; if the best bid survives, the budget changes nothing and money stays unspent.</strong></p>
+<ol class="ar-steps">
+<li>Spend grows with the bid: <x-tex>C_1(b)=N\frac bL\,b=\frac{Nb^2}{L}</x-tex>.</li>
+<li>For <x-tex>b\ge0</x-tex>, <x-tex>C_1(b)\le B\iff b^2\le BL/N\iff b\le b_B=\sqrt{BL/N}</x-tex>. So the allowed bids are <x-tex>0\le b\le\min\{b_B,L\}</x-tex>.</li>
+<li><x-tex>J_1</x-tex> falls with distance from <x-tex>w/2</x-tex>. If <x-tex>w/2</x-tex> is allowed, pick it. If not, pick the allowed bid closest to <x-tex>w/2</x-tex>, which is the top of the allowed range.</li>
+</ol>
+<div class="ar-math"><x-tex display>b_1^*=\min\left\{\frac w2,\ \sqrt{\frac{BL}{N}},\ L\right\}.</x-tex></div>
 <section class="ar-worked"><header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>$2,000 cap versus $500 cap</h4></header><div class="ar-worked-body"><ol class="ar-steps">
-<li>At the budget-free advertiser optimum of $4 CPM, spend is <x-tex>10^6(0.004)^2/0.02=\$800</x-tex>. A $2,000 cap is <strong>slack</strong>: it does not restrict the optimum. The advertiser keeps $1,200 unspent and earns $800 of incremental contribution after cost.</li>
-<li>With <x-tex>B=\$500</x-tex>, the $4 CPM bid is unaffordable. The budget is <strong>binding</strong>: <x-tex>b_1^*=\sqrt{500(0.02)/10^6}=\$0.00316227766</x-tex>, or $3.1623 CPM. This gives 158,113.88 expected impressions, $1,264.91 incremental contribution before spend, and <x-tex>J_1=1264.911064-500=\$764.91</x-tex> after spend.</li>
-</ol><p class="ar-check">Check: without the budget, $800 is the maximum of the whole objective curve. The tighter $500 cap lowers it to $764.91. A larger budget cannot force the advertiser to buy unprofitable volume when stopping is allowed.</p></div></section>
-<h3>Ideal second-price bidding under the same advertiser objective</h3>
-<p>In ideal second price the winner pays the competing threshold <x-tex>Z</x-tex>, not its own bid. Define <x-tex>C_2(b)</x-tex> and <x-tex>J_2(b)</x-tex> as expected ad spend and incremental contribution after spend under this rule. For uniform thresholds and a positive bid within the range, the average price conditional on winning is <x-tex>b/2</x-tex>, because winning thresholds are uniform over <x-tex>[0,b]</x-tex>. Thus:</p>
-<div class="ar-math"><x-tex display>\begin{aligned}C_2(b)&amp;=N\frac bL\frac b2=\frac{Nb^2}{2L},\\J_2(b)&amp;=\frac NL\left(wb-\frac{b^2}{2}\right),\\J_2'(b)&amp;=\frac NL(w-b),\qquad J_2''(b)=-\frac NL&lt;0,\\b_2^*&amp;=\min\left\{w,\sqrt{\frac{2BL}{N}},L\right\}.\end{aligned}</x-tex></div>
-<p>At <x-tex>B=\$2{,}000</x-tex>, the optimum is <x-tex>b_2^*=w=\$0.008</x-tex> ($8 CPM). It buys 400,000 expected impressions, creates <x-tex>400{,}000\times0.008=\$3{,}200</x-tex> incremental contribution, spends $1,600 and leaves $1,600 after spend. At <x-tex>B=\$500</x-tex>, the optimum is $4.4721 CPM, with 223,606.80 expected impressions, $1,788.85 incremental contribution, $500 spend and $1,288.85 after spend. This comparison holds the competitive-threshold distribution fixed; it does not predict how competitors would react to a change of auction rules.</p>
+<li><x-tex>B=\$2{,}000</x-tex>: <x-tex>b_B=\sqrt{2000(0.02)/10^6}=\$0.0063246</x-tex>, above <x-tex>w/2</x-tex>. The cap is <strong>slack</strong>. The advertiser bids $4 CPM, spends <x-tex>10^6(0.004)^2/0.02=\$800</x-tex>, leaves $1,200 unspent and earns $800 after cost.</li>
+<li><x-tex>B=\$500</x-tex>: <x-tex>b_B=\sqrt{500(0.02)/10^6}=\$0.00316227766</x-tex>, below <x-tex>w/2</x-tex>. The cap is <strong>binding</strong>, so <x-tex>b_1^*</x-tex> = $3.1623 CPM. Expected impressions are <x-tex>10^6\times0.00316227766/0.02</x-tex> = 158,113.88, contribution before spend is 158,113.88 × $0.008 = $1,264.91, spend is exactly $500, and <x-tex>J_1=1264.911064-500=\$764.91</x-tex>.</li>
+</ol><p class="ar-check">Check: $764.91 is below the unconstrained $800, as a tighter constraint requires.</p></div></section>
+<h2 id="ar-advertiser-second-price">Second price: pay the competing bid, so bid your value</h2>
+<p><strong>In an ideal second-price auction the winner pays the threshold <x-tex>Z</x-tex>, not its bid, so bidding the full value <x-tex>w</x-tex> is best.</strong> A $6 CPM bid against a $4 CPM competitor wins either way, but pays $6 in first price and $4 in second price.</p>
+<p>The expected payment needs the average threshold <em>given</em> that we win. For <x-tex>0\le z\le b</x-tex>,</p>
+<div class="ar-math"><x-tex display>P(Z\le z\mid Z\le b)=\frac{P(Z\le z)}{P(Z\le b)}=\frac{z/L}{b/L}=\frac zb,</x-tex></div>
+<p>so a winning threshold is uniform on <x-tex>[0,b]</x-tex> and averages <x-tex>b/2</x-tex>. Expected spend is wins times average price, and the square completes as before:</p>
+<div class="ar-math"><x-tex display>\begin{aligned}C_2(b)&amp;=N\frac bL\cdot\frac b2=\frac{Nb^2}{2L},\\
+J_2(b)&amp;=\frac NL\left(wb-\frac{b^2}{2}\right)=\frac{N}{2L}\left[w^2-(b-w)^2\right],\\
+b_2^*&amp;=\min\left\{w,\ \sqrt{\frac{2BL}{N}},\ L\right\}.\end{aligned}</x-tex></div>
+<p>The budget step matches first price: <x-tex>Nb^2/(2L)\le B\iff b\le\sqrt{2BL/N}</x-tex>, and <x-tex>J_2</x-tex> falls with distance from <x-tex>w</x-tex>. At <x-tex>B=\$2{,}000</x-tex> the cap is <x-tex>\sqrt{8\times10^{-5}}=\$0.0089443</x-tex>, above <x-tex>w</x-tex>, so the advertiser bids <x-tex>w</x-tex> = $8 CPM. It wins 400,000 impressions worth <x-tex>400{,}000\times0.008=\$3{,}200</x-tex>, spends $1,600 and keeps $1,600. At <x-tex>B=\$500</x-tex> the cap <x-tex>\sqrt{2\times10^{-5}}</x-tex> binds: $4.4721 CPM, 223,606.80 impressions, $1,788.85 contribution, $500 spend, $1,288.85 after spend. This holds competitors fixed; real bidders react to a rule change.</p>
 <h3>Try the advertiser objective</h3>
-<p>This calculator uses only the direct-buying contract above: <x-tex>w=\Delta qg=\$0.008</x-tex>, successful display on every win, and no platform fee. Its budget is the advertiser's total ad-spend cap. The optional appendix has a separate network-spread calculator with a different contract.</p>
+<p>Direct-buying contract only: <x-tex>w=\$0.008</x-tex>, every win displays, no fee; the budget is the advertiser's spend cap.</p>
 <section class="ar-lab" aria-label="Advertiser incremental contribution calculator">
 <div class="ar-controls"><label class="ar-field" for="ar-adv-budget"><span class="ar-fieldhead"><span>Advertiser spend cap</span><output id="ar-adv-budget-out" for="ar-adv-budget">$2,000.00</output></span><input id="ar-adv-budget" type="range" min="0" max="2000" step="50" value="2000"></label><label class="ar-field" for="ar-adv-auction"><span class="ar-fieldhead">Auction rule</span><select id="ar-adv-auction"><option value="first">First price</option><option value="second">Ideal second price</option></select></label></div>
 <div class="ar-ledger" aria-live="polite"><div><div class="ar-ledgerlabel">Advertiser-optimal bid</div><div class="ar-ledgervalue" id="ar-adv-bid">$4.0000 CPM</div></div><div><div class="ar-ledgerlabel">Expected ad spend</div><div class="ar-ledgervalue" id="ar-adv-cost">$800.00</div></div><div><div class="ar-ledgerlabel">Incremental contribution after spend</div><div class="ar-ledgervalue" id="ar-adv-profit">$800.00</div></div></div>
 <p id="ar-adv-status">200,000 expected impressions · $1,600.00 contribution before spend · budget slack; profitable optimum reached</p>
 </section>
 <!-- script: advertiser.js -->
-<h3>What a real objective still needs</h3>
-<p>This example maximizes contribution, rather than revenue, attributed conversions or full budget use. A business may instead maximize conversion volume subject to a return target, or impose minimum scale and other obligations; those are different optimization problems. A real buying agent must include its actual fees in the advertiser's bill and use values that vary by opportunity. A negative estimated incremental value calls for not bidding when no delivery obligation forces participation. The calculations above are a transparent benchmark, not evidence of how Axon or any particular platform chooses its internal objective.</p>
-<p>For heterogeneous opportunities, write <x-tex>w_i</x-tex> for incremental contribution per successful impression on request <x-tex>i</x-tex>, <x-tex>F_i(b_i)</x-tex> for its win probability, and <x-tex>C_i(b_i)</x-tex> for its unconditional expected all-in advertiser cost. With the same display-success and separability assumptions, the advertiser problem is:</p>
-<div class="ar-math"><x-tex display>\max_{\{b_i\ge0\}}\sum_i\bigl[w_iF_i(b_i)-C_i(b_i)\bigr]\quad\text{subject to}\quad\sum_i C_i(b_i)\le B.</x-tex></div>
-<p>A budget controller (pacing) adjusts participation or bids as spend and opportunity value evolve. It should preserve the stated advertiser objective, and need not force full spend when profitable opportunities run out. The next section gives the advertiser's multiplier and pacing rule. The appendix's numerical network multipliers cannot be copied into this advertiser contract.</p>
 <h2 id="ar-advertiser-general">Beyond uniform prices: advertiser bidding and pacing</h2>
-<p>The $4 CPM result uses a particular distribution. For a general continuous competitive threshold, let <x-tex>F(b)=P(Z\le b)</x-tex> be the win-probability function and <x-tex>f(b)=F'(b)</x-tex> its density. Hold advertiser incremental value <x-tex>w</x-tex> constant conditional on the information used for this bid. The direct-buying, no-fee, successful-display assumptions remain in force. Define <x-tex>j_1(b)</x-tex> and <x-tex>j_2(b)</x-tex> as advertiser incremental contribution after cost <em>per request</em>, under first and ideal second price.</p>
-<div class="ar-math"><x-tex display>\begin{aligned}
-j_1(b)&amp;=(w-b)F(b),&amp; j_1'(b)&amp;=(w-b)f(b)-F(b),\\
-j_2(b)&amp;=\int_0^b(w-z)f(z)\,dz,&amp; j_2'(b)&amp;=(w-b)f(b).
-\end{aligned}</x-tex></div>
-<p>The integration variable <x-tex>z</x-tex> is a possible competing price. In first price, an interior candidate with <x-tex>f(b)&gt;0</x-tex> satisfies <x-tex>b=w-F(b)/f(b)</x-tex>; boundaries and the global objective still need checking. The reduction from value to bid is <strong>bid shading</strong>: accepting fewer wins to pay less per win. It depends on the price distribution. For uniform thresholds <x-tex>F/f=b</x-tex>, giving <x-tex>b=w/2</x-tex>. If the threshold is instead the maximum of two independent uniform bids on <x-tex>[0,L]</x-tex>, then <x-tex>F=(b/L)^2</x-tex> and <x-tex>F/f=b/2</x-tex>, so the first-price optimum for our <x-tex>w=0.008</x-tex> is <x-tex>2w/3=\$0.0053333\ldots</x-tex> ($5.3333 CPM). The objective rises then falls around this point.</p>
-<p>In ideal second price, the derivative is nonnegative below <x-tex>w</x-tex> and nonpositive above it. Thus bidding <x-tex>w</x-tex> is optimal if that bid is allowed; it need not be uniquely optimal when the threshold distribution has gaps. This argument assumes one slot and the stated payment rule. Auctions with multiple ranked slots, quality weights, extra fees or other constraints need their own model.</p>
+<p><strong>For any distribution of competing bids, first price shades the bid below value, second price bids value, a budget scales value down by a multiplier, and pacing is the feedback loop that finds that multiplier.</strong> Keep the direct-buying assumptions, but let <x-tex>F(b)=P(Z\le b)</x-tex> be any continuous win probability with density <x-tex>f=F'</x-tex>. Objectives are per opportunity.</p>
+<h3>Bid shading in first price</h3>
+<div class="ar-math"><x-tex display>j_1(b)=(w-b)F(b),\qquad j_1'(b)=(w-b)f(b)-F(b)=f(b)\Bigl[w-b-\frac{F(b)}{f(b)}\Bigr].</x-tex></div>
+<p>Where <x-tex>f(b)&gt;0</x-tex>, an interior optimum solves</p>
+<div class="ar-math"><x-tex display>b=w-\frac{F(b)}{f(b)}.</x-tex></div>
+<p>The gap <x-tex>F/f</x-tex> is <strong>bid shading</strong>: fewer wins, each cheaper. If <x-tex>F</x-tex> is <strong>log-concave</strong> (<x-tex>\log F</x-tex> is concave, as for the uniform and for the maximum of independent uniforms), this equation has at most one root, that root is the best bid, and with no root the best bid is zero. For the uniform, <x-tex>F/f=b</x-tex> gives <x-tex>w/2</x-tex>. If the threshold is the higher of two independent <x-tex>\mathrm{Uniform}(0,L)</x-tex> bids, <x-tex>F=(b/L)^2</x-tex>, <x-tex>f=2b/L^2</x-tex>, <x-tex>F/f=b/2</x-tex>, so <x-tex>b=w-b/2</x-tex> and <x-tex>b=2w/3=\$0.0053333</x-tex> ($5.3333 CPM). Per million requests it earns <x-tex>10^6(w/3)(2w/(3L))^2=\$189.63</x-tex>; applying the uniform rule <x-tex>w/2</x-tex> instead earns <x-tex>10^6(w/2)(w/(2L))^2=\$160.00</x-tex>, 15.6% less.</p>
+<details class="ar-exercise"><summary>Optional: proof that log-concavity gives a single best bid</summary><div class="ar-answer">
+<p>Assume <x-tex>F</x-tex> is differentiable with <x-tex>f&gt;0</x-tex> on <x-tex>(0,U)</x-tex>, <x-tex>F(0)=0</x-tex>, <x-tex>F(U)=1</x-tex>, and <x-tex>\log F</x-tex> concave there. Then <x-tex>(\log F)'=f/F</x-tex> is nonincreasing, so <x-tex>F/f</x-tex> is nondecreasing, and <x-tex>h(b)=w-b-F(b)/f(b)</x-tex> is strictly decreasing. Since <x-tex>j_1'=f\,h</x-tex> with <x-tex>f&gt;0</x-tex>, <x-tex>j_1'</x-tex> changes sign at most once, and only from positive to negative. So <x-tex>j_1</x-tex> rises up to the root of <x-tex>h</x-tex> and falls after it, making the root the global maximum on <x-tex>[0,U]</x-tex>. If <x-tex>h\le0</x-tex> everywhere, <x-tex>j_1</x-tex> never rises and <x-tex>b=0</x-tex> is best. Bids above <x-tex>U</x-tex> win no more than <x-tex>U</x-tex> and pay more, and bids above <x-tex>w</x-tex> give <x-tex>j_1\le0=j_1(0)</x-tex>, so neither region can hold a better bid.</p>
+</div></details>
+<h3>Truthful bidding in second price</h3>
+<div class="ar-math"><x-tex display>j_2(b)=\int_0^b(w-z)f(z)\,dz,\qquad j_2'(b)=(w-b)f(b).</x-tex></div>
+<p>The derivative is nonnegative below <x-tex>w</x-tex> and nonpositive above it, so bidding <x-tex>w</x-tex> is optimal for every <x-tex>F</x-tex>. This covers one slot. Multi-slot auctions (GSP, generalized second price), quality-weighted bids, floors and fees need their own models. Most exchanges now run first price; Google Ad Exchange <a href="https://support.google.com/authorizedbuyers/answer/9539164?hl=en" rel="noopener noreferrer" target="_blank">announced its move in 2019</a>.</p>
 <h3>The advertiser's budget multiplier</h3>
-<p>Let <x-tex>\mu_A\ge0</x-tex> be the advertiser's budget multiplier; subscript <x-tex>A</x-tex> identifies this advertiser contract. For a request with unconditional expected ad cost <x-tex>c(b)</x-tex>, adding the spend constraint to the contribution objective gives the per-request expression <x-tex>wF(b)-(1+\mu_A)c(b)</x-tex>. The 1 accounts for the cash cost itself; <x-tex>\mu_A</x-tex> adds the cost of scarce budget. At a regular optimum, this dimensionless multiplier is the marginal gain in advertiser contribution-after-cost per extra dollar of budget.</p>
-<div class="ar-math"><x-tex display>\begin{aligned}
-\text{First price, interior candidate:}\quad b&amp;=\frac{w}{1+\mu_A}-\frac{F(b)}{f(b)},\\
-\text{Ideal second price:}\quad b&amp;=\frac{w}{1+\mu_A}.
-\end{aligned}</x-tex></div>
-<p>These are interior conditions under the same density and boundary qualifications. For uniform first price the expression reduces to <x-tex>b=w/[2(1+\mu_A)]</x-tex>. At our binding $500 cap, first price gives <x-tex>\mu_A=w/(2b_1^*)-1\approx0.2649</x-tex>, while ideal second price gives <x-tex>\mu_A=w/b_2^*-1\approx0.7889</x-tex>. At $2,000 both caps are slack and <x-tex>\mu_A=0</x-tex>. These are advertiser multipliers, distinct from the appendix's network multipliers.</p>
+<p><strong>A binding budget makes the advertiser bid as if each impression were worth <x-tex>w/(1+\mu_A)</x-tex> instead of <x-tex>w</x-tex>.</strong> The budget multiplier <x-tex>\mu_A\ge0</x-tex> is zero when the budget is slack, otherwise just large enough that expected spend equals <x-tex>B</x-tex>. Uniform thresholds give <x-tex>b=w/[2(1+\mu_A)]</x-tex> in first price and <x-tex>b=w/(1+\mu_A)</x-tex> in second price.</p>
+<p>It is also the budget's price: contribution after cost gained per extra budget dollar. At our $500 cap, first price gives <x-tex>\mu_A=w/(2b_B)-1=0.008/(2\times0.0031623)-1\approx0.2649</x-tex>, and indeed <x-tex>w/[2(1+\mu_A)]=b_B</x-tex> reproduces the $3.1623 CPM bid; a $501 cap adds about $0.26. Second price gives <x-tex>\mu_A=w/b_B-1\approx0.7889</x-tex> with <x-tex>b_B=\sqrt{2BL/N}</x-tex>. At $2,000 both caps are slack and <x-tex>\mu_A=0</x-tex>.</p>
+<details class="ar-exercise"><summary>Optional: deriving the multiplier as the marginal value of budget</summary><div class="ar-answer">
+<p>At a binding first-price cap spend is exactly <x-tex>B</x-tex>, so the best value is <x-tex>J^*(B)=(N/L)\,w\,b_B-B</x-tex> with <x-tex>b_B=\sqrt{BL/N}</x-tex>. Using <x-tex>db_B/dB=b_B/(2B)</x-tex> and <x-tex>N/L=B/b_B^2</x-tex>:</p>
+<div class="ar-math"><x-tex display>\frac{dJ^*}{dB}=\frac NL\,w\,\frac{b_B}{2B}-1=\frac{w}{2b_B}-1.</x-tex></div>
+<p>Setting <x-tex>1+\mu_A=w/(2b_B)</x-tex> makes the scaled-value bid <x-tex>w/[2(1+\mu_A)]</x-tex> equal <x-tex>b_B</x-tex>, so the two definitions agree. In second price <x-tex>J^*(B)=(N/L)\,w\,b_B-B</x-tex> with <x-tex>b_B=\sqrt{2BL/N}</x-tex> and <x-tex>N/L=2B/b_B^2</x-tex>, giving <x-tex>dJ^*/dB=w/b_B-1</x-tex>, which matches <x-tex>b=w/(1+\mu_A)</x-tex>. A finite check: <x-tex>J^*(B)=w\sqrt{NB/L}-B</x-tex> gives <x-tex>J^*(501)-J^*(500)=\$0.2643</x-tex>.</p>
+</div></details>
+<p>When opportunities differ, with values <x-tex>w_i</x-tex>, one multiplier serves them all: bid as if each value were <x-tex>w_i/(1+\mu_A)</x-tex>. Intuition: the last budget dollar must earn the same everywhere, or money should move to where it earns more. That the rule is optimal whenever such a <x-tex>\mu_A</x-tex> exists is proved below; that one exists is a named fact from Lagrangian duality, not proved here (<a href="https://doi.org/10.1287/opre.11.3.399" rel="noopener noreferrer" target="_blank">Everett, 1963</a>). In practice <x-tex>w_i</x-tex> is an estimate, and bidding on noisy estimates wins most often where the estimate is too high (the <a href="#ar-winners-curse">winner's curse</a>). Fees belong in the bill, and objectives such as volume under a <a href="#ar-roas-def">ROAS</a> target are different problems.</p>
+<details class="ar-exercise"><summary>Optional: why one multiplier is enough (sufficiency proof)</summary><div class="ar-answer">
+<p>With opportunity <x-tex>i</x-tex> having value <x-tex>w_i</x-tex>, win probability <x-tex>F_i</x-tex> and expected cost <x-tex>C_i</x-tex>, the advertiser solves</p>
+<div class="ar-math"><x-tex display>\max_{\{b_i\ge0\}}\sum_i\bigl[w_iF_i(b_i)-C_i(b_i)\bigr]\quad\text{subject to}\quad\sum_i C_i(b_i)\le B.</x-tex></div>
+<p>Write <x-tex>V(b)=\sum_i[w_iF_i(b_i)-C_i(b_i)]</x-tex> and <x-tex>S(b)=\sum_iC_i(b_i)</x-tex>. Suppose <x-tex>b^*</x-tex> maximizes <x-tex>V(b)-\mu S(b)</x-tex> for some <x-tex>\mu\ge0</x-tex>, is feasible (<x-tex>S(b^*)\le B</x-tex>), and either <x-tex>\mu=0</x-tex> or <x-tex>S(b^*)=B</x-tex>. For any feasible <x-tex>b</x-tex>:</p>
+<div class="ar-math"><x-tex display>V(b)\le V(b)-\mu\bigl(S(b)-B\bigr)\le V(b^*)-\mu\bigl(S(b^*)-B\bigr)=V(b^*).</x-tex></div>
+<p>The first step uses <x-tex>\mu\ge0</x-tex> and <x-tex>S(b)\le B</x-tex>; the second uses the maximization; the last uses <x-tex>\mu(S(b^*)-B)=0</x-tex>. Because <x-tex>V-\mu S</x-tex> is a sum of separate terms <x-tex>w_iF_i(b_i)-(1+\mu)C_i(b_i)</x-tex>, each <x-tex>b_i^*</x-tex> maximizes its own term, which is the single-opportunity problem with value <x-tex>w_i/(1+\mu)</x-tex> after dividing by <x-tex>1+\mu</x-tex>.</p>
+</div></details>
 <h3>Pacing keeps the objective while controlling spend over time</h3>
-<p><strong>Pacing</strong> is online control of how quickly money is spent. Let <x-tex>t</x-tex> index control periods, <x-tex>c_t</x-tex> be actual advertiser spend in that period, <x-tex>s_t</x-tex> its desired spend trajectory, and <x-tex>\eta&gt;0</x-tex> a step size in 1/dollar. A simple illustrative update is:</p>
-<div class="ar-math"><x-tex display>\mu_{A,t+1}=\max\{0,\mu_{A,t}+\eta(c_t-s_t)\}.</x-tex></div>
-<p>Overspending raises the multiplier and lowers bids; underspending lowers it, but never below zero. The zero boundary matters: bids can return to the advertiser-profit optimum without being forced beyond it just to spend money. For example, split our million opportunities into ten equal periods. At the $2,000 cap, a flat target is $200 per period, while the $4 CPM first-price optimum spends only $80 per period. Starting at zero, the multiplier stays at zero and the day spends $800, preserving the advertiser's optimum.</p>
-<p>This update illustrates control direction, not a stability or hard-budget guarantee. Delayed bills, traffic changes and interactions can produce oscillations; target trajectories should adapt to remaining budget and opportunity value. Actual hard spending caps require the reservation and settlement mechanisms in <a href="#chapter-7">Chapter 5</a>. The appendix retains a longer pacing simulation for the network's different objective as an optional extension.</p>
+<p><strong>Pacing</strong> is online control of how fast money is spent: not knowing <x-tex>F</x-tex> or the day's traffic, the bidder adjusts <x-tex>\mu_A</x-tex> from observed spend. Let <x-tex>t</x-tex> index control periods, <x-tex>c_t</x-tex> be spend in period <x-tex>t</x-tex>, <x-tex>s_t</x-tex> the target spend and <x-tex>\eta&gt;0</x-tex> a step size in 1/dollar:</p>
+<div class="ar-math"><x-tex display>\mu_{A,t+1}=\max\{0,\ \mu_{A,t}+\eta\,(c_t-s_t)\}.</x-tex></div>
+<p>Three things follow directly: overspending raises the multiplier and lowers bids; the floor at zero means bids never rise past the profit optimum just to spend money; and any resting point with <x-tex>\mu_A&gt;0</x-tex> has <x-tex>c_t=s_t</x-tex>. Split the day into ten periods of 100,000 opportunities. At the $2,000 cap the flat target is $200 per period; the $4 CPM optimum spends <x-tex>10^5(0.004)^2/0.02=\$80</x-tex>; starting at zero, <x-tex>\mu_A</x-tex> stays zero and the day spends $800. At the $500 cap the target is $50, and spend equals $50 when <x-tex>10^5b^2/0.02=50</x-tex>, i.e. <x-tex>b=\$0.0031623</x-tex>, which is the static budget-binding bid with <x-tex>\mu_A\approx0.2649</x-tex>.</p>
+<p>Not proved: convergence, which depends on the step size, delayed bills and traffic swings. The appendix's <a href="#ar-network-pacing">pacing simulation</a> illustrates one step size that settles and one that oscillates. The rule also controls only expected spend; hard caps need the reservation and settlement mechanisms in <a href="#chapter-7">Chapter 7</a>.</p>
 <h2 id="ar-network-spread-heading">Optional appendix: network spread and conflicting incentives</h2>
 <details class="ar-exercise" id="ar-network-spread-appendix"><summary>Optional appendix: a network maximizing spread under CPA billing</summary><div class="ar-answer">
-<aside class="ar-callout ar-warn"><p class="ar-callout-title">Different decision-maker and contract</p><p>This appendix asks how an intermediary maximizes its own media spread. It charges the advertiser $30 per billable attributed conversion and buys publisher impressions. Its per-impression value is <x-tex>v=qa=\$0.015</x-tex>, not the advertiser's <x-tex>w=\Delta qg=\$0.008</x-tex>. Its $2,000 budget limits publisher payments, not the advertiser's bill. Network-optimal bids of $7.50 or $6.3246 CPM below can coexist with advertiser losses. These values and objectives are not a description of Axon. Skip this appendix when first learning advertiser bidding.</p></aside><section id="ar-source-ledgers" aria-labelledby="ar-source-ledgers-title">
+<aside class="ar-callout ar-warn"><p class="ar-callout-title">Different decision-maker and contract</p><p>Here an intermediary maximizes its own media spread. It charges the advertiser $30 per billable attributed conversion and buys publisher impressions in auctions. Its value per impression is <x-tex>v=qa=\$0.015</x-tex>, not the advertiser's <x-tex>w=\Delta qg=\$0.008</x-tex>, and its $2,000 budget limits publisher payments, not the advertiser's bill. Its optimal bids of $7.50 and $6.3246 CPM can coexist with advertiser losses. None of this describes Axon.</p></aside>
+<section id="ar-source-ledgers" aria-labelledby="ar-source-ledgers-title">
 <h2 id="ar-source-ledgers-title">Follow the money through three ledgers</h2>
-<p>Take the position of an <strong>ad network</strong>: a company that buys opportunities to show ads from <strong>publishers</strong> (owners of apps and websites with ad slots) and resells them to <strong>advertisers</strong> (businesses that want their ads shown). Three amounts are easy to conflate: what the network collects from advertisers, what it pays publishers, and what the advertiser earns from the sales the ads produce. Two published examples pin down the first two; then we add the advertiser's ledger. The billing units below are defined in <a href="#chapter-3">Chapter 2</a> and restated here at first use.</p>
-
-<h3>Step 1 · Who pays how much per 1,000 impressions?</h3>
-<p>An <strong>impression</strong> is one display of an ad. <strong>CPM</strong> (cost per mille) quotes a price per 1,000 impressions, so $2 CPM means $0.002 per impression. In Epom's example the network buys publisher <strong>inventory</strong> (the publisher's supply of ad impressions) at <strong>$2 CPM</strong> and sells it to advertisers at <strong>$5 CPM</strong>, keeping a $3 CPM spread. Both sides are billed per impression. <a href="https://epom.com/blog/ad-server/how-to-build-ad-network" rel="noopener noreferrer" target="_blank">Source: Epom, “Ad arbitrage” section</a></p>
-<figure class="ar-map" aria-label="Allocation of money per thousand impressions: the advertiser pays five dollars, of which the publisher receives two dollars and the network keeps three dollars">
-<figcaption class="ar-maplabel">Epom example · per 1,000 impressions</figcaption>
-<div class="ar-labflow"><div><span>Advertiser pays</span><strong>$5</strong></div><span aria-hidden="true" class="ar-flowglyph">=</span><div><span>Publisher receives</span><strong>$2</strong></div><span aria-hidden="true" class="ar-flowglyph">+</span><div><span>Network keeps</span><strong>$3</strong></div></div>
-</figure>
-<p>For every 1,000 impressions the network receives $5 and pays the publisher $2. The remaining $3 is the <strong>media spread</strong>, before servers, sales staff and other operating costs. The example says nothing about whether the advertiser's $5 bought enough business.</p>
-
-<h3>Step 2 · What if the advertiser pays only per conversion?</h3>
-<p>A <strong>conversion</strong> is an action the advertiser values, such as a purchase or an app install. <strong>CPC</strong> (cost per click) and <strong>CPA</strong> (cost per action) contracts bill the advertiser only when that click or action occurs, not per impression. Kevel's documentation uses <strong>9,000 impressions, 18 billable events and $5 per event</strong>. Kevel allows the billable event to be a click or another action; we take the CPA reading and treat each event as a conversion that the contract recognizes. <a href="https://dev.kevel.com/docs/optimization" rel="noopener noreferrer" target="_blank">Source: Kevel, CPC/CPA worked example under “What Is eCPM?”</a></p>
-<p><strong>eCPM</strong> (effective CPM) restates revenue earned under any contract as revenue per 1,000 impressions:</p>
-<div class="ar-table-wrap"><table><thead><tr><th scope="col">Question</th><th scope="col">Calculation</th><th scope="col">Answer</th></tr></thead><tbody>
-<tr><td data-label="Question">How much does the advertiser pay in total?</td><td data-label="Calculation">18 conversions × $5</td><td data-label="Answer"><strong>$90</strong></td></tr>
-<tr><td data-label="Question">How much is collected per 1,000 impressions?</td><td data-label="Calculation">$90 ÷ 9,000 × 1,000</td><td data-label="Answer"><strong>$10 eCPM</strong></td></tr>
-</tbody></table></div>
-<p><strong>The contract is still $5 per conversion.</strong> The $10 eCPM converts revenue already earned into a per-1,000-impression figure so it can be compared with the price paid for impressions. It does not turn the contract into a CPM contract, and it does not guarantee that the next 9,000 impressions will earn the same.</p>
-
-<h3>Step 3 · Collect per conversion, pay per impression</h3>
-<p><strong>The following combined example is constructed for this reader; neither source describes this transaction.</strong> Keep Kevel's 9,000 impressions, 18 conversions and $5 CPA, and assume the network bought those impressions at Epom's $2 CPM.</p>
+<p><strong>A network that buys per impression and sells per conversion keeps a ledger that can be positive while the advertiser's is negative.</strong> Two published examples fix the prices. In <a href="https://epom.com/blog/ad-server/how-to-build-ad-network" rel="noopener noreferrer" target="_blank">Epom's ad-arbitrage example</a> a network buys publisher impressions at $2 CPM and resells them at $5 CPM. In <a href="https://dev.kevel.com/docs/optimization" rel="noopener noreferrer" target="_blank">Kevel's CPA example</a> 9,000 impressions yield 18 billable conversions at $5 each, $90 in total, or $90 ÷ 9,000 × 1,000 = $10 <strong>eCPM</strong> (revenue restated per 1,000 impressions). Our own combination, which neither source describes: buy Kevel's 9,000 impressions at Epom's $2 CPM.</p>
 <div class="ar-table-wrap"><table><thead><tr><th scope="col">Whose ledger</th><th scope="col">Calculation</th><th scope="col">Amount</th></tr></thead><tbody>
 <tr><td data-label="Whose ledger">Advertiser's ad bill</td><td data-label="Calculation">18 conversions × $5 CPA</td><td data-label="Amount"><strong>Pays $90</strong></td></tr>
 <tr><td data-label="Whose ledger">Publisher's ad revenue</td><td data-label="Calculation">9,000 impressions ÷ 1,000 × $2 CPM</td><td data-label="Amount"><strong>Receives $18</strong></td></tr>
 <tr><td data-label="Whose ledger">Network's media spread</td><td data-label="Calculation">$90 collected − $18 paid to the publisher</td><td data-label="Amount"><strong>Keeps $72</strong></td></tr>
 </tbody></table></div>
-<p>This is “buy per impression, sell per conversion.” <strong>The network pays for every impression it buys but is paid only when a contractual conversion occurs.</strong> If the same $18 of impressions yields only 2 conversions, the network collects $10 and loses $8. Conversion prediction tells the network which impressions are worth buying; it cannot make conversions happen.</p>
-
-<h3>Step 4 · The network kept $72. Did the advertiser make money?</h3>
-<p>We cannot tell yet. We know only that the advertiser spent $90. We do not know what each extra order is worth to the advertiser, or how many of the 18 recorded conversions the ad actually caused.</p>
-<p>Two terms separate these questions. A conversion is <strong>attributed</strong> to an ad when an agreed rule (for example, “purchase within 7 days of a click”) credits it to that ad; attribution decides what gets billed. A conversion is <strong>incremental</strong> if it would not have happened without the ad; incrementality decides what the advertiser actually gained. <strong>Teaching assumption:</strong> each incremental order leaves $8 of <strong>contribution</strong>, meaning revenue minus cost of goods, fulfillment and other variable costs, before ad spend. The bill and media cost stay as above:</p>
-<div class="ar-table-wrap"><table><thead><tr><th scope="col">Assumed scenario</th><th scope="col">Advertiser's calculation</th><th scope="col">Incremental contribution after ad spend</th></tr></thead><tbody>
-<tr><td data-label="Assumed scenario">All 18 are incremental</td><td data-label="Advertiser's calculation">18 × $8 − $90</td><td data-label="Incremental contribution after ad spend"><strong>+$54</strong></td></tr>
-<tr><td data-label="Assumed scenario">Only 9 are incremental</td><td data-label="Advertiser's calculation">9 × $8 − $90</td><td data-label="Incremental contribution after ad spend"><strong>−$18</strong></td></tr>
-</tbody></table></div>
-<p>In both scenarios the network bills $90 for 18 contractual conversions, pays the publisher $18 and keeps $72, yet the advertiser's outcomes have opposite signs. <strong>The attributed conversions used for billing are not the incremental conversions.</strong> Measuring the latter requires causal methods, covered in <a href="#chapter-6">Chapter 4</a>.</p>
-<p>The three ledgers are now separate. The publisher counts revenue from selling impressions; the network counts collections minus media cost; the advertiser counts incremental contribution minus the ad bill. That sets up the bidding question: <strong>for impressions not yet bought, how would the network bid if it maximized its own spread, and how could this differ from the advertiser’s choice?</strong></p>
+<p>The network pays for every impression but is paid only per conversion: if the same $18 of impressions yields 2 conversions, it collects $10 and loses $8. The advertiser's ledger depends on how many conversions the ad <em>caused</em>. If each caused order leaves $8 of contribution, all 18 caused gives 18 × $8 − $90 = +$54, but only 9 caused gives 9 × $8 − $90 = −$18. The network keeps $72 either way. Attributed conversions decide the bill; incremental ones decide the advertiser's gain (<a href="#chapter-6">Chapter 6</a>). <a href="#chapter-1">Chapter 1</a> runs the same three ledgers on the running campaign.</p>
 </section>
-
-<details class="ar-exercise" id="ar-auction-advanced"><summary>Appendix calculator: network spread, two contracts and delivery failures</summary><div class="ar-answer">
-<section id="ar-lab-explanation" aria-labelledby="ar-lab-explanation-title">
-<h2 id="ar-lab-explanation-title">Network-spread derivation: the appendix calculator's default values</h2>
-<p><strong>These numbers are set by this reader, not taken from a published case.</strong> The closest published derivation is Section 3.2.1 of Zhang and Wang, <a href="https://wnzhang.net/papers/sam-kdd.pdf#page=4" target="_blank" rel="noopener noreferrer">“Statistical Arbitrage Mining for Display Advertising”</a> (hereafter SAM; PDF page 4, printed page 1468). SAM derives optimal bids when competing prices are uniformly distributed, but it does not build the three-party ledger below. The model here is independent, and every line can be recomputed by hand.</p>
-<p>Reading order: <strong>who pays whom → try a $6 CPM bid → why the optimum is $6.3246 CPM → does the advertiser make money.</strong> The tables use the default parameters and do not respond to the sliders; the interactive calculator follows the derivation.</p>
-
-<h3>1. Two contracts before any algorithm</h3>
-<p>There are three parties: a merchant selling goods, an app that shows ads, and an ad network between them. “Platform” below means this ad network. Other intermediaries (exchanges and supply-side platforms, see <a href="#chapter-3">Chapter 2</a>) and their fees are left out so the money flows stay visible.</p>
-<div class="ar-table-wrap"><table><thead><tr><th scope="col">Role</th><th scope="col">What it does</th><th scope="col">How money is settled</th></tr></thead><tbody>
-<tr><td data-label="Role">Advertiser</td><td data-label="What it does">Sells goods and wants ads to bring more orders</td><td data-label="How money is settled">Pays the platform $30 for each order the contract recognizes</td></tr>
-<tr><td data-label="Role">Publisher</td><td data-label="What it does">Owns the app's ad slots and sells opportunities to show ads</td><td data-label="How money is settled">Auctions each opportunity and receives media payments from the platform</td></tr>
-<tr><td data-label="Role">Ad network / platform</td><td data-label="What it does">Buys opportunities from the publisher and delivers the advertiser's ads</td><td data-label="How money is settled">Collects from the advertiser, pays the publisher, and keeps the difference, positive or negative</td></tr>
-</tbody></table></div>
-<p><strong>Contract A: advertiser → platform, billed per order.</strong> In this example a conversion means placing an order and nothing else. A <strong>billable attributed conversion</strong> is an order that the attribution rule credits to one of the platform's impressions and that passes the contract's checks. We assume each such order is billed exactly once, in full.</p>
-<p>This is a <strong>CPA</strong> contract with settlement price <x-tex>a=\$30</x-tex> per order. That is a fixed payment price. It differs from a <em>target</em> CPA (tCPA), where the system tries to keep the <em>average</em> acquisition cost near a target (<a href="#chapter-3">Chapter 2</a>). An order being attributed to an ad does not prove the ad caused it; step 5 quantifies the gap.</p>
-<p><strong>Contract B: platform → publisher, impressions bought one auction at a time.</strong> An <strong>ad opportunity</strong> is one slot at one moment in which an ad could be shown. A <strong>bid request</strong> is the message in which the publisher (directly or through an exchange) invites bids on that opportunity. Each request is auctioned separately within milliseconds; that is what <strong>real-time bidding (RTB)</strong> means. To <strong>win</strong> is to be selected by the auction. A <strong>successful impression</strong> is the ad actually completing the display event defined in the contract. An ad can fail to load after a win, so the two events are kept separate.</p>
-<p>Bids are quoted in CPM: $6 CPM means $6 ÷ 1,000 = $0.006 per impression. <strong>Each auction still sells a single opportunity; a CPM quote does not buy 1,000 impressions at once.</strong> The default is a <strong>first-price auction</strong>: the winner pays its own bid. By default every win also yields a successful impression.</p>
-<div class="ar-math">Bid request → platform bids → win → successful impression<br>→ user may place an order → attribution rule confirms a billable order<br><strong>The publisher is paid under the procurement contract (B); the advertiser is billed separately under the order contract (A).</strong></div>
-
-<h3>2. Inputs and derived quantities</h3>
-<p>Every row below is a <strong>given assumption</strong>. The calculator does not train a prediction model and does not infer the ad's causal effect from attributed orders.</p>
-<div class="ar-table-wrap"><table><thead><tr><th scope="col">Input and symbol</th><th scope="col">Default value</th><th scope="col">Definition</th></tr></thead><tbody>
-<tr><td data-label="Input and symbol">Opportunities <x-tex>N</x-tex></td><td data-label="Default value">1,000,000</td><td data-label="Definition">Bid requests received in one day. None has been won yet, so this is not the number of impressions bought.</td></tr>
-<tr><td data-label="Input and symbol">Platform media budget <x-tex>B</x-tex></td><td data-label="Default value">$2,000</td><td data-label="Definition">Cap on the platform's <em>expected</em> spend on media (payments to the publisher). It does not limit the advertiser's bill.</td></tr>
-<tr><td data-label="Input and symbol">Billable conversion probability per impression <x-tex>q</x-tex></td><td data-label="Default value">0.0005 = 0.05%</td><td data-label="Definition">Probability that one successful impression produces a billable order: 5 orders per 10,000 successful impressions. The denominator is impressions, not clicks.</td></tr>
-<tr><td data-label="Input and symbol">Settlement price <x-tex>a</x-tex></td><td data-label="Default value">$30 per order</td><td data-label="Definition">Paid by the advertiser to the platform. Not the product's selling price, and not the price paid to the publisher.</td></tr>
-<tr><td data-label="Input and symbol">Display success rate <x-tex>\rho</x-tex> (rho)</td><td data-label="Default value">1 = 100%</td><td data-label="Definition">Probability that a win becomes a successful impression. Display failures are switched off by default.</td></tr>
-<tr><td data-label="Input and symbol">Competitive threshold <x-tex>Z</x-tex>, upper bound <x-tex>L</x-tex></td><td data-label="Default value"><x-tex>Z</x-tex> between $0 and $20 CPM<br><x-tex>L</x-tex> = $20 CPM = $0.02 per billable event</td><td data-label="Definition"><x-tex>Z</x-tex> is the highest competing bid in one auction, the price to beat. It varies across opportunities; its distribution is specified next. A <strong>billable event</strong> is whatever the publisher contract charges for: a successful impression by default, which equals a win when <x-tex>\rho=1</x-tex>.</td></tr>
-</tbody></table></div>
-<p>The <a href="#ar-threshold-math">main lesson derives the competitive-threshold win probability</a>. We use the same distribution in this appendix.</p>
-<p>One more derived quantity is needed: the platform's <strong>expected revenue per successful impression</strong>, <x-tex>v</x-tex>. It follows from Contract A and is not a separate input:</p>
+<section id="ar-network-budget-free" aria-labelledby="ar-network-bid-title">
+<h2 id="ar-network-bid-title">The network's bid: same algebra, different value</h2>
+<p><strong>The network's spread has the same shape as the advertiser's objective with <x-tex>w</x-tex> replaced by <x-tex>v</x-tex>, so its budget-free first-price bid is <x-tex>v/2</x-tex> = $7.50 CPM.</strong> These numbers are set by this reader; the closest published derivation is Section 3.2.1 of Zhang and Wang's <a href="https://wnzhang.net/papers/sam-kdd.pdf#page=4" target="_blank" rel="noopener noreferrer">“Statistical Arbitrage Mining for Display Advertising”</a>, which uses a second-price setting with the bid as a cost bound.</p>
+<p>Two contracts. <strong>A:</strong> the advertiser pays the network <x-tex>a=\$30</x-tex> per billable attributed order. <strong>B:</strong> the network buys each impression in a first-price auction and pays its bid. A successful impression produces a billable order with probability <x-tex>q=0.0005</x-tex>, independent of the bid and threshold. So the network's expected revenue per impression is</p>
 <div class="ar-math"><x-tex display>v=q\,a=0.0005\times\$30=\$0.015\ \text{per impression}.</x-tex></div>
-<p>“Expected” means the average over many repetitions under the same conditions; orders come in whole numbers, but their expected count can be fractional. $0.015 per impression is $15 per 1,000 impressions, the platform's revenue <strong>eCPM</strong>. This is only a change of units; the contract still bills per order.</p>
-<p>One simplification holds throughout: <x-tex>q</x-tex> is the same for every opportunity and does not depend on <x-tex>Z</x-tex> or <x-tex>b</x-tex>. If <x-tex>q</x-tex> and <x-tex>Z</x-tex> were correlated (for example, because competitors also bid more for likely buyers), a higher bid would buy a different mix of users and a single <x-tex>q</x-tex> would no longer apply.</p>
-
-<h3>3. No optimization yet: bid $6 CPM</h3>
-<p>Convert to <x-tex>b=\$0.006</x-tex> per impression and multiply count × probability × price:</p>
-<div class="ar-table-wrap"><table><thead><tr><th scope="col">Step</th><th scope="col">Calculation</th><th scope="col">Meaning</th></tr></thead><tbody>
-<tr><td data-label="Step">① Win rate <x-tex>F(b)</x-tex></td><td data-label="Calculation">6 / 20 = <strong>30%</strong></td><td data-label="Meaning">Share of opportunities whose threshold is at most the bid</td></tr>
-<tr><td data-label="Step">② Successful impressions <x-tex>D</x-tex></td><td data-label="Calculation">1,000,000 × 30% × 100%<br>= <strong>300,000</strong></td><td data-label="Meaning"><x-tex>N\times F(b)\times\rho</x-tex></td></tr>
-<tr><td data-label="Step">③ Media cost <x-tex>C</x-tex></td><td data-label="Calculation">300,000 × $0.006<br>= <strong>$1,800</strong></td><td data-label="Meaning">First-price: each win pays the bid. Within the $2,000 budget</td></tr>
-<tr><td data-label="Step">④ Billable attributed orders</td><td data-label="Calculation">300,000 × 0.0005<br>= <strong>150 orders</strong></td><td data-label="Meaning"><x-tex>D\times q</x-tex></td></tr>
-<tr><td data-label="Step">⑤ Advertiser bill <x-tex>A</x-tex></td><td data-label="Calculation">150 × $30<br>= <strong>$4,500</strong></td><td data-label="Meaning">Paid by the advertiser to the platform, not by the platform to the publisher</td></tr>
-<tr><td data-label="Step">⑥ Platform media gross spread <x-tex>M</x-tex></td><td data-label="Calculation">$4,500 − $1,800<br>= <strong>$2,700</strong></td><td data-label="Meaning">Collections minus media cost, before the platform's other costs</td></tr>
-</tbody></table></div>
-<p>Case matters: <x-tex>a</x-tex> is the $30 price per order; <x-tex>A</x-tex> is the bill for the whole campaign. <strong>Media gross spread <x-tex>M=A-C</x-tex></strong> is not the platform's accounting net profit, and this example does not settle whether its financial statements would book revenue gross or net (<a href="#chapter-3">Chapter 2</a>).</p>
-
-<h3>4. Why the calculator bids $6.3246 CPM</h3>
-<p>Now the optimization problem: <strong>the platform chooses one bid, used on every opportunity, to maximize expected media gross spread, subject to expected media cost of at most $2,000.</strong> The platform is risk-neutral: it maximizes the expectation and ignores variance. “Optimal” is relative to this objective; the advertiser's profit is not in it. Because all opportunities are identical, spread is concave and cost convex in the bid (shown below), a single common bid is optimal; varying bids across identical opportunities cannot help.</p>
-<p>First compare a few bids. All amounts are expected values:</p>
+<p>Keep the main line's <x-tex>N</x-tex>, <x-tex>L</x-tex> and uniform threshold, with every win displayed. The network's <strong>media gross spread</strong> is collections minus media cost, before its other costs:</p>
+<div class="ar-math"><x-tex display>M(b)=N\frac bL\,v-\frac{Nb^2}{L}=\frac NL\bigl(vb-b^2\bigr)=\frac NL\left[\left(\frac v2\right)^2-\left(b-\frac v2\right)^2\right].</x-tex></div>
+<p>The peak is <x-tex>b_0=v/2=\$0.0075</x-tex> ($7.50 CPM): 375,000 expected wins, 187.5 attributed conversions, $5,625 collected, $2,812.50 media cost, and spread <x-tex>Nv^2/(4L)=10^6\times0.015^2/0.08=\$2{,}812.50</x-tex>.</p>
 <div class="ar-table-wrap"><table><thead><tr><th scope="col">Bid (CPM)</th><th scope="col">Media cost</th><th scope="col">Advertiser bill</th><th scope="col">Platform gross spread</th><th scope="col">Within budget?</th></tr></thead><tbody>
 <tr><td data-label="Bid (CPM)">$4.00</td><td data-label="Media cost">$800.00</td><td data-label="Advertiser bill">$3,000.00</td><td data-label="Platform gross spread">$2,200.00</td><td data-label="Within budget?">Yes</td></tr>
 <tr><td data-label="Bid (CPM)">$6.00</td><td data-label="Media cost">$1,800.00</td><td data-label="Advertiser bill">$4,500.00</td><td data-label="Platform gross spread">$2,700.00</td><td data-label="Within budget?">Yes</td></tr>
-<tr><td data-label="Bid (CPM)">≈ $6.3246</td><td data-label="Media cost">$2,000.00</td><td data-label="Advertiser bill">$4,743.42</td><td data-label="Platform gross spread">$2,743.42</td><td data-label="Within budget?">Yes, exactly exhausts the expected budget</td></tr>
+<tr><td data-label="Bid (CPM)">≈ $6.3246</td><td data-label="Media cost">$2,000.00</td><td data-label="Advertiser bill">$4,743.42</td><td data-label="Platform gross spread">$2,743.42</td><td data-label="Within budget?">Exactly</td></tr>
 <tr><td data-label="Bid (CPM)">$7.50</td><td data-label="Media cost">$2,812.50</td><td data-label="Advertiser bill">$5,625.00</td><td data-label="Platform gross spread">$2,812.50</td><td data-label="Within budget?">No</td></tr>
-<tr><td data-label="Bid (CPM)">$10.00</td><td data-label="Media cost">$5,000.00</td><td data-label="Advertiser bill">$7,500.00</td><td data-label="Platform gross spread">$2,500.00</td><td data-label="Within budget?">No, and the spread is already falling</td></tr>
+<tr><td data-label="Bid (CPM)">$10.00</td><td data-label="Media cost">$5,000.00</td><td data-label="Advertiser bill">$7,500.00</td><td data-label="Platform gross spread">$2,500.00</td><td data-label="Within budget?">No, and past the peak</td></tr>
 </tbody></table></div>
-<p>Write step 3 as a function of <x-tex>b</x-tex>. With <x-tex>\rho=1</x-tex>, wins equal successful impressions; the formulas hold for <x-tex>0\le b\le L</x-tex>:</p>
-<div class="ar-math"><x-tex display>\begin{aligned}
-D(b)&amp;=N\,\frac{b}{L}, &amp; A(b)&amp;=v\,D(b),\\
-C(b)&amp;=b\,D(b)=\frac{Nb^2}{L}, &amp; M(b)&amp;=A(b)-C(b)=\frac{N}{L}\bigl(vb-b^2\bigr).
-\end{aligned}</x-tex></div>
-<p>A higher bid raises both the win rate and the price per win, so cost grows with <x-tex>b^2</x-tex>. Ignoring the budget, set the derivative to zero:</p>
-<div class="ar-math"><x-tex display>M'(b)=\frac{N}{L}\,(v-2b)=0\ \Longrightarrow\ b_0=\frac{v}{2}=\$0.0075\ \text{per impression}=\$7.50\ \text{CPM}.</x-tex></div>
-<p><x-tex>b_0</x-tex> is the budget-free optimum. Since <x-tex>M''(b)=-2N/L&lt;0</x-tex>, <x-tex>M</x-tex> is strictly concave and <x-tex>b_0</x-tex> is its unique global maximum on <x-tex>[0,L]</x-tex>; the upper boundary does not bind because <x-tex>b_0=0.0075&lt;L=0.02</x-tex>. But <x-tex>b_0</x-tex> costs $2,812.50, above the $2,000 budget. A feasible bid must satisfy</p>
-<div class="ar-math"><x-tex display>C(b)=\frac{Nb^2}{L}\le B\iff b\le b_B=\sqrt{\frac{BL}{N}}=\sqrt{\frac{2000\times0.02}{10^6}}=\$0.006324555\ldots\ \text{per impression}.</x-tex></div>
-<p><x-tex>M</x-tex> increases on <x-tex>[0,b_0]</x-tex>, so the best feasible bid is the largest one that is not past the peak, within budget, and not above <x-tex>L</x-tex>. Call it <x-tex>b^*</x-tex>:</p>
-<div class="ar-math"><x-tex display>b^*=\min\Bigl\{\frac{v}{2},\ \sqrt{\frac{BL}{N}},\ L\Bigr\}=\min\{0.0075,\ 0.006324555\ldots,\ 0.02\}\ \to\ \$6.3246\ \text{CPM (displayed)}.</x-tex></div>
-<p>The Lagrangian gives the same answer and introduces the multiplier used in the budget-objective sections later in this appendix. Maximize <x-tex>M(b)-\mu\,\bigl(C(b)-B\bigr)</x-tex> with <x-tex>\mu\ge0</x-tex> and complementary slackness <x-tex>\mu\,\bigl(C(b^*)-B\bigr)=0</x-tex>. The first-order condition <x-tex>\frac{N}{L}\bigl(v-2(1+\mu)b\bigr)=0</x-tex> gives <x-tex>b=v/\bigl(2(1+\mu)\bigr)</x-tex>. When the budget binds, <x-tex>b=b_B</x-tex>, so</p>
+<p><strong>The $2,000 media budget binds.</strong> As in the main line, the best feasible bid is the one closest to the peak:</p>
+<div class="ar-math"><x-tex display>b^*=\min\Bigl\{\frac{v}{2},\ \sqrt{\frac{BL}{N}},\ L\Bigr\}=\min\{0.0075,\ 0.006324555\ldots,\ 0.02\}\ \to\ \$6.3246\ \text{CPM}.</x-tex></div>
+<p>The main line's multiplier derivation, with <x-tex>v</x-tex> for <x-tex>w</x-tex>, gives the budget's shadow price:</p>
 <div class="ar-math"><x-tex display>1+\mu=\frac{v}{2b_B}=\frac{0.015}{0.012649\ldots}=1.18585\ldots,\qquad \mu\approx0.186.</x-tex></div>
-<p><x-tex>\mu</x-tex> is the <strong>shadow price</strong> of the budget: one more budget dollar adds about $0.186 of expected spread. Check: the optimal spread is <x-tex>M^*(B)=M(b_B)</x-tex>, with <x-tex>db_B/dB=b_B/(2B)</x-tex> and <x-tex>N/L=B/b_B^2</x-tex>, so <x-tex>dM^*/dB=\frac{N}{L}(v-2b_B)\frac{b_B}{2B}=\frac{v}{2b_B}-1=\mu</x-tex>.</p>
-<p>In the calculator, <strong>“budget binding”</strong> means the budget, not the spread peak, sets the bid: the platform would bid $7.50 CPM but can afford only about $6.3246. It does not mean the advertiser's bill is $2,000. The budget constrains <em>expected</em> spend, so a realized day can still overspend; per-request stop rules (hard caps) are outside this example.</p>
-<p>Conversely, raise the budget to $6,000. Then <x-tex>b_B=\sqrt{6000\times0.02/10^6}\approx\$0.01095</x-tex> per impression ($10.95 CPM) exceeds $7.50 CPM, so the platform still bids $7.50 CPM and spends only $2,812.50. The objective is spread; exhausting the budget is not a goal. The budget stops binding at <x-tex>B=Nb_0^2/L=\$2{,}812.50</x-tex>.</p>
-
-<h3>5. The advertiser's ledger: attributed orders are not incremental orders</h3>
-<p>Steps 1–4 settle the publisher's and the platform's ledgers. Judging the advertiser needs two <strong>independently given</strong> inputs:</p>
-<div class="ar-table-wrap"><table><thead><tr><th scope="col">Term and symbol</th><th scope="col">Definition</th><th scope="col">Value in this example</th></tr></thead><tbody>
-<tr><td data-label="Term and symbol">True incremental conversion probability <x-tex>\Delta q</x-tex> (delta q)</td><td data-label="Definition">For comparable opportunities and the same observation window: <x-tex>P(\text{order}\mid\text{ad shown})-P(\text{order}\mid\text{ad not shown})</x-tex></td><td data-label="Value in this example">0.0002 = 2 per 10,000: on average 2 incremental orders per 10,000 impressions</td></tr>
-<tr><td data-label="Term and symbol">Contribution per incremental order <x-tex>g</x-tex></td><td data-label="Definition">Revenue from an incremental order minus cost of goods, fulfillment and other per-order costs, before ad spend</td><td data-label="Value in this example">$40 per order: an amount, not a 40% margin, and not the selling price</td></tr>
-</tbody></table></div>
-<p><x-tex>\Delta q</x-tex> is a difference of probabilities, not the share of attributed orders that are incremental. Orders also happen without the ad, for example when the user already meant to buy. For a single opportunity we never observe both outcomes (shown and not shown), so <x-tex>\Delta q</x-tex> must come from evidence such as randomized holdout experiments (<a href="#chapter-6">Chapter 4</a>), not from attribution reports. Here it is simply assumed known.</p>
-<p>Multiplying impressions by <x-tex>\Delta q</x-tex> further assumes that opportunities do not affect each other, that repeated exposure has no cumulative effect, that <x-tex>\Delta q</x-tex> does not depend on <x-tex>Z</x-tex>, <x-tex>b</x-tex> or display failures, and that every incremental order contributes the same <x-tex>g</x-tex>.</p>
+<p>Check: while binding, optimal spread is <x-tex>M^*(B)=v\sqrt{NB/L}-B=106.066\sqrt B-B</x-tex>, and <x-tex>M^*(2001)-M^*(2000)=\$0.1857</x-tex>. The budget stops binding at <x-tex>B=Nb_0^2/L=\$2{,}812.50</x-tex>. At $6,000 the cap <x-tex>\sqrt{6000\times0.02/10^6}\approx\$0.01095</x-tex> per impression ($10.95 CPM) is above $7.50 CPM, so the network still bids $7.50 and leaves budget unspent.</p>
+<p>Under ideal second price the network pays <x-tex>Z</x-tex>, so as in the main line <x-tex>b^*=\min\{v,\sqrt{2BL/N},L\}=\min\{0.015,\ 0.0089443\ldots,\ 0.02\}\to\$8.9443</x-tex> CPM. The win rate is about 44.72%, the advertiser bill $6,708.20 and the spread $4,708.20, with <x-tex>\mu=v/b^*-1\approx0.677</x-tex>; the finite check <x-tex>M^*(B)=v\sqrt{2NB/L}-B=150\sqrt B-B</x-tex> gives $0.6768. These comparisons hold competitors fixed.</p>
+<x-chart>{"title": "Optimal network bid vs media budget",
+ "params": {"N": 1000000, "L": 0.02, "v": 0.015},
+ "x": {"label": "Expected media budget B ($ per day)", "min": 0, "max": 6000, "ticks": [0, 1000, 2000, 3000, 4000, 5000, 6000], "format": "usd"},
+ "y": {"label": "Optimal bid b* ($ CPM)", "min": 0, "max": 16, "ticks": [0, 4, 8, 12, 16], "format": {"prefix": "$"}},
+ "series": [{"fn": "1000*min(v/2, sqrt(x*L/N))", "label": "first price", "tone": "accent", "samples": 600},
+            {"fn": "1000*min(v, sqrt(2*x*L/N))", "label": "ideal second price", "tone": "warm", "samples": 600}],
+ "vlines": [{"x": 2000, "label": "B = $2,000", "tone": "muted"}],
+ "points": [{"x": 2000, "y": 6.3246, "label": "$6.32", "pos": "left", "tone": "accent"},
+            {"x": 2000, "y": 8.9443, "label": "$8.94", "pos": "left", "tone": "warm"},
+            {"x": 2812.5, "y": 7.5, "tone": "accent"},
+            {"x": 3000, "y": 6.6, "label": "flat from $2,812.50", "pos": "right", "marker": false, "tone": "accent"},
+            {"x": 5625, "y": 15, "tone": "warm"}, {"x": 5300, "y": 13.2, "label": "flat from $5,625", "pos": "below", "marker": false, "tone": "warm"}],
+ "caption": "<x-tex>b^*(B)=\\min\\{v/2,\\sqrt{BL/N}\\}</x-tex> under first price and <x-tex>\\min\\{v,\\sqrt{2BL/N}\\}</x-tex> under ideal second price. While the budget binds the bid grows as <x-tex>\\sqrt B</x-tex>; once the budget-free optimum is affordable ($2,812.50 for first price, $5,625 for second price) the bid stops rising, extra budget stays unspent and <x-tex>\\mu=0</x-tex>."}</x-chart>
+</section>
+<h2 id="ar-network-advertiser-ledger">The advertiser's ledger under the network's bid</h2>
+<p><strong>The network's bid uses <x-tex>q</x-tex> and <x-tex>a</x-tex>; the advertiser's outcome depends on <x-tex>\Delta q</x-tex> and <x-tex>g</x-tex>, which the network's objective never sees.</strong> Use the running inputs <x-tex>\Delta q=0.0002</x-tex> (true incremental order probability per impression) and <x-tex>g=\$40</x-tex> (contribution per incremental order). Per 10,000 impressions:</p>
 <div class="ar-math"><x-tex display>\begin{aligned}
-&amp;\text{Per 10,000 impressions:}\\
-&amp;\text{platform bills 5 attributed orders:} &amp;&amp; 5\times\$30=\$150\\
+&amp;\text{network bills 5 attributed orders:} &amp;&amp; 5\times\$30=\$150\\
 &amp;\text{advertiser gains 2 incremental orders:} &amp;&amp; 2\times\$40=\$80\\
 &amp;\text{advertiser incremental contribution profit:} &amp;&amp; \$80-\$150=-\$70
 \end{aligned}</x-tex></div>
-<p><strong>Advertiser incremental contribution profit</strong> is the contribution from ad-caused orders minus the ad bill. The calculator calls it “advertiser incremental profit.” It excludes the company's fixed costs and is not company net profit.</p>
-<p>Now plug in <x-tex>b^*</x-tex>. With the unrounded value, the win rate is 31.6227766…% and <x-tex>D</x-tex> = 316,227.766… successful impressions. Only displayed values in the table are rounded.</p>
-<div class="ar-table-wrap"><table><thead><tr><th scope="col">Whose ledger</th><th scope="col">Calculation</th><th scope="col">Result</th></tr></thead><tbody>
-<tr><td data-label="Whose ledger">Publisher</td><td data-label="Calculation"><x-tex>D\times b^*</x-tex></td><td data-label="Result">Revenue <strong>$2,000.00</strong>; the publisher's own costs are not modeled</td></tr>
-<tr><td data-label="Whose ledger">Platform collections</td><td data-label="Calculation"><x-tex>D\times0.0005</x-tex> = 158.113883… orders, × $30</td><td data-label="Result">Advertiser bill <x-tex>A</x-tex> = <strong>$4,743.42</strong></td></tr>
-<tr><td data-label="Whose ledger">Platform gross spread</td><td data-label="Calculation"><x-tex>A-C</x-tex></td><td data-label="Result"><strong>$2,743.42</strong>, before infrastructure, bad debt, operations and other costs</td></tr>
-<tr><td data-label="Whose ledger">Advertiser incremental contribution</td><td data-label="Calculation"><x-tex>D\times0.0002</x-tex> = 63.245553… orders, × $40</td><td data-label="Result"><strong>$2,529.82</strong></td></tr>
-<tr><td data-label="Whose ledger">Advertiser incremental contribution profit</td><td data-label="Calculation"><x-tex>D\,\Delta q\,g-A=D\,(\Delta q\,g-q\,a)</x-tex></td><td data-label="Result"><strong>−$2,213.59</strong>, from unrounded values</td></tr>
-</tbody></table></div>
-<p><strong>The advertiser's loss is not a platform miscalculation.</strong> The platform is paid per attributed order, while the advertiser needs incremental contribution to cover the whole bill, and the contract does not align the two. The example shows the gap can exist; it does not claim an informed advertiser would accept this price for long.</p>
-<p>The total bill divided by incremental orders is the <strong>true incremental CPA</strong>, the ad spend per ad-caused order: $4,743.416… ÷ 63.245553… = <strong>$75</strong> (equivalently <x-tex>qa/\Delta q=0.015/0.0002</x-tex>), well above the $40 contribution per order. Its denominator differs from that of the contractual $30 per attributed order.</p>
-<p>The advertiser breaks even (incremental contribution profit of zero) when contribution per impression covers the bill per impression:</p>
+<p>At <x-tex>b^*</x-tex> (unrounded) the network wins 316,227.766… impressions. Collections are 158.113883… orders × $30 = $4,743.42; spread is $2,743.42; the advertiser gains 63.245553… incremental orders × $40 = $2,529.82, so its incremental contribution profit is <strong>−$2,213.59</strong>. The <strong>true incremental CPA</strong>, spend per ad-caused order, is $4,743.416… ÷ 63.245553… = <strong>$75</strong> (<x-tex>qa/\Delta q=0.015/0.0002</x-tex>), far above the $40 an order is worth. The advertiser breaks even only if</p>
 <div class="ar-math"><x-tex display>\Delta q\,g\ge q\,a\iff\Delta q\ge\frac{0.0005\times30}{40}=0.000375=3.75\ \text{per }10{,}000.</x-tex></div>
-<p>Move the <x-tex>\Delta q</x-tex> slider from 2 to 3.75 per 10,000 and the advertiser breaks even, while the platform's bid and collections stay put: the platform's objective uses <x-tex>q</x-tex> and <x-tex>a</x-tex>, not <x-tex>\Delta q</x-tex>. Note also that <x-tex>\Delta q</x-tex> and <x-tex>q</x-tex> measure different things and neither bounds the other; nothing here requires <x-tex>\Delta q&lt;q</x-tex>.</p>
-
-<h3>6. Use the calculator to verify the ledgers</h3>
-<p>With the defaults, check the $2,000 media cost, the $4,743.42 advertiser bill and the $2,743.42 gross spread. Then change <x-tex>\Delta q</x-tex> and confirm that only the advertiser's incremental profit moves. Finally, raise the budget and watch the bid stop rising at $7.50 CPM once the budget exceeds $2,812.50.</p>
+<p>Moving <x-tex>\Delta q</x-tex> from 2 to 3.75 per 10,000 leaves the network's bid and collections unchanged. <x-tex>\Delta q</x-tex> and <x-tex>q</x-tex> measure different events, and neither bounds the other.</p>
+<x-chart>{"title": "Network spread and advertiser incremental profit vs bid",
+ "params": {"N": 1000000, "L": 0.02, "v": 0.015, "g": 40},
+ "x": {"label": "First-price bid b ($ CPM)", "min": 0, "max": 15, "ticks": [0, 5, 10, 15], "format": {"prefix": "$"}},
+ "y": {"label": "$ per 1,000,000 requests", "min": -6000, "max": 8000, "ticks": [-6000, -4000, -2000, 0, 2000, 4000, 6000, 8000], "format": "usd"},
+ "series": [{"fn": "N*(v - x/1000)*(x/1000)/L", "label": "network gross spread", "tone": "accent"},
+            {"fn": "N*(x/1000)/L*(0.0002*g - v)", "label": "advertiser, Δq = 2 per 10,000", "tone": "negative"},
+            {"fn": "N*(x/1000)/L*(0.0006*g - v)", "label": "advertiser, Δq = 6 per 10,000", "tone": "positive", "dash": true}],
+ "vlines": [{"x": 7.5, "label": "network optimum $7.50", "tone": "muted"}],
+ "points": [{"x": 7.5, "y": 2812.5}, {"x": 7.8, "y": 1900, "label": "$2,812.50", "pos": "right", "marker": false},
+            {"x": 7.5, "y": -2625}, {"x": 7.8, "y": -4300, "label": "−$2,625", "pos": "right", "marker": false}],
+ "caption": "Budget-free. Network spread <x-tex>N(v-b)b/L</x-tex> peaks at $7.50 CPM. The advertiser pays per attributed order and never for media, so its incremental profit <x-tex>N(b/L)(\\Delta q\\,g-q\\,a)</x-tex> is linear in the bid: at <x-tex>\\Delta q</x-tex> = 2 per 10,000 each impression loses $0.008 − $0.015 = −$0.007 (−$2,625 at $7.50) and it prefers no bidding; at 6 per 10,000 each gains $0.024 − $0.015 = $0.009 and it wants every impression. Its preferred bid is a corner; the network's is interior."}</x-chart>
+<h3>Use the calculator to check the ledgers</h3>
+<p>With the defaults, find the $2,000 media cost, $4,743.42 bill and $2,743.42 spread. Change <x-tex>\Delta q</x-tex> and only the advertiser's line moves; raise the budget past $2,812.50 and the bid stops at $7.50 CPM.</p>
 <section aria-labelledby="ar-lab-title" class="ar-lab">
 <div class="ar-kicker">ADVANCED · Teaching model built for this reader</div>
 <h3 id="ar-lab-title">Network-spread calculator: not the advertiser objective</h3>
-<p class="ar-labintro">The readouts below follow the sliders; the tables above keep the default values. The budget limits the platform's media spend; the advertiser pays a separate bill per billable attributed order.</p>
+<p class="ar-labintro">The budget limits the network's media spend; the advertiser pays a separate bill per billable attributed order.</p>
 <div class="ar-controls">
 <label class="ar-field"><span class="ar-fieldhead"><span>Auction mechanism</span></span><select id="ar-auction"><option value="first">First-price · pay your own bid</option><option value="second">Ideal second-price · pay the competitive threshold</option></select></label>
 <label class="ar-field"><span class="ar-fieldhead"><span>Network media budget B</span><output for="ar-budget" id="ar-budget-out">$2,000</output></span><input id="ar-budget" max="6000" min="0" step="100" type="range" value="2000"/></label>
@@ -310,239 +229,36 @@ C(b)&amp;=b\,D(b)=\frac{Nb^2}{L}, &amp; M(b)&amp;=A(b)-C(b)=\frac{N}{L}\bigl(vb-
 <div><div class="ar-ledgerlabel">Advertiser incremental profit</div><div class="ar-ledgervalue ar-negative" id="ar-adprofit">−$2,213.59</div><div class="ar-ledgernote">Incremental order contribution − advertiser bill</div></div>
 </div>
 <div class="ar-labstatus" id="ar-lab-status">Win rate 31.62% · 158.11 attributed conversions · budget binding: bid capped by the budget</div>
-<p class="ar-assumption">Teaching parameters: billable conversion probability per successful impression 0.0005, settlement CPA $30, contribution per incremental order $40, competitive threshold uniform on $0–20 CPM and identically distributed across 1,000,000 opportunities. Δq is a given difference in order probability between showing and not showing the ad, not derived from attribution reports. Opportunities are independent, and ρ does not depend on the threshold or the bid. Every comparison holds the threshold distribution fixed, although real competitors may change their bids. All figures are expectations; realized spend can exceed the budget.</p>
+<p class="ar-assumption">Teaching parameters: billable conversion probability per successful impression 0.0005, settlement CPA $30, contribution per incremental order $40, competitive threshold uniform on $0–20 CPM across 1,000,000 opportunities. Δq is given, not derived from attribution. ρ does not depend on the threshold or the bid. Competitors are held fixed. All figures are expectations; realized spend can exceed the budget.</p>
 </section>
-
-<details class="ar-exercise" id="ar-defaults-second-price"><summary>Extension A: why does the formula change under “ideal second-price”?</summary><div class="ar-answer">
-<p>An <strong>ideal second-price auction</strong> charges the winner the competitive threshold <x-tex>Z</x-tex> instead of its own bid <x-tex>b</x-tex>; floor prices, bid increments and fees are ignored. If you bid $6 CPM and the highest competing bid is $4 CPM, first-price charges $6 CPM and ideal second-price charges $4 CPM. You win either way; only the payment differs.</p>
-<p>For a fixed <x-tex>b</x-tex> the win rate is still <x-tex>b/L</x-tex>. Conditional on winning, <x-tex>Z\sim\mathrm{Uniform}(0,b)</x-tex>, so the expected payment per win is <x-tex>\mathbb E[Z\mid Z\le b]=b/2</x-tex>. With the default <x-tex>\rho=1</x-tex>:</p>
-<div class="ar-math"><x-tex display>\begin{aligned}
-C(b)&amp;=N\cdot\frac{b}{L}\cdot\frac{b}{2}=\frac{Nb^2}{2L},\\
-M(b)&amp;=\frac{N}{L}\Bigl(vb-\frac{b^2}{2}\Bigr),\qquad M'(b)=\frac{N}{L}\,(v-b),\qquad M''(b)=-\frac{N}{L}&lt;0.
-\end{aligned}</x-tex></div>
-<p>Ignoring the budget, the best bid is <x-tex>b_0=v</x-tex>: bid your value, the familiar truthful-bidding result for second-price auctions. Then apply the budget and the price range:</p>
-<div class="ar-math"><x-tex display>b^*=\min\Bigl\{v,\ \sqrt{\frac{2BL}{N}},\ L\Bigr\}=\min\{0.015,\ 0.0089443\ldots,\ 0.02\}\ \to\ \$8.9443\ \text{CPM}.</x-tex></div>
-<p>With the same $2,000 budget, the win rate is about 44.72%, the advertiser bill $6,708.20, the platform gross spread $4,708.20 and the advertiser incremental contribution profit −$3,130.50. The Lagrangian condition is now <x-tex>b=v/(1+\mu)</x-tex>, so the budget's shadow price rises to <x-tex>\mu=v/b^*-1\approx0.677</x-tex>. More impressions mean more attributed orders billed; with these loss-making parameters the advertiser loses more.</p>
-<p>The comparison holds the threshold distribution and the other inputs fixed, not the advertiser bill. In reality a change of auction rule also changes competitors' bids, so this is not a prediction of market-level outcomes.</p>
-</div></details>
-
-<details class="ar-exercise" id="ar-defaults-delivery"><summary>Extension B: are failed displays billed? Compute a 50% success rate first, then the full formula</summary><div class="ar-answer">
-<p><x-tex>\rho</x-tex> is the probability that a win becomes a successful impression. At <x-tex>\rho</x-tex> = 50%, on average 50 of every 100 wins produce an impression. Revenue comes only from orders after successful impressions; media cost depends on the publisher contract.</p>
-<p>Fix a first-price bid of $6 CPM without re-optimizing. It still wins 300,000 times, but only 150,000 impressions succeed, so collections are 150,000 × 0.0005 × $30 = $2,250.</p>
+<details class="ar-exercise" id="ar-defaults-delivery"><summary>Extension: are failed displays billed? (the calculator's ρ and billing controls)</summary><div class="ar-answer">
+<p><x-tex>\rho</x-tex> is the probability that a win becomes a successful impression; orders come only from successful impressions. Fix a first-price bid of $6 CPM with <x-tex>\rho</x-tex> = 50%: 300,000 wins, 150,000 impressions, and collections of 150,000 × 0.0005 × $30 = $2,250.</p>
 <div class="ar-table-wrap"><table><thead><tr><th scope="col">Publisher contract</th><th scope="col">Media cost</th><th scope="col">Platform gross spread</th></tr></thead><tbody>
 <tr><td data-label="Publisher contract">Display-based: billed only for successful impressions</td><td data-label="Media cost">150,000 × $0.006 = $900</td><td data-label="Platform gross spread">$2,250 − $900 = $1,350</td></tr>
 <tr><td data-label="Publisher contract">Win-based: billed on every win</td><td data-label="Media cost">300,000 × $0.006 = $1,800</td><td data-label="Platform gross spread">$2,250 − $1,800 = $450</td></tr>
 </tbody></table></div>
-<p>Under win-based billing, failed displays also cost money, so the re-optimized bid is lower. Both contracts are teaching settings for this calculator.</p>
-<p>To cover all four combinations with one formula, introduce two pieces of <strong>notation</strong>; they are not new parameters to estimate:</p>
-<ul><li><x-tex>\alpha</x-tex> (alpha), the media billing coefficient: the probability that a win is billed. <x-tex>\alpha=\rho</x-tex> under display-based billing; <x-tex>\alpha=1</x-tex> under win-based billing.</li><li><x-tex>k</x-tex>, the auction payment coefficient: <x-tex>k=1</x-tex> for first-price and <x-tex>k=2</x-tex> for ideal second-price, so the expected price per billed event is <x-tex>b/k</x-tex>. It is not a fee rate, and it is unrelated to the click indicator <x-tex>K</x-tex> defined earlier in “Define the event the model predicts”.</li></ul>
-<p>Assume display success is independent of <x-tex>Z</x-tex>, so conditioning on a successful display does not change the expected payment per win. Then</p>
+<p>For the general formula, let <x-tex>\alpha</x-tex> be the probability a win is billed (<x-tex>\alpha=\rho</x-tex> display-based, <x-tex>\alpha=1</x-tex> win-based) and <x-tex>k</x-tex> the payment divisor (<x-tex>k=1</x-tex> first price, <x-tex>k=2</x-tex> ideal second price, so the expected price per billed win is <x-tex>b/k</x-tex>; <x-tex>k</x-tex> is local to this box). Assuming display success is independent of <x-tex>Z</x-tex>:</p>
 <div class="ar-math"><x-tex display>\begin{aligned}
-D&amp;=N\,\frac{b}{L}\,\rho, &amp; C&amp;=N\,\frac{b}{L}\,\alpha\,\frac{b}{k}=\frac{N\alpha b^2}{kL},\\
-A&amp;=D\,q\,a=D\,v, &amp; M&amp;=\frac{N}{L}\Bigl(\rho vb-\frac{\alpha b^2}{k}\Bigr).
+C&amp;=N\,\frac{b}{L}\,\alpha\,\frac{b}{k}=\frac{N\alpha b^2}{kL}, &amp; M&amp;=\frac{N}{L}\Bigl(\rho vb-\frac{\alpha b^2}{k}\Bigr),\\
+b^*&amp;=\min\Bigl\{\frac{k\rho v}{2\alpha},\ \sqrt{\frac{kBL}{N\alpha}},\ L\Bigr\}, &amp; \text{advertiser}&amp;=N\frac bL\rho\,(\Delta q\,g-q\,a).
 \end{aligned}</x-tex></div>
-<p>Setting <x-tex>M'(b)=\frac{N}{L}\bigl(\rho v-2\alpha b/k\bigr)=0</x-tex> gives the budget-free bid <x-tex>b_0=k\rho v/(2\alpha)</x-tex>, a maximum because <x-tex>M''(b)=-2N\alpha/(kL)&lt;0</x-tex>. Solving <x-tex>C\le B</x-tex> gives the budget cap. Together they form the calculator's complete formula:</p>
-<div class="ar-math"><x-tex display>\begin{aligned}
-b^*&amp;=\min\Bigl\{\frac{k\rho v}{2\alpha},\ \sqrt{\frac{kBL}{N\alpha}},\ L\Bigr\},\\
-\text{advertiser incremental contribution profit}&amp;=D\,(\Delta q\,g-q\,a).
-\end{aligned}</x-tex></div>
-<p>The <x-tex>\rho</x-tex> slider covers 50%–100%, so <x-tex>\alpha&gt;0</x-tex>. At <x-tex>\rho</x-tex> = 50% with the $2,000 budget and first-price, re-optimizing gives: under display-based billing (<x-tex>\alpha=\rho</x-tex>, so <x-tex>\rho</x-tex> cancels in <x-tex>b_0</x-tex>), <x-tex>b^*</x-tex> = $7.50 CPM and media cost $1,406.25; under win-based billing (<x-tex>\alpha=1</x-tex>), <x-tex>b^*</x-tex> = $3.75 CPM and media cost $703.13 (exactly $703.125). Neither budget binds. These are re-optimized bids, a different exercise from the fixed-$6 comparison above.</p>
+<p>The first term comes from <x-tex>M'(b)=(N/L)(\rho v-2\alpha b/k)=0</x-tex>, a maximum since <x-tex>M''&lt;0</x-tex>; the second from <x-tex>C\le B</x-tex>. At <x-tex>\rho</x-tex> = 50%, $2,000 and first price, re-optimizing gives $7.50 CPM and $1,406.25 media cost under display-based billing (<x-tex>\rho</x-tex> cancels), and $3.75 CPM and $703.13 (exactly $703.125) under win-based billing. Neither budget binds. The slider keeps <x-tex>\rho\ge50\%</x-tex>, so <x-tex>\alpha&gt;0</x-tex>.</p>
 </div></details>
-
-<details class="ar-exercise" id="ar-defaults-provenance"><summary>Sources: what comes from the paper, and what this reader added</summary><div class="ar-answer">
-<p><a href="https://wnzhang.net/papers/sam-kdd.pdf#page=4" target="_blank" rel="noopener noreferrer">SAM, Section 3.2.1, Equations 15–20</a> analyzes uniformly distributed competing prices and the resulting optimal bids. SAM's <x-tex>r</x-tex> (reward per conversion), <x-tex>\theta</x-tex> (conversion probability) and <x-tex>l</x-tex> (price upper bound) correspond to <x-tex>a</x-tex>, <x-tex>q</x-tex> and <x-tex>L</x-tex> here. SAM's symbols are not used anywhere else in this chapter.</p>
-<p>One difference matters. SAM's Equation 2 (Section 3) is set in a second-price auction and uses the bid as an <strong>upper bound on cost</strong>. This reader's default is first-price, where the winner pays exactly its bid; Extension A computes the actual expected second-price payment. The expressions look alike, but the models differ.</p>
-<p>Section 5.4 of Wang, Zhang and Yuan, <a href="https://arxiv.org/pdf/1610.03013" target="_blank" rel="noopener noreferrer">“Display Advertising with Real-Time Bidding and Behavioural Targeting”</a> (hereafter the RTB monograph), frames this class of optimization across billing schemes. The single advertiser, fixed conversion probability, specific numbers, display-failure contracts, incrementality and advertiser ledger here are assumptions this reader added to expose the mechanism, not experimental results from the literature.</p>
-</div></details>
-<p><strong>The model shows how contracts can pull the parties' objectives apart.</strong> It ignores differences in value across users and the fall in conversion probability as volume scales, so it cannot be used to judge a real platform's take rate, profitability or scaling limits.</p>
-</section>
-</div></details>
-
-<h2>First-price and second-price auctions cost different amounts</h2>
-<p>This restates the main-line auction argument for a different objective: the network uses its CPA receipts <x-tex>v</x-tex> in place of advertiser incremental contribution <x-tex>w</x-tex>.</p>
-<p>The following simplified decision model is original to this reader; by default every win yields a successful impression. Let <x-tex>Z\ge0</x-tex> be the <strong>competitive threshold</strong>, the highest competing bid, which we must meet or beat to win; <x-tex>b\ge0</x-tex> our bid; and <x-tex>v\ge0</x-tex> the expected monetary value of winning and being shown. We win if and only if <x-tex>b\ge Z</x-tex>; ties have probability zero in this continuous model. For fixed <x-tex>x</x-tex>, <x-tex>F(b\mid x)=P(Z\le b\mid x)</x-tex> is the conditional CDF of the threshold, i.e., the win rate at bid <x-tex>b</x-tex>, and <x-tex>f(z\mid x)=\partial F(z\mid x)/\partial z</x-tex> is its density. From here on we fix <x-tex>x</x-tex> and drop it, writing <x-tex>F(b)</x-tex> and <x-tex>f(b)</x-tex>; in integrals <x-tex>z</x-tex> denotes a value of <x-tex>Z</x-tex> and <x-tex>dF(z)=f(z)\,dz</x-tex>.</p>
-<p>Bids, values and payments are in dollars per won-and-displayed opportunity; multiply by 1,000 for a CPM interface. Assumptions: the bidder is risk-neutral, maximizing expected net profit; given <x-tex>x</x-tex>, <x-tex>v</x-tex> does not depend on <x-tex>Z</x-tex>; one bid does not change later responses; there are no fees, ties or dynamic feedback; and there is no budget yet. Let <x-tex>\pi_1(b)</x-tex> and <x-tex>\pi_2(b)</x-tex> be the expected net profit per request under first-price and second-price, counting zero revenue and zero cost on a loss; primes denote derivatives in <x-tex>b</x-tex>. Formulas containing <x-tex>F/f</x-tex> apply only to interior candidates with <x-tex>f(b)&gt;0</x-tex>; the allowed bid range, its boundaries and the global optimum must still be checked.</p>
-<p>In a <strong>first-price auction</strong> the winner pays its own bid. Expected net profit per request is</p>
-<div class="ar-math"><x-tex display>\pi_1(b)=(v-b)F(b),\qquad
-\pi_1'(b)=(v-b)f(b)-F(b).</x-tex></div>
-<p>An interior optimum therefore satisfies</p>
-<div class="ar-math"><x-tex display>b=v-\frac{F(b)}{f(b)}.</x-tex></div>
-<p>This is an implicit equation, not a fixed discount. The gap <x-tex>F(b)/f(b)</x-tex> is the <strong>bid shading</strong>: bidding below value trades a lower payment per win against fewer wins. The second-order condition is <x-tex>\pi_1''(b)=-2f(b)+(v-b)f'(b)&lt;0</x-tex> at the candidate. A convenient sufficient condition for a unique global maximum is that <x-tex>F/f</x-tex> is nondecreasing (<x-tex>F</x-tex> log-concave): then <x-tex>\pi_1'(b)=f(b)\bigl[(v-b)-F(b)/f(b)\bigr]</x-tex> changes sign once, from positive to negative. The optimum always lies in <x-tex>[0,v]</x-tex>, because any <x-tex>b&gt;v</x-tex> earns <x-tex>\pi_1(b)\le0\le\pi_1(0)</x-tex>. For uniform thresholds <x-tex>F(b)/f(b)=b</x-tex>, so <x-tex>b=v/2</x-tex>. That halving is a property of the uniform, not of first price:</p>
-<section class="ar-worked">
-<header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>First-price bid when the threshold is the higher of two bids</h4></header>
-<div class="ar-worked-body">
-<p>Given: value <x-tex>v=\$0.015</x-tex> per impression ($15 CPM); two competitors whose bids are independent and each <x-tex>\mathrm{Uniform}(0,L)</x-tex> with <x-tex>L=\$0.02</x-tex> per impression, so the threshold <x-tex>Z</x-tex> is the larger of the two; first price; no budget.</p>
-<ol class="ar-steps">
-<li>Threshold distribution. We win when both competing bids are at most <x-tex>b</x-tex>, so <x-tex>F(b)=(b/L)^2</x-tex>, <x-tex>f(b)=2b/L^2</x-tex> and <x-tex>F(b)/f(b)=b/2</x-tex> (uniform: <x-tex>b</x-tex>). <x-tex>\log F=2\log b-2\log L</x-tex> is concave, so the first-order condition has one root and it is the global maximum.</li>
-<li>First-order condition: <x-tex display>b=v-\frac{F(b)}{f(b)}=v-\frac{b}{2}\ \Longrightarrow\ b=\frac{2v}{3},</x-tex> so <x-tex>b=2\times0.015/3=\$0.010</x-tex> per impression.</li>
-<li>Win rate <x-tex>F(0.010)=(0.010/0.02)^2=0.25</x-tex>; expected profit per request <x-tex>\pi_1=(0.015-0.010)\times0.25=\$0.00125</x-tex>.</li>
-<li>The uniform rule <x-tex>b=v/2</x-tex> applied to this market instead: <x-tex>F(0.0075)=(0.0075/0.02)^2=0.140625</x-tex> and <x-tex>\pi_1=0.0075\times0.140625=\$0.00105469</x-tex>.</li>
-</ol>
-<p class="ar-result">Result: bid <strong>$10 CPM</strong>, shading one third of value instead of one half. Over 1,000,000 requests that earns <strong>$1,250</strong>; bidding $7.50 CPM earns $1,054.69, 15.6% less.</p>
-<p class="ar-check">Check: neighbouring bids do worse: $9 CPM gives 0.006 × 0.2025 = $0.001215 and $11 CPM gives 0.004 × 0.3025 = $0.00121 per request. With <x-tex>J</x-tex> such competitors <x-tex>F=(b/L)^J</x-tex> and <x-tex>b=Jv/(J+1)</x-tex>: more competition, less shading. Under ideal second price the optimum stays <x-tex>b=v</x-tex> whatever <x-tex>F</x-tex> is.</p>
-</div></section>
-<p>In an <strong>ideal second-price auction</strong> the winner pays the threshold. Expected net profit per request is</p>
-<div class="ar-math"><x-tex display>\pi_2(b)=\int_0^b(v-z)\,dF(z),\qquad
-\pi_2'(b)=(v-b)f(b).</x-tex></div>
-<p><x-tex>\pi_2'\ge0</x-tex> for <x-tex>b&lt;v</x-tex> and <x-tex>\pi_2'\le0</x-tex> for <x-tex>b&gt;v</x-tex>, so under the assumptions above <strong><x-tex>b=v</x-tex> is optimal</strong> (truthful bidding) whenever bidding <x-tex>v</x-tex> is allowed. If the threshold has no probability mass near <x-tex>v</x-tex>, nearby bids do equally well and the optimum is not unique. This does not mean every ad system should bid truthfully. <strong>GSP</strong> (generalized second-price auction) sells several ranked slots with different position values, and mechanisms with <strong>quality scores</strong> (multipliers that weight bids by predicted ad quality) must be modeled under their own rules. Real transactions also involve floor prices, fees, discrete bid increments and <strong>internal auctions</strong> (an intermediary first runs its own auction among its advertisers, then bids externally with the winner). Google Ad Exchange announced its move to first-price auctions in 2019, which is enough to show that second-price textbooks are not an operating manual for current markets. <a href="https://support.google.com/authorizedbuyers/answer/9539164?hl=en" rel="noopener noreferrer" target="_blank">Google first-price migration announcement</a></p>
-<h2 id="ar-network-budget-free">The budget-free optimum in the shared example</h2>
-<p>Let the threshold be <x-tex>Z\sim\mathrm{Uniform}(0,L)</x-tex>, independent of response probabilities and identically distributed across requests, so <x-tex>F(b)=b/L</x-tex> for <x-tex>0\le b\le L</x-tex>.</p>
-<section class="ar-worked">
-<header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>Budget-free first-price bid</h4></header>
-<div class="ar-worked-body">
-<p>Given: <x-tex>N</x-tex> = 1,000,000 bid requests; <x-tex>L=\$0.02</x-tex> per impression; billable conversion probability <x-tex>q=0.0005</x-tex> per impression; settlement price <x-tex>a=\$30</x-tex> per conversion; first price; every win is displayed; no budget.</p>
-<ol class="ar-steps">
-<li>Value per impression: <x-tex>v=q\,a=0.0005\times\$30=\$0.015</x-tex>.</li>
-<li>Expected profit per request and its maximizer: <x-tex display>\pi_1(b)=(v-b)\frac{b}{L},\quad \pi_1'(b)=\frac{v-2b}{L}.</x-tex> Setting <x-tex>\pi_1'=0</x-tex> gives <x-tex>b_0=v/2=\$0.0075</x-tex> per impression, a maximum since <x-tex>\pi_1''=-2/L&lt;0</x-tex>.</li>
-<li>Volume: <x-tex>F(b_0)=0.0075/0.02=0.375</x-tex>, so 1,000,000 × 0.375 = 375,000 expected wins and 375,000 × 0.0005 = 187.5 attributed conversions.</li>
-<li>Ledgers: collections 187.5 × $30 = $5,625; media cost 375,000 × $0.0075 = $2,812.50; gross spread $5,625 − $2,812.50 = $2,812.50.</li>
-</ol>
-<p class="ar-result">Result: bid <strong>$7.50 CPM</strong>; expected gross spread <strong>$2,812.50</strong>, before infrastructure, channel fees, operations, bad debt and cost of capital.</p>
-<p class="ar-check">Check: closed form <x-tex>N\pi_1(v/2)=Nv^2/(4L)=10^6\times0.015^2/0.08=\$2{,}812.50</x-tex>. Cost equals spread at the optimum because <x-tex>v-b=b</x-tex> at <x-tex>b=v/2</x-tex>, a uniform-specific coincidence.</p>
-</div></section>
-<x-chart>{"title": "Expected gross spread vs bid: first price and ideal second price",
- "params": {"N": 1000000, "L": 0.02, "v": 0.015},
- "x": {"label": "Bid b ($ CPM)", "min": 0, "max": 20, "ticks": [0, 5, 10, 15, 20], "format": {"prefix": "$"}},
- "y": {"label": "Spread per 1,000,000 requests", "min": 0, "max": 6000, "ticks": [0, 1000, 2000, 3000, 4000, 5000, 6000], "format": "usd"},
- "series": [{"fn": "N*(v - x/1000)*(x/1000)/L", "label": "first price: pay b", "tone": "accent", "to": 15},
-            {"fn": "(N/L)*(v*x/1000 - (x/1000)**2/2)", "label": "ideal second price: pay Z", "tone": "warm"}],
- "points": [{"x": 7.5, "y": 2812.5}, {"x": 7.5, "y": 2200, "label": "b₀ = $7.50", "pos": "below", "marker": false},
-            {"x": 15, "y": 5625}, {"x": 15, "y": 4700, "label": "b₀ = $15", "pos": "below", "marker": false}],
- "caption": "First price <x-tex>N(v-b)b/L</x-tex> peaks at $7.50 CPM ($2,812.50); ideal second price <x-tex>(N/L)(vb-b^2/2)</x-tex> peaks at $15 CPM ($5,625); both with <x-tex>Z\\sim\\mathrm{Uniform}(0,L)</x-tex> and <x-tex>v=\\$0.015</x-tex>. At any bid both rules win the same share <x-tex>b/L</x-tex>, but second price charges <x-tex>b/2</x-tex> per win on average instead of <x-tex>b</x-tex>, so its optimum moves out to <x-tex>b=v</x-tex>. First-price spread falls to zero at <x-tex>b=v</x-tex> ($15 CPM). Competitors are held fixed, so the gap between the peaks does not predict what a change of auction rule would do."}</x-chart>
-<p>The advertiser's ledger is more revealing. Assume, as in the optional derivation, a contribution of <x-tex>g=\$40</x-tex> per order and a true incremental conversion probability of <x-tex>\Delta q=0.0002</x-tex> per impression (the order probability with the ad minus without it). Counting every attributed conversion as worth $40 gives 187.5 × $40 − $5,625 = $1,875, which looks profitable. Counting only incremental orders gives 375,000 × 0.0002 = 75 orders and 75 × $40 − $5,625 = <strong>−$2,625</strong>. The intermediary can make money while its customer loses money. If the gap persists, it eventually erodes the customer's budgets, renewals and the intermediary's pricing power.</p>
-<x-chart>{"title": "Network spread and advertiser incremental profit vs bid",
- "params": {"N": 1000000, "L": 0.02, "v": 0.015, "g": 40},
- "x": {"label": "First-price bid b ($ CPM)", "min": 0, "max": 15, "ticks": [0, 5, 10, 15], "format": {"prefix": "$"}},
- "y": {"label": "$ per 1,000,000 requests", "min": -6000, "max": 8000, "ticks": [-6000, -4000, -2000, 0, 2000, 4000, 6000, 8000], "format": "usd"},
- "series": [{"fn": "N*(v - x/1000)*(x/1000)/L", "label": "network gross spread", "tone": "accent"},
-            {"fn": "N*(x/1000)/L*(0.0002*g - v)", "label": "advertiser, Δq = 2 per 10,000", "tone": "negative"},
-            {"fn": "N*(x/1000)/L*(0.0006*g - v)", "label": "advertiser, Δq = 6 per 10,000", "tone": "positive", "dash": true}],
- "vlines": [{"x": 7.5, "label": "network optimum $7.50", "tone": "muted"}],
- "points": [{"x": 7.5, "y": 2812.5}, {"x": 7.8, "y": 1900, "label": "$2,812.50", "pos": "right", "marker": false},
-            {"x": 7.5, "y": -2625}, {"x": 7.8, "y": -4300, "label": "−$2,625", "pos": "right", "marker": false}],
- "caption": "Network spread <x-tex>N(v-b)b/L</x-tex> peaks at $7.50 CPM. The advertiser pays per attributed order and never pays for media, so its incremental profit <x-tex>N(b/L)(\\Delta q\\,g-q\\,a)</x-tex> is linear in the bid. With <x-tex>\\Delta q</x-tex> = 2 per 10,000 each impression loses $0.008 − $0.015 = −$0.007 and the advertiser would prefer no bidding; with 6 per 10,000 each gains $0.024 − $0.015 = $0.009 and it wants every impression the network will buy. Its preferred bid is a corner; the network's is interior. At 3.75 per 10,000 the advertiser's line is flat at zero."}</x-chart>
-<h2>Write the two budget objectives separately</h2>
-<p>Index the bid requests in the planning period by <x-tex>i</x-tex>. For request <x-tex>i</x-tex>, <x-tex>b_i</x-tex> is the bid, <x-tex>v_i</x-tex> the expected value of winning and being shown, <x-tex>F_i</x-tex> the threshold CDF, and <x-tex>C_i(b_i)</x-tex> the expected media cost of the request, counting zero spend on a loss. <x-tex>B</x-tex> is the total media budget for the period. Sums run over all requests; “s.t.” means “subject to.” Note that <x-tex>C_i(b)</x-tex> is a per-request cost, whereas <x-tex>C</x-tex> in the optional calculator is the total over requests.</p>
-<p>Per request, expected cost is <x-tex>C(b)=b\,F(b)</x-tex> under first-price and <x-tex>C(b)=\int_0^b z\,dF(z)</x-tex> under ideal second-price. To maximize total value within the budget:</p>
-<div class="ar-math"><x-tex display>\max_{b_i}\sum_i v_iF_i(b_i)
-\quad\text{s.t.}\quad
-\sum_i C_i(b_i)\le B.</x-tex></div>
-<p>Attach a multiplier <x-tex>\lambda\ge0</x-tex> to the budget constraint. The Lagrangian separates across requests, with per-request term <x-tex>v\,F(b)-\lambda\,C(b)</x-tex> (subscript dropped). <x-tex>\lambda</x-tex> is measured in value dollars per budget dollar. Under the usual regularity conditions it is the <strong>shadow price</strong> of the budget: the increase in optimal total value per extra budget dollar. Using <x-tex>C'(b)=F(b)+b\,f(b)</x-tex> for first-price and <x-tex>C'(b)=b\,f(b)</x-tex> for second-price, the interior first-order conditions with <x-tex>\lambda&gt;0</x-tex> and <x-tex>f(b)&gt;0</x-tex> are</p>
-<div class="ar-math"><x-tex display>\text{Second-price:}\quad b=\frac{v}{\lambda},
-\qquad
-\text{First-price:}\quad b=\frac{v}{\lambda}-\frac{F(b)}{f(b)}.</x-tex></div>
-<p>To maximize <em>net profit</em> under the same budget instead, solve <x-tex>\max_{b_i}\sum_i\bigl[v_iF_i(b_i)-C_i(b_i)\bigr]</x-tex> s.t. <x-tex>\sum_i C_i(b_i)\le B</x-tex>. The per-request term becomes <x-tex>v\,F(b)-(1+\mu)\,C(b)</x-tex>, where <x-tex>\mu\ge0</x-tex> is the budget multiplier for this objective: the 1 stands for the cost itself and <x-tex>\mu</x-tex> for the extra cost of budget scarcity. Under the same interior conditions:</p>
-<div class="ar-math"><x-tex display>\text{Second-price:}\quad b=\frac{v}{1+\mu},
-\qquad
-\text{First-price:}\quad b=\frac{v}{1+\mu}-\frac{F(b)}{f(b)}.</x-tex></div>
-<p>Complementary slackness, <x-tex>\mu\bigl(\sum_i C_i(b_i)-B\bigr)=0</x-tex>, pins down <x-tex>\mu</x-tex>. A slack budget gives <x-tex>\mu=0</x-tex>, which recovers the budget-free profit optimum; otherwise <x-tex>\mu</x-tex> is set so that expected spend equals <x-tex>B</x-tex>. In the uniform example with <x-tex>B</x-tex> = $2,000, <x-tex>\mu\approx0.186</x-tex> under first-price and <x-tex>\mu\approx0.677</x-tex> under second-price (worked examples in the next section).</p>
-<p>The difference between the objectives is economic, not notational. If both objectives exhaust the budget at the same bids, comparing the conditions gives <x-tex>\lambda=1+\mu\ge1</x-tex>. But a total-value bidder can end up with <x-tex>\lambda&lt;1</x-tex>; its second-price bid <x-tex>v/\lambda</x-tex> then exceeds <x-tex>v</x-tex>, so it knowingly buys impressions that cost more than they are worth, because its objective counts value, not profit. With a slack budget the total-value objective has no reason to economize at all: it buys every opportunity with positive value, and “set <x-tex>\lambda=0</x-tex> in the division formula” is not a valid step. Budget constraints, ROAS constraints (a floor on return on ad spend; see <a href="#chapter-3">Chapter 2</a>) and CPA constraints (a cap on average cost per action) are also different problems. Transplanting multipliers between papers often produces strategies that look alike but mean different things.</p>
-<p>All of this optimizes expectations under a known threshold distribution. If the distribution is unknown, it must be learned; if only win/loss outcomes are observed, the problem changes again (see <a href="#ar-price-observation">Learning the auction prices</a>). Recent research on first-price bidding with budgets distinguishes these feedback regimes, and its guarantees do not automatically transfer to production markets. <a href="https://proceedings.mlr.press/v202/wang23ao/wang23ao.pdf" rel="noopener noreferrer" target="_blank">ICML 2023 first-price budget research</a></p>
-<h2>How a $2,000 media budget changes the bid</h2>
-<p>Keep the homogeneous teaching parameters (<x-tex>N</x-tex> = 1,000,000 requests, <x-tex>L=\$0.02</x-tex>, <x-tex>v=q\,a=\$0.015</x-tex> per impression, every win displayed) and cap expected media spend at <x-tex>B</x-tex> = $2,000. The objective is still expected collections minus media cost. Both budget-free optima cost more than $2,000, so the budget binds under either rule:</p>
-<x-chart>{"title": "Expected media cost vs bid against the $2,000 budget",
- "params": {"N": 1000000, "L": 0.02},
- "x": {"label": "Bid b ($ CPM)", "min": 0, "max": 16, "ticks": [0, 4, 8, 12, 16], "format": {"prefix": "$"}},
- "y": {"label": "Expected media cost", "min": 0, "max": 6000, "ticks": [0, 1000, 2000, 3000, 4000, 5000, 6000], "format": "usd"},
- "series": [{"fn": "N*(x/1000)**2/L", "label": "first price: N b²/L", "tone": "accent"},
-            {"fn": "N*(x/1000)**2/(2*L)", "label": "ideal second price: N b²/(2L)", "tone": "warm"}],
- "hlines": [{"y": 2000, "label": "B = $2,000"}],
- "vlines": [{"x": 6.3246, "label": "$6.32", "tone": "accent"}, {"x": 8.9443, "label": "$8.94", "tone": "warm"}],
- "points": [{"x": 7.5, "y": 2812.5, "label": "b₀ = $7.50", "pos": "left"},
-            {"x": 15, "y": 5625, "label": "b₀ = $15", "pos": "left"}],
- "caption": "Expected daily media cost <x-tex>Nb^2/L</x-tex> (first price) and <x-tex>Nb^2/(2L)</x-tex> (ideal second price). The dots are the budget-free optima, $2,812.50 at $7.50 CPM and $5,625 at $15 CPM; both lie above the budget line, so each rule bids where its curve crosses <x-tex>B</x-tex>. Paying the threshold halves the cost of a given bid, so the same budget affords a bid <x-tex>\\sqrt2</x-tex> times higher."}</x-chart>
-<section class="ar-worked">
-<header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>Budget-binding first-price bid and its shadow price</h4></header>
-<div class="ar-worked-body">
-<p>Given: <x-tex>N</x-tex> = 1,000,000 requests; <x-tex>L=\$0.02</x-tex> and <x-tex>v=\$0.015</x-tex> per impression; expected media budget <x-tex>B</x-tex> = $2,000; first price; uniform thresholds; net-profit objective.</p>
-<ol class="ar-steps">
-<li>Does the budget bind? The budget-free bid <x-tex>b_0=v/2=\$0.0075</x-tex> costs <x-tex>Nb_0^2/L=10^6\times0.0075^2/0.02=\$2{,}812.50</x-tex>, above $2,000. Yes.</li>
-<li>Largest affordable bid. Spread rises on <x-tex>[0,b_0]</x-tex>, so the optimum is the bid that spends exactly <x-tex>B</x-tex>: <x-tex display>\frac{Nb^2}{L}=B\ \Longrightarrow\ b_B=\sqrt{\frac{BL}{N}},</x-tex> so <x-tex>b_B=\sqrt{2000\times0.02/10^6}=\sqrt{4\times10^{-5}}=\$0.006324555</x-tex> per impression.</li>
-<li>Shadow price. The first-order condition for uniform first price is <x-tex>b=v/\bigl(2(1+\mu)\bigr)</x-tex>; at <x-tex>b_B</x-tex> it gives <x-tex>1+\mu=v/(2b_B)=0.015/0.012649=1.18585</x-tex>, so <x-tex>\mu=0.1859</x-tex>.</li>
-<li>Ledger: win rate <x-tex>b_B/L</x-tex> = 31.6228%, so 316,227.77 expected wins; collections 316,227.77 × $0.015 = $4,743.42; media cost $2,000; gross spread $2,743.42.</li>
-</ol>
-<p class="ar-result">Result: bid <strong>$6.3246 CPM</strong>, <strong><x-tex>\mu\approx0.186</x-tex></strong>. The budget costs $2,812.50 − $2,743.42 = $69.08 of spread against the budget-free optimum.</p>
-<p class="ar-check">Check: while the budget binds, optimal spread is <x-tex>M^*(B)=(N/L)\,v\,b_B-B=v\sqrt{NB/L}-B=106.066\sqrt B-B</x-tex>. Then <x-tex>M^*(2001)-M^*(2000)=\$0.1857</x-tex>, matching <x-tex>\mu</x-tex>.</p>
-</div></section>
-<section class="ar-worked">
-<header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>The same budget under ideal second price</h4></header>
-<div class="ar-worked-body">
-<p>Given: as above, but the winner pays the threshold <x-tex>Z</x-tex>, so expected cost per request is <x-tex>\int_0^b z\,dz/L=b^2/(2L)</x-tex>.</p>
-<ol class="ar-steps">
-<li>The budget-free bid <x-tex>b_0=v</x-tex> costs <x-tex>Nv^2/(2L)=10^6\times0.015^2/0.04=\$5{,}625</x-tex>, above $2,000: binding.</li>
-<li>Largest affordable bid: <x-tex display>\frac{Nb^2}{2L}=B\ \Longrightarrow\ b_B=\sqrt{\frac{2BL}{N}},</x-tex> so <x-tex>b_B=\sqrt{8\times10^{-5}}=\$0.008944272</x-tex> per impression.</li>
-<li>Shadow price from the second-price condition <x-tex>b=v/(1+\mu)</x-tex>: <x-tex>1+\mu=0.015/0.008944272=1.67705</x-tex>, so <x-tex>\mu=0.6771</x-tex>.</li>
-<li>Ledger: win rate 44.7214%, so 447,213.60 expected wins at an average price of <x-tex>b_B/2</x-tex> = $4.4721 CPM; collections 447,213.60 × $0.015 = $6,708.20; gross spread $4,708.20.</li>
-</ol>
-<p class="ar-result">Result: bid <strong>$8.9443 CPM</strong>, <x-tex>\sqrt2</x-tex> times the first-price bid; <strong><x-tex>\mu\approx0.677</x-tex></strong>; gross spread $4,708.20.</p>
-<p class="ar-check">Check: 447,213.60 wins × $0.0044721 = $2,000, so the budget is exactly spent. <x-tex>M^*(B)=v\sqrt{2NB/L}-B=150\sqrt B-B</x-tex> gives <x-tex>M^*(2001)-M^*(2000)=\$0.6768</x-tex>. The shadow price is higher because the cap sits further below the budget-free bid ($15 CPM).</p>
-</div></section>
-<div class="ar-table-wrap"><table>
-<thead>
-<tr>
-<th>Strategy</th>
-<th style="text-align:right">Bid (CPM)</th>
-<th style="text-align:right">Win rate</th>
-<th style="text-align:right">Expected attributed conversions</th>
-<th style="text-align:right">Media spend</th>
-<th style="text-align:right">Network collections</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td data-label="Strategy">First-price, no budget, net-profit optimum</td>
-<td data-label="Bid (CPM)" style="text-align:right">$7.5000</td>
-<td data-label="Win rate" style="text-align:right">37.5000%</td>
-<td data-label="Expected attributed conversions" style="text-align:right">187.5000</td>
-<td data-label="Media spend" style="text-align:right">$2,812.50</td>
-<td data-label="Network collections" style="text-align:right">$5,625.00</td>
-</tr>
-<tr>
-<td data-label="Strategy">First-price, $2,000 media budget</td>
-<td data-label="Bid (CPM)" style="text-align:right">$6.3246</td>
-<td data-label="Win rate" style="text-align:right">31.6228%</td>
-<td data-label="Expected attributed conversions" style="text-align:right">158.1139</td>
-<td data-label="Media spend" style="text-align:right">$2,000.00</td>
-<td data-label="Network collections" style="text-align:right">$4,743.42</td>
-</tr>
-<tr>
-<td data-label="Strategy">Second-price, $2,000 media budget</td>
-<td data-label="Bid (CPM)" style="text-align:right">$8.9443</td>
-<td data-label="Win rate" style="text-align:right">44.7214%</td>
-<td data-label="Expected attributed conversions" style="text-align:right">223.6068</td>
-<td data-label="Media spend" style="text-align:right">$2,000.00</td>
-<td data-label="Network collections" style="text-align:right">$6,708.20</td>
-</tr>
-</tbody>
-</table></div>
-<p>In the second row the network's gross spread is $2,743.42 on an advertiser CPA bill of $4,743.42; in the third row it is $4,708.20. <strong>The $2,000 media budget is not the denominator of the advertiser's ROAS</strong>; the advertiser's spend is its bill. When the table switches auction format, it holds the threshold distribution fixed only to compare payment rules. Real bidders would respond, so the table does not predict equilibrium outcomes under the two mechanisms.</p>
-<x-chart>{"title": "Optimal bid vs media budget",
- "params": {"N": 1000000, "L": 0.02, "v": 0.015},
- "x": {"label": "Expected media budget B ($ per day)", "min": 0, "max": 6000, "ticks": [0, 1000, 2000, 3000, 4000, 5000, 6000], "format": "usd"},
- "y": {"label": "Optimal bid b* ($ CPM)", "min": 0, "max": 16, "ticks": [0, 4, 8, 12, 16], "format": {"prefix": "$"}},
- "series": [{"fn": "1000*min(v/2, sqrt(x*L/N))", "label": "first price", "tone": "accent", "samples": 600},
-            {"fn": "1000*min(v, sqrt(2*x*L/N))", "label": "ideal second price", "tone": "warm", "samples": 600}],
- "vlines": [{"x": 2000, "label": "B = $2,000", "tone": "muted"}],
- "points": [{"x": 2000, "y": 6.3246, "label": "$6.32", "pos": "left", "tone": "accent"},
-            {"x": 2000, "y": 8.9443, "label": "$8.94", "pos": "left", "tone": "warm"},
-            {"x": 2812.5, "y": 7.5, "tone": "accent"},
-            {"x": 3000, "y": 6.6, "label": "flat from $2,812.50", "pos": "right", "marker": false, "tone": "accent"},
-            {"x": 5625, "y": 15, "tone": "warm"}, {"x": 5300, "y": 13.2, "label": "flat from $5,625", "pos": "below", "marker": false, "tone": "warm"}],
- "caption": "<x-tex>b^*(B)=\\min\\{v/2,\\sqrt{BL/N}\\}</x-tex> under first price and <x-tex>\\min\\{v,\\sqrt{2BL/N}\\}</x-tex> under ideal second price. While the budget binds the bid grows as <x-tex>\\sqrt B</x-tex>; once the budget-free optimum is affordable ($2,812.50 for first price, $5,625 for second price) the bid stops rising, the extra budget stays unspent and <x-tex>\\mu=0</x-tex>. The calculator's budget slider ($0 to $6,000) traces these curves."}</x-chart>
-<p>With the $2,000 budget the total-value objective also bids up to the cap, so the two objectives yield the same bid. More generally, suppose both objectives' optima exhaust the same budget <x-tex>B</x-tex> on the same feasible set. On the boundary <x-tex>\sum_i C_i=B</x-tex>, net profit equals total value minus the constant <x-tex>B</x-tex>, so both objectives select the same point on that boundary, even with heterogeneous opportunities. We make no claim about other tied optima off the boundary. This is not a general equivalence: a net-profit objective may deliberately underspend while a total-value objective keeps buying, and any change to the feasible set or the constraints requires solving again. The budget here also constrains expected spend only; realized requests and payments are random, and enforcing a hard cap on every realized path is a separate system responsibility.</p>
+<h2 id="ar-network-total-value">Maximizing total value is a different budget objective</h2>
+<p><strong>A bidder that maximizes total value within a budget, rather than value minus cost, can rationally bid above value.</strong> Per request, let <x-tex>C(b)</x-tex> be expected cost: <x-tex>bF(b)</x-tex> in first price, <x-tex>\int_0^b z\,dF(z)</x-tex> in second price. The total-value problem is <x-tex>\max\sum_i v_iF_i(b_i)</x-tex> subject to <x-tex>\sum_iC_i(b_i)\le B</x-tex>. With a multiplier <x-tex>\lambda\ge0</x-tex> the per-request term is <x-tex>vF(b)-\lambda C(b)</x-tex>, and setting its derivative to zero (<x-tex>C'=F+bf</x-tex> or <x-tex>bf</x-tex>) gives</p>
+<div class="ar-math"><x-tex display>\text{Second price:}\quad b=\frac{v}{\lambda},\qquad\text{First price:}\quad b=\frac{v}{\lambda}-\frac{F(b)}{f(b)},</x-tex></div>
+<p>compared with <x-tex>v/(1+\mu)</x-tex> for the profit objective. The main line's sufficiency argument applies with <x-tex>\lambda</x-tex> in place of <x-tex>1+\mu</x-tex>. Existence of the multiplier is again assumed. When both objectives spend exactly <x-tex>B</x-tex>, profit equals total value minus the constant <x-tex>B</x-tex> on that boundary, so they pick the same bids and <x-tex>\lambda=1+\mu\ge1</x-tex>; at $2,000 in our example both bid $6.3246 CPM. They split when the budget is loose: the profit bidder stops at <x-tex>\mu=0</x-tex> and leaves money unspent, while the total-value bidder keeps buying, and with <x-tex>\lambda&lt;1</x-tex> its second-price bid <x-tex>v/\lambda</x-tex> exceeds value. If the threshold distribution must be learned from win/loss feedback, see <a href="#ar-price-observation">learning the auction prices</a> in <a href="#chapter-5">Chapter 5</a>.</p>
+<section id="ar-network-pacing" aria-label="Network pacing simulation">
 <h2>Budget pacing is online control, not even spending</h2>
-<p><strong>Pacing</strong> controls the rate of spend over time. The simplest illustrative update is</p>
-<div class="ar-math"><x-tex display>\mu_{t+1}=\max\{0,\ \mu_t+\eta\,(c_t-s_t)\}.</x-tex></div>
-<p>Here <x-tex>t</x-tex> indexes control periods (for example, minutes). <x-tex>\mu_t\ge0</x-tex> is the budget multiplier in period <x-tex>t</x-tex>, not the bid; the bid is derived from it, for example <x-tex>b=v/(1+\mu_t)</x-tex> under ideal second-price, or <x-tex>b=v/(1+\mu_t)-F(b)/f(b)</x-tex> under first-price, which is <x-tex>v/\bigl(2(1+\mu_t)\bigr)</x-tex> for uniform thresholds. <x-tex>c_t</x-tex> is actual spend and <x-tex>s_t</x-tex> target spend in period <x-tex>t</x-tex>. The step size <x-tex>\eta&gt;0</x-tex>, in units of 1/dollar, converts a spend error into a multiplier change, and <x-tex>\max\{0,\cdot\}</x-tex> keeps the multiplier nonnegative. Overspending raises <x-tex>\mu</x-tex> and lowers bids; underspending does the reverse. The update is projected subgradient descent on the Lagrangian dual: by the envelope theorem the dual objective's derivative in <x-tex>\mu</x-tex> is budget minus spend, so a step against it moves <x-tex>\mu</x-tex> by <x-tex>+\eta\,(c_t-s_t)</x-tex>. It sets the direction of control, not stability: delayed billing data, traffic cycles and interacting control loops can make it oscillate. <a href="https://wnzhang.net/papers/fc-wsdm.pdf" rel="noopener noreferrer" target="_blank">Feedback control in RTB advertising</a></p>
+<p><strong>The pacing rule from the main line finds the network's budget multiplier from spend alone, but whether it settles depends on the step size.</strong> The bid follows from the multiplier: <x-tex>b=v/(1+\mu_t)</x-tex> in second price, or <x-tex>v/\bigl(2(1+\mu_t)\bigr)</x-tex> in uniform first price. This is an illustration, not a stability proof (<a href="https://wnzhang.net/papers/fc-wsdm.pdf" rel="noopener noreferrer" target="_blank">feedback control in RTB advertising</a> studies real controllers).</p>
 <section class="ar-worked">
 <header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>Five periods of pacing</h4></header>
 <div class="ar-worked-body">
-<p>Given: the day's <x-tex>N</x-tex> = 1,000,000 requests arrive in 10 periods of <x-tex>n</x-tex> = 100,000; flat target <x-tex>s_t=B/10</x-tex> = $200 per period; first price with uniform thresholds (<x-tex>L=\$0.02</x-tex>, <x-tex>v=\$0.015</x-tex> per impression); step size <x-tex>\eta</x-tex> = 0.002 per dollar; start at <x-tex>\mu_1=0</x-tex>. To isolate the controller, realized spend equals expected spend.</p>
+<p>Given: <x-tex>N</x-tex> = 1,000,000 requests in 10 periods of <x-tex>n</x-tex> = 100,000; flat target <x-tex>s_t=B/10</x-tex> = $200; first price, <x-tex>L=\$0.02</x-tex>, <x-tex>v=\$0.015</x-tex>; step size <x-tex>\eta</x-tex> = 0.002 per dollar; <x-tex>\mu_1=0</x-tex>. Realized spend equals expected spend, to isolate the controller.</p>
 <ol class="ar-steps">
-<li>Each period, bid and spend follow from <x-tex>\mu_t</x-tex>:<x-tex display>\begin{gathered}b_t=\frac{v}{2(1+\mu_t)},\qquad c_t=\frac{n\,b_t^2}{L},\\ \mu_{t+1}=\max\{0,\ \mu_t+\eta\,(c_t-s_t)\}.\end{gathered}</x-tex></li>
+<li>Each period:<x-tex display>b_t=\frac{v}{2(1+\mu_t)},\qquad c_t=\frac{n\,b_t^2}{L},\qquad \mu_{t+1}=\max\{0,\ \mu_t+\eta\,(c_t-s_t)\}.</x-tex></li>
 <li>Period 1: <x-tex>b_1=0.015/2=\$0.0075</x-tex>, <x-tex>c_1=10^5\times0.0075^2/0.02=\$281.25</x-tex>, error +$81.25, so <x-tex>\mu_2=0.002\times81.25=0.1625</x-tex>.</li>
 <li>Period 2: <x-tex>b_2=0.015/(2\times1.1625)=\$0.0064516</x-tex>, <x-tex>c_2=\$208.12</x-tex>, error +$8.12, so <x-tex>\mu_3=0.1625+0.002\times8.12=0.1787</x-tex>.</li>
-<li>Periods 3 to 5 repeat step 1:</li>
 </ol>
 <div class="ar-table-wrap"><table><thead><tr><th scope="col">Period</th><th scope="col">Multiplier</th><th scope="col">Bid (CPM)</th><th scope="col">Spend</th><th scope="col">Error vs $200</th><th scope="col">Next multiplier</th></tr></thead><tbody>
 <tr><td data-label="Period">1</td><td data-label="Multiplier">0</td><td data-label="Bid (CPM)">$7.5000</td><td data-label="Spend">$281.25</td><td data-label="Error vs $200">+$81.25</td><td data-label="Next multiplier">0.1625</td></tr>
@@ -551,8 +267,8 @@ b^*&amp;=\min\Bigl\{\frac{k\rho v}{2\alpha},\ \sqrt{\frac{kBL}{N\alpha}},\ L\Big
 <tr><td data-label="Period">4</td><td data-label="Multiplier">0.1836</td><td data-label="Bid (CPM)">$6.3367</td><td data-label="Spend">$200.77</td><td data-label="Error vs $200">+$0.77</td><td data-label="Next multiplier">0.1851</td></tr>
 <tr><td data-label="Period">5</td><td data-label="Multiplier">0.1851</td><td data-label="Bid (CPM)">$6.3285</td><td data-label="Spend">$200.25</td><td data-label="Error vs $200">+$0.25</td><td data-label="Next multiplier">0.1856</td></tr>
 </tbody></table></div>
-<p class="ar-result">Result: <x-tex>\mu_t</x-tex> converges to <strong>0.1859</strong> and the bid to <strong>$6.3246 CPM</strong>, the static budget-binding solution, without the controller knowing <x-tex>L</x-tex> or <x-tex>N</x-tex>.</p>
-<p class="ar-check">Check: the fixed point solves <x-tex>nv^2/\bigl(4L(1+\mu)^2\bigr)=s</x-tex>, so <x-tex>1+\mu^*=(v/2)\sqrt{n/(sL)}=0.0075\times\sqrt{25{,}000}=1.18585</x-tex>. Near it spend falls by <x-tex>2s/(1+\mu^*)</x-tex> = $337.31 per unit of <x-tex>\mu</x-tex>, so each period multiplies the error by <x-tex>1-0.002\times337.31=0.325</x-tex>; the errors 81.25, 8.12, 2.42, 0.77, 0.25 approach that ratio. The early overspend is never recovered under a flat target: the 10-period total is $2,092.93. Retargeting <x-tex>s_t</x-tex> to remaining budget ÷ remaining periods would absorb it.</p>
+<p class="ar-result">Result: <x-tex>\mu_t</x-tex> approaches <strong>0.1859</strong> and the bid <strong>$6.3246 CPM</strong>, the static budget-binding solution, without the controller knowing <x-tex>L</x-tex> or <x-tex>N</x-tex>.</p>
+<p class="ar-check">Check: the fixed point solves <x-tex>nv^2/\bigl(4L(1+\mu)^2\bigr)=s</x-tex>, so <x-tex>1+\mu^*=(v/2)\sqrt{n/(sL)}=0.0075\times\sqrt{25{,}000}=1.18585</x-tex>. Near it spend falls by <x-tex>2s/(1+\mu^*)</x-tex> = $337.31 per unit of <x-tex>\mu</x-tex>, so each period multiplies the error by about <x-tex>1-0.002\times337.31=0.325</x-tex>, as the errors 81.25, 8.12, 2.42, 0.77, 0.25 show. Under a flat target the early overspend is never recovered: the 10-period total is $2,092.93. Retargeting <x-tex>s_t</x-tex> to remaining budget ÷ remaining periods would absorb it.</p>
 </div></section>
 <x-chart>{"title": "Pacing multiplier by period for three step sizes",
  "x": {"label": "Control period t", "min": 1, "max": 10, "ticks": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]},
@@ -561,10 +277,8 @@ b^*&amp;=\min\Bigl\{\frac{k\rho v}{2\alpha},\ \sqrt{\frac{kBL}{N\alpha}},\ L\Big
             {"points": [[1, 0], [2, 0.1625], [3, 0.1787], [4, 0.1836], [5, 0.1851], [6, 0.1856], [7, 0.1858], [8, 0.1858], [9, 0.1858], [10, 0.1859]], "label": "η = 0.002: settles", "tone": "accent"},
             {"points": [[1, 0], [2, 0.5281], [3, 0.011], [4, 0.4996], [5, 0.0125], [6, 0.4957], [7, 0.0129], [8, 0.4948], [9, 0.013], [10, 0.4946]], "label": "η = 0.0065: oscillates", "tone": "negative"},
             {"fn": "0.1859", "label": "μ* = 0.186 (static optimum)", "tone": "ink", "dash": true}],
- "caption": "Same deterministic model as the worked example. Near <x-tex>\\mu^*</x-tex>, each period multiplies the spend error by <x-tex>1-\\eta\\times\\$337.31</x-tex>: monotone convergence for <x-tex>\\eta&lt;0.00296</x-tex>, damped oscillation up to <x-tex>0.00593</x-tex>, no convergence beyond. Starting from <x-tex>\\mu_1=0</x-tex> the first step is larger, so it already overshoots once <x-tex>\\eta&gt;0.18585/81.25=0.00229</x-tex>. At <x-tex>\\eta=0.0005</x-tex> the factor is 0.83, the multiplier in force in period 10 is still <x-tex>\\mu_{10}=0.158</x-tex>, and the day spends $2,325.97. At <x-tex>\\eta=0.0065</x-tex> the factor is −1.19 and the loop locks into a two-period cycle between <x-tex>\\mu\\approx0.01</x-tex> and <x-tex>0.49</x-tex>, alternating bids of about $7.40 and $5.02 CPM."}</x-chart>
-<p>The target trajectory <x-tex>s_t</x-tex> need not be flat over the day. If evening opportunities are worth more, hold budget back for the evening; if high-value supply is scarce, an unspent budget is not necessarily a fault. Distinguish under-delivery caused by a system failure while profitable opportunities exist from stopping because no opportunity meets the economic constraints. Forcing full spend through bid multipliers quietly turns value maximization into budget-consumption maximization.</p>
-<p>Allocating across many campaigns adds more dimensions: which advertiser gets a given opportunity, how much budget each campaign has left, whether there are <strong>guaranteed-delivery</strong> obligations (contracts that promise a fixed number of impressions), and whether the platform earns a service fee, a per-impression price or a per-conversion price. Statistical arbitrage research links CPA revenue to CPM procurement cost, but the arbitrageur still carries user-response, attribution and payment risk; “arbitrage” here does not mean risk-free profit. <a href="https://arxiv.org/pdf/1506.03837" rel="noopener noreferrer" target="_blank">Statistical Arbitrage Mining</a></p>
-
+ "caption": "Same deterministic model as the worked example. Near <x-tex>\\mu^*</x-tex> each period multiplies the spend error by <x-tex>1-\\eta\\times\\$337.31</x-tex>: monotone convergence for <x-tex>\\eta&lt;0.00296</x-tex>, damped oscillation up to <x-tex>0.00593</x-tex>, no convergence beyond (a local, linearized statement). Starting from <x-tex>\\mu_1=0</x-tex> the first step already overshoots once <x-tex>\\eta&gt;0.18585/81.25=0.00229</x-tex>. At <x-tex>\\eta=0.0005</x-tex> the factor is 0.83, <x-tex>\\mu_{10}=0.158</x-tex> and the day spends $2,325.97. At <x-tex>\\eta=0.0065</x-tex> the factor is −1.19 and the loop cycles between <x-tex>\\mu\\approx0.01</x-tex> and <x-tex>0.49</x-tex>, bids of about $7.40 and $5.02 CPM."}</x-chart>
+<p>A flat target is itself a choice: if evening traffic is worth more, hold budget for the evening. Forcing full spend through the multiplier quietly turns value maximization into budget consumption.</p>
+</section>
 </div></details>
 </article>
-

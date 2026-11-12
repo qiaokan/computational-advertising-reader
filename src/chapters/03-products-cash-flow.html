@@ -1,159 +1,123 @@
-<article class="ar-lesson" id="ar-chapter-2" data-nav="Products and cash flow" data-time="09:20–10:10 · 50 min"><h1>Products and cash flow</h1>
+<article class="ar-lesson" id="ar-chapter-2" data-nav="Products and cash flow" data-time="10:05–10:45 · 40 min"><h1>Products and cash flow</h1>
 <aside class="ar-callout ar-key"><p class="ar-callout-title">In this chapter</p><ul>
-<li>Specify any ad product on five distinct dimensions: context, creative, transaction type, billing event, objective.</li>
-<li>Price one campaign as CPM, CPC or CPA with the same expected payment, and say who absorbs click risk and conversion risk under each.</li>
-<li>Trace $100 of advertiser spend through net and gross revenue recognition, and see why an 80% and a 20% gross margin can hide identical gross profit.</li>
-<li>Decide whether to scale a budget by comparing the return on the <em>additional</em> spend with the break-even return (one over the contribution margin), and correct attribution-based ROAS for over- or under-crediting.</li>
+<li>Describe any ad product by five separate choices: context, creative, how it is sold, what is billed and what is optimized.</li>
+<li>Locate the four points of a pricing product (ranked, billed, bid, judged) and say who estimates and who bears each segment between them under CPM, CPC, CPA, oCPC and oCPM.</li>
+<li>Explain why CPA billing needs conversions the platform can verify, and why platforms selling oCPM or oCPC offer cost guarantees.</li>
+<li>Trace $100 of advertiser spend through net and gross revenue recognition: the same $20 gross profit shows as an 80% or a 20% gross margin.</li>
+<li>Decide whether to scale a budget by comparing the return on the <em>additional</em> spend with the break-even return, one over the contribution margin.</li>
 </ul></aside>
-<h2>Specify an ad product along five distinct dimensions</h2>
-<p>People often list “search, feed, RTB, CPC, performance advertising” as if they were categories of one kind. They are not. <em>Search</em> names the user context (a results page for a typed query); a <em>feed</em> is another context, a scrolling stream of content with ads inserted between items. <em>RTB</em> (real-time bidding) names a transaction mechanism: each individual ad opportunity is auctioned in milliseconds while the page or app loads. <em>CPC</em> (cost per click) names the billing event. <em>Performance advertising</em> names the optimization goal: the advertiser pays for, and judges results by, measurable downstream actions such as installs or purchases, as opposed to <em>brand advertising</em>, which buys reach and awareness. If you force these into one mutually exclusive taxonomy, the objective function you build downstream will be wrong.</p>
+<p class="ar-gist"><strong>The gist.</strong> An ad product is a contract. It names the event the advertiser pays for and the result the advertiser wants, and these are usually different events. Between the impression the auction sells and the purchase the advertiser wants lie conversion rates that nobody knows exactly. Whoever has to pay when a rate turns out lower than expected carries that risk, and choosing a pricing product (per impression, per click, per purchase, or an “optimized” variant) is choosing who that is. The second half follows the money into the books: a platform's margin, an advertiser's average return and the return on its next dollar are three different numbers, and only the last one says whether to spend more.</p>
+<h2>An ad product is five separate choices</h2>
+<p><strong>Search, feed, real-time bidding, CPC and performance advertising are not categories of one kind; each answers a different question.</strong> Search and feed are user contexts. Real-time bidding (RTB: a separate auction for each impression while the page or app loads) is a way of selling. CPC (cost per click) is a billing event. Performance advertising is an objective: the advertiser pays for, and judges results by, measurable actions such as installs or purchases, unlike brand advertising, which buys reach. Forcing these into one taxonomy produces the wrong objective function downstream. <a href="#chapter-2">The landscape</a> surveys the values each dimension takes; this chapter needs only the dimensions.</p>
 <div class="ar-table-wrap"><table>
 <thead>
 <tr>
 <th>Dimension</th>
-<th>Typical values</th>
-<th>Impact on product and technology</th>
+<th>Example values</th>
+<th>What it decides</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td data-label="Dimension">User context</td>
-<td data-label="Typical values">Search, content feed, web pages, in-game interstitials (full-screen ads shown at natural breaks, e.g. between levels)</td>
-<td data-label="Impact on product and technology">How the user reveals intent, and how much the ad disrupts the core product</td>
+<td data-label="Example values">Search, content feed, in-game interstitial (a full-screen ad between levels)</td>
+<td data-label="What it decides">How the user reveals intent, and how much the ad disrupts the product</td>
 </tr>
 <tr>
-<td data-label="Dimension">Creative and interaction</td>
-<td data-label="Typical values">Text, images, video, native cards (ads styled to match surrounding content), playable ads (a short interactive demo of a game)</td>
-<td data-label="Impact on product and technology">How creatives are produced, reviewed, displayed and measured</td>
+<td data-label="Dimension">Creative</td>
+<td data-label="Example values">Text, video, playable ad (a short interactive demo of a game)</td>
+<td data-label="What it decides">How ads are produced, reviewed and measured</td>
 </tr>
 <tr>
 <td data-label="Dimension">Transaction type</td>
-<td data-label="Typical values">Direct deals (negotiated by hand, fixed price and volume); programmatic guaranteed (fixed price, reserved volume, executed through automated buying systems); preferred deals (fixed price, first look at inventory, no volume commitment); private auctions (invitation-only); open auctions (any qualified buyer, via RTB)</td>
-<td data-label="Impact on product and technology">Who commits to volume, and who bears the risk of under-delivery (delivering fewer impressions than promised)</td>
+<td data-label="Example values">Guaranteed deal (fixed price and volume), private auction, open auction via RTB</td>
+<td data-label="What it decides">Who commits to volume and who bears the risk of under-delivery</td>
 </tr>
 <tr>
 <td data-label="Dimension">Billing event</td>
-<td data-label="Typical values">Impressions, clicks, installs, purchases and other actions</td>
-<td data-label="Impact on product and technology">When money is owed, and who bears response risk (the risk that a paid-for impression produces no click or conversion)</td>
+<td data-label="Example values">Impression, click, install, purchase</td>
+<td data-label="What it decides">When money is owed, and who bears the risk that a paid-for impression yields no click or conversion (<a href="#ar-risk-map">the four points</a>)</td>
 </tr>
 <tr>
 <td data-label="Dimension">Optimization objective</td>
-<td data-label="Typical values">Clicks, installs, revenue, contribution profit, incremental profit</td>
-<td data-label="Impact on product and technology">Model labels, observation windows and control constraints</td>
+<td data-label="Example values">Clicks, installs, revenue, incremental profit</td>
+<td data-label="What it decides">Model labels, observation windows and constraints</td>
 </tr>
 </tbody>
 </table></div>
-<p>A product can combine choices from several dimensions. Take a rewarded video: an ad the user opts into inside a game in exchange for an in-game reward such as extra lives. The publisher can sell that slot through a first-price auction (the winner pays its own bid; see <a href="#chapter-4">Prediction and bidding</a>) and be paid per impression, while the advertiser's goal is a target D7 ROAS. ROAS (return on ad spend) is revenue divided by ad spend, defined precisely <a href="#ar-roas-def">below</a>; the D7 version counts revenue from the first seven days after a user is acquired. These descriptions do not conflict, because each belongs to a different dimension. Note also that the reward does not require the user to install the advertised app, so a user who is willing to finish the video does not necessarily intend to buy anything. <a href="https://support.google.com/admob/answer/7372450?hl=en" rel="noopener noreferrer" target="_blank">Google AdMob rewarded ads documentation</a></p>
-<p>Contexts differ in how intent becomes visible. In search, the query states part of the user's current need. A feed has to infer opportunities from context, past behavior, and how users have responded to creatives. Open-web and in-app advertising must additionally join supply, user identity and conversion events across companies. These differences change how hard prediction is and what the product can do. They do not show that any context inherently earns a higher incremental return.</p>
-<h2>Advertisers buy a delivery service under constraints</h2>
-<p>A campaign is the advertiser's unit of purchase. To run one, the platform needs at least six groups of inputs:</p>
+<p>One product takes one value from each row. A rewarded video, an ad the user opts into inside a game for an in-game reward, can be sold in a first-price auction (the winner pays its own bid; <a href="#chapter-4">chapter 4</a>), billed per impression and optimized toward a target D7 ROAS (defined below). These choices do not conflict, because each belongs to a different dimension. The reward also means that finishing the video does not signal intent to buy. <a href="https://support.google.com/admob/answer/7372450?hl=en" rel="noopener noreferrer" target="_blank">Google AdMob rewarded ads documentation</a></p>
+<h2>The contract must define every event it pays for or optimizes</h2>
+<p><strong>“Optimize for purchases” is not yet a contract: each event and value needs an operational definition before a model can target it or an invoice can count it.</strong> Does a purchase mean an order placed, a payment completed, or an order still valid after the refund period? Is its value merchandise revenue, a commission or contribution profit? Changing one definition changes training labels, delivery and reports with no change to the model. A campaign setup is therefore an executable contract: conversion events, budget and flight dates (start and end of delivery), audiences, creatives, attribution rules, value postbacks (server-to-server messages that report each conversion and its value to the platform) and billing terms.</p>
+<p id="ar-roas-def">Definitions used later. <strong>ROAS</strong> (return on ad spend) is revenue credited to ads by the attribution rules divided by ad spend, often quoted as a percentage (300% means 3.0); <strong>iROAS</strong> (incremental ROAS) uses instead the revenue that would not have occurred without the ads. <span id="ar-d7-def">D7 ROAS</span> counts a cohort's attributed revenue in the window <x-tex>[t_0,\ t_0+168\text{ h})</x-tex>, where <x-tex>t_0</x-tex> is acquisition (for apps, the install), and is valid only once the window has closed for every user. <strong>LTV</strong> (lifetime value) must state its horizon, revenue or contribution, refunds, discounting, and whether acquisition cost is already subtracted; treating revenue LTV as profit overstates what you can afford to bid.</p>
+<h2 id="ar-risk-map">Who bears which risk: the four points</h2>
+<p><strong>Every pricing product fixes four points on the path from impression to business result, and who bears which risk follows from where they sit.</strong> Between the points lie conversion rates nobody knows exactly, and the party that estimates a rate is not always the party that pays when the estimate is wrong.</p>
+<p id="ar-billing-terms">Units: <strong>CPM</strong> (cost per mille) is a price per 1,000 impressions, <strong>CPC</strong> per click, <strong>CPI</strong> per install, <strong>CPA</strong> (cost per action) per contractually defined action such as a purchase. <strong>CTR</strong> is clicks per impression and <strong>CVR</strong> conversions per click; the platform's predictions of them are pCTR and pCVR. <strong>eCPM</strong> restates any per-event price per 1,000 impressions, <x-tex>\text{eCPM}=1000\times\text{amount}/\text{impressions}</x-tex>. In <strong>oCPM</strong> and <strong>oCPC</strong> (together <strong>oCPX</strong>) the advertiser states a target price per conversion, the platform turns it into a bid with its model, and billing stays per impression or per click.</p>
+<p>The four points, in funnel order:</p>
+<ol>
+<li><strong>Ranked:</strong> the event the auction sells and compares bids on, almost always the impression. Every bid is converted to eCPM before ranking.</li>
+<li><strong>Billed:</strong> the event on the invoice.</li>
+<li><strong>Bid:</strong> the event the advertiser attaches its price to. A performance advertiser values purchases; even under manual CPM or CPC it sets its bid by multiplying its price per purchase by one conversion rate of its own, so its bid point is effectively the purchase.</li>
+<li><strong>Judged:</strong> what the advertiser's business is measured on, such as purchases, D7 ROAS or LTV.</li>
+</ol>
+<p>Three rates connect them, rank→bill, bill→bid and bid→judged, and each estimate of them has an error. Three rules follow:</p>
 <ul>
-<li>business goals and the conversion events that measure them;</li>
-<li>budget and flight dates (the start and end of delivery);</li>
-<li>permitted audiences and geographies;</li>
-<li>creatives and landing pages;</li>
-<li>attribution rules and value postbacks (server-to-server messages that report each conversion, and its value, back to the ad platform);</li>
-<li>billing and settlement terms.</li>
+<li><strong>Rank→bill is the seller's risk.</strong> The platform must estimate this rate to rank in eCPM at all. If it bills at a later event, it gives away the impression and is paid only if the click or purchase follows, so it bears this error.</li>
+<li><strong>Bill→bid is the payer's risk, whoever estimates it.</strong> This rate converts a price per purchase into a price per billed event. Under CPM and CPC the advertiser estimates it implicitly, with one constant; under oCPX the platform estimates it with a model, impression by impression. Either way the advertiser pays per billed event, so the error moves its cost per purchase.</li>
+<li><strong>Bid→judged stays with the advertiser</strong> under every product, including the gap between credited and caused purchases from <a href="#chapter-1">chapter 1</a>.</li>
 </ul>
-<p>Below the campaign, ad groups usually carry finer targeting, bidding or creative combinations, but the hierarchy differs across platforms. Do not treat one platform's menu structure as a universal data model.</p>
-<p>“Optimize for purchases” is still underspecified. Does a purchase mean an order placed, a payment completed, or an order still valid after the refund period? Is value the merchandise revenue, the merchant's commission, or contribution profit? Does D7 revenue mean revenue accumulated over the first seven days, or revenue on day seven only? In this reader, <span id="ar-d7-def">D7 ROAS</span> uses the half-open window <x-tex>[t_0,\ t_0+168\text{ h})</x-tex>, where <x-tex>t_0</x-tex> is the moment of acquisition (for app campaigns, the install). It equals the cohort's cumulative attributed revenue in that window divided by the ad spend that acquired the cohort. The metric is only valid once the window has fully elapsed for every user in the cohort. Other platforms draw the day boundaries differently, so redefine the metric for each interface.</p>
-<p>Changing one field definition can change offline training labels, delivery behavior and reports without any change to the model. Advertiser onboarding is therefore more than a configuration form. Events, currency, time zone, deduplication keys, attribution windows, refunds and target constraints together must form an executable contract.</p>
-<p>Creative is a decision variable too. The same user can click and retain very differently depending on the creative shown. A pure “user value model” ignores creative supply, review latency, creative fatigue (response decays as the same audience sees a creative repeatedly) and landing-page quality. A platform that reliably finds high-CTR creatives may simply be rewarding clickbait, so the product needs user-experience and downstream-quality metrics as guardrails: constraints that must not degrade while the primary metric is optimized.</p>
-<h2>Publishers sell attention and pay for it with product quality</h2>
-<p>Publishers and app developers track revenue per thousand ad requests (often called RPM or request eCPM). They also track fill rate (the share of ad requests that receive an ad), ad latency, ad load (how many ads are shown per session or per unit of content) and user retention. If every filled request renders exactly one impression, request RPM equals fill rate times impression eCPM, where eCPM is revenue per thousand impressions (defined <a href="#ar-billing-terms">below</a>). Raising revenue per ad at the cost of users opening the app less often erodes future supply. The seller therefore optimizes a combination of ad revenue, user experience and future usage, not each auction in isolation.</p>
-<p>Guaranteed contracts add a further layer. Suppose a publisher has committed to deliver one million qualifying impressions this month. Each qualifying opportunity can either count toward the contract or be sold on the spot market (the real-time auction). The comparison is between spot revenue and the shadow value of the opportunity: the Lagrange multiplier on the contract's delivery constraint, i.e. the marginal value of one more qualifying impression toward avoiding an under-delivery penalty. Supply forecasting, admission control (deciding whether to accept a new guaranteed contract given forecast supply), under-delivery penalties and allocation across overlapping contracts all enter this decision. Google Ad Manager draws exactly this line: programmatic guaranteed reserves and commits inventory, while a preferred deal carries no volume guarantee. <a href="https://support.google.com/admanager/answer/2805834?hl=en" rel="noopener noreferrer" target="_blank">Google Ad Manager deal types</a>, <a href="https://support.google.com/admanager/answer/7637485?hl=en" rel="noopener noreferrer" target="_blank">Difference between guaranteed and preferred deals</a></p>
-<h2>Roles and money flows</h2>
-<p>The main functional roles are:</p>
-<ul>
-<li><strong>DSP (demand-side platform):</strong> buys inventory and optimizes delivery on behalf of advertisers.</li>
-<li><strong>SSP (supply-side platform):</strong> manages and sells a publisher's inventory.</li>
-<li><strong>Ad exchange:</strong> the marketplace that runs auctions matching buyers to sellers.</li>
-<li><strong>Ad server:</strong> selects which ad to show for a request, delivers it and logs the result.</li>
-<li><strong>Ad network:</strong> a company that bundles several of these roles, typically buying from publishers and selling to advertisers.</li>
-<li><strong>Mobile ad mediation:</strong> software in the app that decides which of several demand sources fills each ad request. Each demand source usually ships an SDK (software development kit, a library embedded in the app). Mediation either runs a bidding auction, in which all sources bid simultaneously, or a waterfall, which calls demand sources one at a time in a configured priority order until one fills.</li>
-<li><strong>MMP (mobile measurement partner), e.g. Adjust or AppsFlyer:</strong> sits in the feedback loop and provides measurement and attribution (crediting an install or purchase to an ad; see <a href="#chapter-6">Attribution, experiments and data</a>). Money does not pass through the MMP.</li>
-</ul>
-<p>Sources: <a href="https://www.iab.com/wp-content/uploads/2025/06/IAB_Untangling_Issues_Commerce_Media_Networks_June_23_2025.pdf" rel="noopener noreferrer" target="_blank">IAB (Interactive Advertising Bureau) 2025 commerce media white paper, glossary appendix</a>, <a href="https://help.adjust.com/en/article/getting-started-with-adjust" rel="noopener noreferrer" target="_blank">Adjust integration documentation</a>.</p>
-<p>The diagram below is organized by function. A real company may merge several boxes, and not every intermediary exists in every transaction.</p>
-<figure aria-label="Functional roles and money flows · a company may merge several roles" class="ar-map"><figcaption class="ar-maplabel">Functional roles and money flows · a company may merge several roles</figcaption><div class="ar-flow"><div class="ar-node">Advertiser<small>Goals · Budget · Creatives</small></div><span aria-hidden="true" class="ar-arrow">→</span><div class="ar-node">Buy-side optimization<small>Network / DSP</small></div><span aria-hidden="true" class="ar-arrow">→</span><div class="ar-node">Exchange and supply<small>Auction · Mediation</small></div><span aria-hidden="true" class="ar-arrow">→</span><div class="ar-node">Publisher or app<small>Display · Delivery</small></div><span aria-hidden="true" class="ar-arrow">→</span><div class="ar-node">User<small>Sees · Acts</small></div></div><div class="ar-feedback">↳ Feedback: user events → measurement and attribution → advertiser and buy-side optimization<br/>Payment: advertiser → buyer → exchange and supply → publisher, each leg settled under its own contract</div><details class="ar-map-source"><summary>View the full diagram source</summary><pre>flowchart LR
-  A[Advertiser goals budget creatives] --&gt; B[Buy-side delivery and optimization network or DSP]
-  B --&gt; C[Exchange and supply scheduling]
-  C --&gt; D[Publisher or App]
-  D --&gt; E[User sees ad and acts]
-  E --&gt; M[Measurement and attribution]
-  M --&gt; A
-  M --&gt; B
-  A -. Pays per contract .-&gt; B
-  B -. Buys impressions and settles .-&gt; C
-  C -. Publisher revenue .-&gt; D
-</pre></details></figure>
-<p>You cannot read a company's revenue off this diagram. Buying on a client's behalf, buying and reselling, charging a service fee, revenue sharing and acting as a settlement agent are different contracts, and they change both how revenue is recognized and who bears risk. Establish the company's transaction role first, then read its financial statements (worked example <a href="#ar-accounting-expansion">below</a>).</p>
-<h2>Keep billing events and optimization objectives apart</h2>
-<p id="ar-billing-terms">The common pricing units are:</p>
-<ul>
-<li><strong>CPM</strong> (cost per mille): price per thousand impressions. An impression is one successful display of an ad.</li>
-<li><strong>CPC</strong> (cost per click): price per click.</li>
-<li><strong>CPI</strong> (cost per install): price per app install.</li>
-<li><strong>CPA</strong> (cost per action, or per acquisition): price per contractually defined action, such as a purchase.</li>
-<li><strong>CTR</strong> (click-through rate): clicks divided by impressions.</li>
-<li><strong>CVR</strong> (conversion rate): conversions divided by a denominator you must state. CVR per click and conversion probability per impression are different quantities; the second equals CTR times the first for post-click conversions.</li>
-<li><strong>eCPM</strong> (effective CPM): some revenue or value restated per thousand impressions, <x-tex>\text{eCPM}=1000\times\text{amount}/\text{impressions}</x-tex>. It is a unit conversion for comparing across contracts, not necessarily the price on any invoice.</li>
-</ul>
-<p>Use the running example from <a href="#chapter-1">the roadmap chapter</a>. An ad network buys impressions in auctions and charges the advertiser <x-tex>a=\$30</x-tex> per billable conversion. An impression is clicked with probability <x-tex>p_{\text{click}}=0.01</x-tex> (the CTR), and a click converts with probability <x-tex>p_{\text{conv}}=0.05</x-tex> (post-click CVR), so a billable conversion follows an impression with probability <x-tex>q=0.01\times0.05=0.0005</x-tex>. The network's expected revenue per impression is <x-tex>v=q\,a=0.0005\times\$30=\$0.015</x-tex>, an eCPM of $15. That does not mean the network bids $15 CPM. The <a href="#ar-network-spread-appendix">optional network-spread appendix</a> derives bids for a network maximizing its own spread. Those bids use its CPA receipts and are not advertiser recommendations. The main bidding lesson instead uses the advertiser’s incremental contribution and an explicitly different direct-buying contract. Nor is the advertiser billed per impression: it still pays $30 per conversion. Valuation, bid and payment are three separate quantities.</p>
-<p>The billing event decides who bears <em>response risk</em>: the risk that paid-for impressions yield fewer clicks or conversions than forecast. The network's media cost is set in the auction regardless of how it bills, so any shortfall the advertiser does not pay for comes out of the network's margin.</p>
+<div class="ar-table-wrap"><table>
+<thead><tr><th>Product</th><th>Billed</th><th>Bid</th><th>Rank→bill</th><th>Bill→bid</th></tr></thead>
+<tbody>
+<tr><td data-label="Product">CPM</td><td data-label="Billed">Impression</td><td data-label="Bid">Purchase, via the advertiser's constant</td><td data-label="Rank→bill">None (same point)</td><td data-label="Bill→bid">Advertiser estimates and bears</td></tr>
+<tr><td data-label="Product">CPC</td><td data-label="Billed">Click</td><td data-label="Bid">Purchase, via the advertiser's constant</td><td data-label="Rank→bill">Platform estimates (pCTR) and bears</td><td data-label="Bill→bid">Advertiser estimates and bears</td></tr>
+<tr><td data-label="Product">CPA</td><td data-label="Billed">Purchase</td><td data-label="Bid">Purchase</td><td data-label="Rank→bill">Platform estimates (pCTR × pCVR) and bears</td><td data-label="Bill→bid">None (same point)</td></tr>
+<tr><td data-label="Product">oCPC</td><td data-label="Billed">Click</td><td data-label="Bid">Purchase</td><td data-label="Rank→bill">Platform estimates (pCTR) and bears</td><td data-label="Bill→bid">Platform estimates (pCVR); advertiser bears</td></tr>
+<tr><td data-label="Product">oCPM</td><td data-label="Billed">Impression</td><td data-label="Bid">Purchase</td><td data-label="Rank→bill">None (same point)</td><td data-label="Bill→bid">Platform estimates (pCTR × pCVR); advertiser bears</td></tr>
+</tbody></table></div>
+<p>The ranked point is the impression in every row, and bid→judged is the advertiser's in every row. Automated bid targets fit the same table. Google's tCPA (target cost per action), for example, bids toward an average cost per conversion while the advertiser is typically still billed per click, which makes it oCPC, and it does not promise that every conversion costs less than the target. <a href="https://support.google.com/google-ads/answer/2390684" rel="noopener noreferrer" target="_blank">Google tCPA documentation</a></p>
 <section class="ar-worked">
-  <header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>One campaign, three billing events</h4></header>
+  <header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>One campaign under five products</h4></header>
   <div class="ar-worked-body">
-    <p>Given: a hypothetical campaign in which the network has already won and paid for <x-tex>I=1{,}000{,}000</x-tex> impressions (not the <x-tex>N</x-tex> bid requests above); forecast <x-tex>p_{\text{click}}=0.01</x-tex>, <x-tex>p_{\text{conv}}=0.05</x-tex>, <x-tex>q=0.0005</x-tex>; CPA price <x-tex>a=\$30</x-tex> per conversion. Set each price so the expected payment at the forecast is the same. Outcomes are independent across impressions.</p>
+    <p>Given: the running example's forecast <x-tex>p_{\text{click}}=0.01</x-tex>, <x-tex>p_{\text{conv}}=0.05</x-tex>, so <x-tex>q=0.0005</x-tex>; the advertiser's price per purchase <x-tex>a=\$30</x-tex>. Every bid is set from the forecast.</p>
     <ol class="ar-steps">
-      <li>Prices with equal expected payment per impression, <x-tex>q\,a=\$0.015</x-tex>: per conversion, per click, per 1,000 impressions,
-        <x-tex display>\begin{aligned}
-\text{CPA} &amp;= a = \$30\\
-\text{CPC} &amp;= p_{\text{conv}}\,a = 0.05\times\$30 = \$1.50\\
-\text{CPM} &amp;= 1000\,q\,a = \$15
-\end{aligned}</x-tex></li>
-      <li>Expected campaign payment, identical by construction: CPM <x-tex>1{,}000\times\$15</x-tex>; CPC <x-tex>10{,}000\text{ clicks}\times\$1.50</x-tex>; CPA <x-tex>500\text{ conversions}\times\$30</x-tex>; each <x-tex>\$15{,}000</x-tex>.</li>
-      <li>Sampling noise with the forecast rates correct. CPM: payment is fixed once impressions are delivered, standard deviation $0. CPC: <x-tex>\$1.50\sqrt{I p_{\text{click}}(1-p_{\text{click}})}=\$1.50\sqrt{9{,}900}\approx\$149.25</x-tex> (1.0% of the mean). CPA: <x-tex>\$30\sqrt{I q(1-q)}=\$30\sqrt{499.75}\approx\$670.65</x-tex> (4.5% of the mean).</li>
-      <li>Forecast error, which dominates sampling noise at this scale. If the true CTR is 0.005, there are 5,000 clicks and 250 conversions: the advertiser pays $15,000 under CPM, $7,500 under CPC, $7,500 under CPA. If instead the true CVR is 0.025, there are 10,000 clicks and 250 conversions: it pays $15,000, $15,000 and $7,500.</li>
-      <li>Advertiser's realized cost per conversion in those two scenarios: CPM $60 and $60; CPC $30 and $60; CPA $30 and $30.</li>
+      <li>Bids, each ranked at an eCPM of $15. CPM: <x-tex>1000\times0.0005\times\$30=\$15</x-tex> CPM. CPC and oCPC: <x-tex>0.05\times\$30=\$1.50</x-tex> per click, ranked at <x-tex>1000\times0.01\times\$1.50=\$15</x-tex>. CPA: $30 per purchase, ranked at <x-tex>1000\times0.0005\times\$30=\$15</x-tex>. oCPM: <x-tex>1000\times0.01\times0.05\times\$30=\$15</x-tex> CPM. Under CPC the advertiser chose the 0.05; under oCPC and oCPM the platform's pCTR and pCVR supplied the rates.</li>
+      <li>Scenario A, true CTR 0.005, CVR as forecast: per 1,000 impressions, 5 clicks and <x-tex>5\times0.05=0.25</x-tex> purchases. Bills: CPM and oCPM $15; CPC and oCPC <x-tex>5\times\$1.50=\$7.50</x-tex>; CPA <x-tex>0.25\times\$30=\$7.50</x-tex>.</li>
+      <li>Scenario B, true CVR 0.025, CTR as forecast: 10 clicks and <x-tex>10\times0.025=0.25</x-tex> purchases. Bills: CPM, oCPM, CPC and oCPC $15 (<x-tex>10\times\$1.50</x-tex> for the click products); CPA $7.50.</li>
+      <li>Cost per purchase, bill ÷ 0.25: a $15 bill gives $60, a $7.50 bill $30.</li>
     </ol>
-    <p class="ar-result">Result: <strong>same expected payment, different risk bearer. Under CPM the advertiser bears both click and conversion risk; under CPC the network bears click risk and the advertiser conversion risk; under CPA the network bears both.</strong></p>
-    <p class="ar-check">Check: the advertiser's payment scales with the ratio of true to forecast rates for exactly the events it pays for: CPC payment = $15,000 × (true CTR ÷ 0.01); CPA payment = $15,000 × (true <x-tex>q</x-tex> ÷ 0.0005). Both scenarios halve <x-tex>q</x-tex>, so CPA pays $7,500 in both.</p>
+    <p class="ar-result">Result: <strong>cost per purchase doubles to $60 exactly where the advertiser bears the mis-estimated rate: CPM and oCPM in both scenarios, CPC and oCPC in scenario B. Under CPA it stays $30; the platform absorbs the shortfall.</strong></p>
+    <p class="ar-check">Check against the table: the CTR error (A) is rank→bill for CPC, oCPC and CPA, but bill→bid for CPM and oCPM. The CVR error (B) is rank→bill only for CPA, and bill→bid for the other four.</p>
   </div>
 </section>
-<x-chart>{"type": "bar", "title": "Advertiser's payment for the same 1M impressions",
- "y": {"label": "Advertiser pays", "min": 0, "max": 16000, "ticks": [0, 4000, 8000, 12000, 16000], "format": "usd"},
- "categories": ["Forecast holds", "CTR halves", "CVR halves"],
- "groups": [{"label": "CPM $15", "tone": "muted", "values": [15000, 15000, 15000]},
-            {"label": "CPC $1.50", "tone": "warm", "values": [15000, 7500, 15000]},
-            {"label": "CPA $30", "tone": "accent", "values": [15000, 7500, 7500]}],
- "caption": "Each bar is the advertiser's payment; the gap to $15,000 is absorbed by the network, whose media cost is unchanged. A bar that does not move when a rate falls means the advertiser bears that rate's risk. Prices are set so expected payment is <x-tex>I q a=\\$15{,}000</x-tex> at the forecast."}</x-chart>
-<p>Equal expected payments are a modelling convenience. A party that absorbs variance and forecast error charges for it, so in practice CPA and CPC prices carry a risk premium relative to the CPM equivalent. Shifting the billing event also shifts incentives: under CPA the network's revenue depends on the advertiser's conversion definition and reporting; under CPM the advertiser must police impression quality itself.</p>
-<p id="ar-roas-def">Define the return metrics precisely:</p>
+<p>Equal expected bills are a modelling convenience: a party that bears a segment charges for it, so CPC and CPA prices carry a risk premium over the CPM equivalent.</p>
+<h3>CPA needs a billing event the platform can verify</h3>
+<p><strong>Under CPA the conversion count sets the bill, so the platform must verify conversions itself or through a trusted third party.</strong> For apps that party is usually a mobile measurement partner (<strong>MMP</strong>, such as Adjust or AppsFlyer), which records installs and in-app events and attributes them to ads. To see why, suppose the advertiser reports only a fraction <x-tex>k</x-tex> of its conversions, <x-tex>0&lt;k&lt;1</x-tex>.</p>
 <ul>
-<li><strong>ROAS</strong> (return on ad spend) = revenue under an agreed definition (usually attributed revenue, i.e. revenue credited to ads by the attribution rules) ÷ ad spend. It is often quoted as a percentage: 300% means 3.0.</li>
-<li><strong>iROAS</strong> (incremental ROAS) = incremental revenue ÷ ad spend, where incremental revenue is the revenue that would not have occurred without the ads. Keep the two numerators distinct.</li>
-<li><strong>tCPA</strong> (target CPA): the average cost per conversion that an automated bidding algorithm tries to achieve across a campaign.</li>
-<li><strong>tROAS</strong> (target ROAS): the ROAS that an automated bidding algorithm tries to achieve.</li>
+<li><strong>Under CPA, under-reporting pays.</strong> The bill per impression becomes <x-tex>a\,k\,q</x-tex>, smaller by the factor <x-tex>k</x-tex> at once. Allocation follows the platform's <x-tex>\text{eCPM}=1000\,a\,\text{pCTR}\,\text{pCVR}</x-tex>; if pCVR is pooled across advertisers or updates with a lag, it does not fall, and the advertiser keeps the same impressions for less. With <x-tex>k=1/2</x-tex> it pays $7.50 instead of $15 per 1,000 impressions while still ranked at $15.</li>
+<li><strong>Under oCPM, reports only affect allocation.</strong> The bill is the auction price per impression. Under-reporting scales pCVR by <x-tex>k</x-tex>, so the eCPM falls by <x-tex>k</x-tex> unless the target rises from <x-tex>a</x-tex> to <x-tex>a/k</x-tex>:
+<x-tex display>\begin{aligned}1000\,a\,\text{pCTR}\,(k\,\text{pCVR})&amp;=k\cdot\text{eCPM},\\ 1000\,\tfrac{a}{k}\,\text{pCTR}\,(k\,\text{pCVR})&amp;=\text{eCPM}.\end{aligned}</x-tex>
+The restored eCPM wins the same impressions at the same price under either auction rule, so the bill is unchanged and under-reporting buys nothing.</li>
 </ul>
-<p><strong>Optimizing toward a CPA target does not mean being billed per conversion, and it does not guarantee that every conversion costs less than the target.</strong> Google's tCPA, for example, sets bids automatically to hit an average conversion-cost target, while the advertiser is typically still billed per click. <a href="https://support.google.com/google-ads/answer/2390684" rel="noopener noreferrer" target="_blank">Google tCPA documentation</a></p>
-<p>LTV (lifetime value: the total value a customer generates over a horizon) also needs a definition before use. State at least: the horizon; whether it measures revenue or contribution profit; whether refunds are deducted; whether it is discounted; and whether acquisition ad spend has already been subtracted. Treating revenue LTV as a profit valuation systematically overstates what you can afford to bid.</p>
-<h2>Three ledgers and the limits of scaling</h2>
-<p>Each party keeps its own ledger. The advertiser's ledger records the business value gained and what was paid for it. The network's ledger records what it collects from advertisers and what it pays publishers and service providers. The publisher's ledger records what it earns from selling inventory and what it loses in user experience and future usage. All three reports can show growth while total real economic value does not rise.</p>
+<p>The CPA gain lasts only while allocation ignores the reports. With an instant, advertiser-specific model, restoring allocation needs the price <x-tex>a/k</x-tex>, and the bill is back to <x-tex>(a/k)\,k\,q=a\,q</x-tex>.</p>
+<h3>Why oCPX platforms offer cost guarantees</h3>
+<p><strong>Under oCPX the platform makes the bill→bid estimate but the advertiser pays for its errors, so several platforms selling oCPX promise to compensate cost per conversion that exceeds the target by more than a stated tolerance.</strong> In scenario B an oCPC advertiser with a $30 target paid $60 per purchase. Much of such overrun comes from selection, not bias: the auction buys the impressions where the estimate is highest, so even an unbiased model overpredicts on the impressions it wins (the <a href="#ar-winners-curse">winner's curse</a>, chapter 5). Realized cost per conversion runs above target on average, and the platform must correct its estimates on won traffic or pay out.</p>
+<h3>Dual bids limit variance while the model learns</h3>
+<p>A new campaign's conversion model has little data, so its bids are noisy. A dual bid states two prices: one for a frequent shallow event, such as an install, whose rate the platform already estimates well, and one for the rare deep event, such as a purchase. The shallow bid bounds how far a noisy deep-event estimate can move the impression bid, and weight shifts to the deep event as its data accumulate.</p>
+<h2>Platform margin, advertiser return and scaling are different questions</h2>
 <section id="ar-accounting-expansion" aria-label="A complete worked example of gross margin, campaign return, and scaling">
-<p><strong>The platform's gross margin, the advertiser's campaign return and the payoff from further scaling are three different questions. A platform can hold an 80% gross margin while the advertiser earns less with every extra dollar it spends.</strong> Below, one ad budget is entered into two income statements, and then we examine how scaling changes each side's returns. Throughout, amounts are for one fixed period, “spend” means the amount billed to the advertiser in that period, and refunds, credits and taxes are ignored.</p>
-<h3>1. What is the denominator of the platform's 80% gross margin?</h3>
+<p><strong>A platform can hold an 80% gross margin while its advertiser loses money on every additional dollar.</strong> Below, one $100 budget is entered in two income statements, and then we ask what scaling does to each side. Amounts are for one period, “spend” is what the advertiser is billed, and refunds, credits and taxes are ignored.</p>
+<h3>1. What is the denominator of an 80% gross margin?</h3>
 <p>Four accounting terms first.</p>
 <ul>
-<li><strong>Take rate:</strong> the amount the platform keeps after paying the publisher, divided by total advertiser spend (sometimes called gross billings).</li>
-<li><strong>Gross vs net revenue recognition:</strong> a platform that recognizes revenue <em>gross</em> books the full advertiser spend as revenue and the publisher payout as a cost. One that recognizes revenue <em>net</em> books only the amount it keeps.</li>
-<li><strong>Cost of revenue:</strong> costs directly incurred to deliver the service, such as serving infrastructure, data and payment processing. Under gross recognition it also includes the publisher payout, often called TAC (traffic acquisition cost).</li>
+<li><strong>Take rate:</strong> the amount the platform keeps after paying the publisher, divided by total advertiser spend.</li>
+<li><strong>Gross vs net revenue recognition:</strong> a platform that recognizes revenue <em>gross</em> books the full advertiser spend as revenue and the publisher payout as a cost; one that recognizes revenue <em>net</em> books only the amount it keeps.</li>
+<li><strong>Cost of revenue:</strong> costs directly incurred to deliver the service, such as serving, data and payment processing. Under gross recognition it also includes the publisher payout, called TAC (traffic acquisition cost).</li>
 <li><strong>Gross profit</strong> = recognized revenue − cost of revenue. <strong>Gross margin</strong> = gross profit ÷ recognized revenue.</li>
 </ul>
 <section class="ar-worked">
   <header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>$100 of spend under net and gross recognition</h4></header>
   <div class="ar-worked-body">
-    <p>Given, for one period: advertiser spend <x-tex>S=\$100</x-tex>; publisher payout <x-tex>P=\$75</x-tex>; the platform's direct service costs <x-tex>D=\$5</x-tex> (serving, data, payment processing), all classified as cost of revenue. Compare two platforms with identical cash flows, one that qualifies for net recognition and one that qualifies for gross recognition (the control test below decides which; neither chooses).</p>
+    <p>Given, for one period: advertiser spend <x-tex>S=\$100</x-tex>; publisher payout <x-tex>P=\$75</x-tex>; the platform's direct service costs <x-tex>D=\$5</x-tex>, all classified as cost of revenue. Compare two platforms with identical cash flows, one that qualifies for net recognition and one that qualifies for gross recognition.</p>
     <ol class="ar-steps">
       <li>Take rate, a cash-flow ratio identical for both: <x-tex>(S-P)/S=(\$100-\$75)/\$100=25\%</x-tex>.</li>
       <li>Net recognition: revenue <x-tex>=S-P=\$25</x-tex>; cost of revenue <x-tex>=D=\$5</x-tex>; gross profit <x-tex>=\$25-\$5=\$20</x-tex>; gross margin <x-tex>=\$20/\$25=80\%</x-tex>. The $75 payout appears in neither line.</li>
@@ -170,12 +134,13 @@
  "groups": [{"label": "Net recognition", "tone": "accent", "values": [25, 5, 20]},
             {"label": "Gross recognition", "tone": "warm", "values": [100, 80, 20]}],
  "caption": "Gross recognition adds the $75 publisher payout to both revenue and cost of revenue. Gross profit is unchanged; only the margin denominator moves, from $25 to $100."}</x-chart>
-<p>The 80% is measured against the $25 the platform recognizes: each recognized dollar leaves $0.80 after cost of revenue. It does not mean the platform keeps 80% of the ad budget, nor that 80% is final profit; R&amp;D, sales, taxes and the cost of capital still come out. <strong>Before comparing two ad companies' gross margins, align their revenue recognition and cost classification.</strong> Here 80% versus 20% reflects no difference in efficiency at all.</p>
-<p><strong>Calling the platform an “agent” in the contract does not by itself justify net recognition.</strong> IFRS 15, the international revenue standard, and ASC 606, its US GAAP counterpart, apply the same test. The entity identifies each specified good or service promised to the customer (for an ad platform, typically the ad placement) and asks whether it controls that good or service before it is transferred to the customer. If it does, it is a principal and recognizes revenue at the gross amount of consideration; if not, it is an agent and recognizes only its fee or commission, i.e. the consideration net of what it passes to the other party. Three indicators support, but do not replace, the control assessment: primary responsibility for fulfilling the promise; inventory risk before or after transfer (for example, buying impressions up front with no matching advertiser order); and discretion in setting the price. One company can be a principal for some offerings and an agent for others. <a href="https://www.ifrs.org/news-and-events/updates/ifric/2022/ifric-update-april-2022/" rel="noopener noreferrer" target="_blank">IFRS Interpretations Committee on principal versus agent</a>, <a href="https://www.ifrs.org/content/dam/ifrs/meetings/2024/february/iasb/ap6b-ifrs-15-pir-principal-vs-agent-considerations.pdf" rel="noopener noreferrer" target="_blank">Summary of IFRS 15 principal-versus-agent requirements</a></p>
+<p>The 80% does not mean the platform keeps 80% of the ad budget, nor that 80% is profit; R&amp;D, sales, taxes and the cost of capital still come out. <strong>Before comparing two ad companies' gross margins, align their revenue recognition.</strong> Here 80% versus 20% reflects no difference in efficiency at all.</p>
+<p>Which treatment applies is set by accounting standards, not chosen by the platform.</p>
+<details class="ar-exercise" id="ar-gross-net-rule"><summary>Optional: who may recognize revenue gross</summary><div class="ar-answer">
+<p>Calling oneself an “agent” in a contract does not decide it. Under IFRS 15 and its US counterpart ASC 606, a platform that controls the ad placement before it passes to the advertiser is a principal and recognizes the gross amount; otherwise it is an agent and recognizes only its net fee. Indicators of control are primary responsibility for delivery, inventory risk (for example, buying impressions before any advertiser order) and discretion over price. <a href="https://www.ifrs.org/content/dam/ifrs/meetings/2024/february/iasb/ap6b-ifrs-15-pir-principal-vs-agent-considerations.pdf" rel="noopener noreferrer" target="_blank">Summary of IFRS 15 principal-versus-agent requirements</a></p>
+</div></details>
 <h3>2. Why does the advertiser's profit fall while its sales rise?</h3>
-<p>Switch to the advertiser's ledger. Its revenue, such as the $300 of incremental sales in the table below, is what consumers pay the advertiser for goods or services. It has nothing to do with the $25 of revenue the platform recognizes.</p>
-<p>Let <x-tex>m</x-tex> be the advertiser's <strong>contribution margin</strong> before advertising: the fraction of each incremental sales dollar left after goods, fulfillment and other variable non-advertising costs, before ad spend and fixed costs. Take <x-tex>m=40\%</x-tex>, so each additional $100 of sales leaves $40 to pay for advertising and contribute to profit. Assume <x-tex>m</x-tex> is constant across volume (variable costs are linear in sales).</p>
-<p>Below, “profit” always means <strong>incremental contribution profit after ad spend</strong> (incremental sales × <x-tex>m</x-tex> − ad spend), not the company's net income. Each column's revenue is assumed to be truly incremental, measured over the same observation period with the same revenue definition.</p>
+<p>Switch to the advertiser's ledger. Its revenue is what consumers pay it for goods; it has nothing to do with the $25 the platform recognizes. Let <x-tex>m</x-tex> be the advertiser's <strong>contribution margin</strong>: the fraction of each incremental sales dollar left after goods, fulfillment and other variable costs, before ad spend and fixed costs. Take <x-tex>m=40\%</x-tex>, constant across volume. “Profit” below means <strong>incremental contribution profit after ad spend</strong>, incremental sales × <x-tex>m</x-tex> − ad spend, and each column's revenue is assumed to be truly incremental.</p>
 <div class="ar-table-wrap"><table><thead><tr><th scope="col">Advertiser's ledger</th><th scope="col">First $100</th><th scope="col">Additional $50</th><th scope="col">Cumulative $150</th></tr></thead><tbody>
 <tr><td data-label="Advertiser&#x27;s ledger">Incremental sales revenue</td><td data-label="First $100">$300</td><td data-label="Additional $50">$75</td><td data-label="Cumulative $150">$375</td></tr>
 <tr><td data-label="Advertiser&#x27;s ledger">Variable non-advertising costs (60% of sales)</td><td data-label="First $100">$180</td><td data-label="Additional $50">$45</td><td data-label="Cumulative $150">$225</td></tr>
@@ -184,10 +149,9 @@
 <tr><td data-label="Advertiser&#x27;s ledger"><strong>Contribution profit after ad spend</strong></td><td data-label="First $100"><strong>$20</strong></td><td data-label="Additional $50"><strong>−$20</strong></td><td data-label="Cumulative $150"><strong>$0</strong></td></tr>
 <tr><td data-label="Advertiser&#x27;s ledger">iROAS (incremental sales ÷ ad spend in that column)</td><td data-label="First $100">3.0</td><td data-label="Additional $50">1.5</td><td data-label="Cumulative $150">2.5</td></tr>
 </tbody></table></div>
-<p>The first $100 of spend generates $120 of contribution and so earns $20 after paying for itself. The additional $50 generates only $30 of contribution and so loses $20 on its own. The new orders are real, but what they leave after fulfillment does not cover the extra acquisition cost. Sales rise from $300 to $375 while contribution profit falls from $20 to zero.</p>
+<p>The first $100 generates $120 of contribution and earns $20 after paying for itself. The additional $50 generates only $30 of contribution and loses $20 on its own. Sales rise from $300 to $375 while profit falls from $20 to zero.</p>
 <h3>3. Average iROAS hides the loss on the additional budget</h3>
-<p>Let <x-tex>C</x-tex> be ad spend, <x-tex>R</x-tex> the incremental sales revenue it generates, and <x-tex>m</x-tex> the contribution margin defined above. Let <x-tex>\Delta C</x-tex> be additional spend and <x-tex>\Delta R</x-tex> the additional incremental revenue it generates. Here “marginal iROAS” means the finite-increment ratio <x-tex>\Delta R/\Delta C</x-tex>; only in the limit <x-tex>\Delta C\to0</x-tex> does it become a derivative.</p>
-<p>Contribution profit is <x-tex>mR-C</x-tex>, which for <x-tex>C&gt;0</x-tex> and <x-tex>m&gt;0</x-tex> is non-negative exactly when <x-tex>R/C\ge 1/m</x-tex>. So the break-even iROAS is <x-tex>1/m</x-tex>: 2.5 at <x-tex>m=40\%</x-tex>, 5 at <x-tex>m=20\%</x-tex>, 1.25 at <x-tex>m=80\%</x-tex>. If <x-tex>m\le0</x-tex>, no iROAS breaks even.</p>
+<p>Let <x-tex>C</x-tex> be ad spend and <x-tex>R</x-tex> the incremental revenue it generates. Contribution profit is <x-tex>mR-C</x-tex>, which for <x-tex>C&gt;0</x-tex> and <x-tex>m&gt;0</x-tex> is non-negative exactly when <x-tex>R/C\ge 1/m</x-tex>. So the break-even iROAS is <x-tex>1/m</x-tex>: 2.5 at <x-tex>m=40\%</x-tex>. The decision to add spend <x-tex>\Delta C</x-tex>, which brings additional incremental revenue <x-tex>\Delta R</x-tex>, applies the same test to the increment: <x-tex>\Delta R/\Delta C</x-tex>, the marginal iROAS, must reach <x-tex>1/m</x-tex>.</p>
 <section class="ar-worked">
   <header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>Should the advertiser add the extra $50?</h4></header>
   <div class="ar-worked-body">
@@ -202,19 +166,10 @@
     <p class="ar-check">Check: profit at $100 is <x-tex>0.4\times\$300-\$100=\$20</x-tex> and at $150 is $0, a change of −$20. Equivalently, the increment needed <x-tex>\Delta R\ge2.5\times\$50=\$125</x-tex> and delivered $75.</p>
   </div>
 </section>
-<p>The cumulative 2.5 sits at break-even only because the early high-return spend subsidizes the late low-return spend. The trading analogue: a scaled-up strategy's marginal capacity may not cover its costs while the book's average return hides the loss from the scale-up itself.</p>
-<details class="ar-exercise" id="ar-scaling-derivation"><summary>Optional derivation of break-even ROAS and a fitted response curve</summary><div class="ar-answer">
-<p>If ROAS is computed from attributed revenue <x-tex>A</x-tex> instead, you cannot apply <x-tex>1/m</x-tex> directly. For <x-tex>A&gt;0</x-tex>, define the attribution-to-incrementality ratio <x-tex>\kappa=R/A</x-tex> (true incremental revenue ÷ attributed revenue). Contribution profit is then <x-tex>m\kappa A-C</x-tex>, so for <x-tex>\kappa&gt;0</x-tex> and <x-tex>m&gt;0</x-tex> the attributed ROAS at which incremental contribution breaks even is</p>
-<div class="ar-math"><x-tex display>\frac{A}{C}=\frac{1}{m\kappa}.</x-tex></div>
-<p>The formula treats <x-tex>\kappa</x-tex> as constant over the spend range under consideration; in practice the marginal <x-tex>\kappa</x-tex> of new spend can differ from the average. <x-tex>\kappa</x-tex> must be estimated separately, usually from a randomized experiment; the attribution report cannot reveal it. It is not necessarily below 1: attribution can also miss genuinely caused sales (for example, conversions on another device or outside the attribution window).</p>
-<p>More generally, write incremental revenue as a function of spend, <x-tex>R(C)</x-tex>: the revenue difference relative to not advertising, so <x-tex>R(0)=0</x-tex>. Let <x-tex>\Pi(C)</x-tex> be contribution profit after ad spend and <x-tex>R'(C)</x-tex> the marginal incremental revenue per additional dollar. Hold <x-tex>m</x-tex> fixed and ignore other volume-dependent costs:</p>
-<div class="ar-math"><x-tex display>\begin{aligned}
-\Pi(C) &amp;= m\,R(C) - C \\
-\Delta\Pi &amp;= m\,[R(C+\Delta C) - R(C)] - \Delta C \\
-\text{scale by a finite }\Delta C\text{ iff } &amp;\ \Delta\Pi &gt; 0 \\
-\text{positive marginal profit iff } &amp;\ m\,R'(C) &gt; 1
-\end{aligned}</x-tex></div>
-<p>At equality the derivative alone gives no gain from an infinitesimal increase. Use the finite-change formula for a proposed spend increase. Let <x-tex>R</x-tex> be differentiable and concave, with no other constraint (such as a budget cap) binding. If <x-tex>m\,R'(0)\le1</x-tex>, not advertising is optimal: <x-tex>C^*=0</x-tex>. If <x-tex>m\,R'(0)&gt;1</x-tex> and <x-tex>m\,R'</x-tex> eventually falls below 1, the optimum is interior and satisfies <x-tex>m\,R'(C^*)=1</x-tex>; the example's data satisfy both conditions, as the bracket below shows. The three points <x-tex>R(0)=0</x-tex>, <x-tex>R(100)=300</x-tex>, <x-tex>R(150)=375</x-tex> prove that the $150 plan is less profitable than the $100 plan, but not that $100 is optimal. Concavity adds a bracket: the chord slopes 3 on <x-tex>[0,100]</x-tex> and 1.5 on <x-tex>[100,150]</x-tex> give <x-tex>R'(0)\ge3&gt;2.5</x-tex> and <x-tex>R'(150)\le1.5&lt;2.5</x-tex>, so <x-tex>0&lt;C^*&lt;150</x-tex>. Since <x-tex>R'(100)</x-tex> can lie anywhere in <x-tex>[1.5,3]</x-tex>, the data cannot say whether <x-tex>C^*</x-tex> is above or below $100. Pinning it down requires a functional form.</p>
+<p>The cumulative 2.5 sits at break-even only because the early high-return spend subsidizes the late low-return spend. The trading analogue: a scaled-up strategy's marginal capacity may not cover its costs while the book's average return hides the loss.</p>
+<details class="ar-exercise" id="ar-scaling-derivation"><summary>Optional: where is the optimal budget? A fitted response curve</summary><div class="ar-answer">
+<p>Write incremental revenue as a function of spend, <x-tex>R(C)</x-tex>, with <x-tex>R(0)=0</x-tex>, and hold <x-tex>m</x-tex> fixed. Contribution profit is <x-tex>\Pi(C)=m\,R(C)-C</x-tex>, so a finite increase <x-tex>\Delta C</x-tex> pays iff <x-tex>m\,[R(C+\Delta C)-R(C)]&gt;\Delta C</x-tex>, and an infinitesimal one iff <x-tex>m\,R'(C)&gt;1</x-tex>. Let <x-tex>R</x-tex> be differentiable and concave, with no other constraint binding. If <x-tex>m\,R'(0)\le1</x-tex>, not advertising is optimal. If <x-tex>m\,R'(0)&gt;1</x-tex> and <x-tex>m\,R'</x-tex> eventually falls below 1, the optimum is interior and satisfies <x-tex>m\,R'(C^*)=1</x-tex>.</p>
+<p>The three points <x-tex>R(0)=0</x-tex>, <x-tex>R(100)=300</x-tex>, <x-tex>R(150)=375</x-tex> prove that the $150 plan is worse than the $100 plan, but not that $100 is optimal. Concavity gives a bracket: the chord slopes 3 on <x-tex>[0,100]</x-tex> and 1.5 on <x-tex>[100,150]</x-tex> give <x-tex>R'(0)\ge3&gt;2.5</x-tex> and <x-tex>R'(150)\le1.5&lt;2.5</x-tex>, so <x-tex>0&lt;C^*&lt;150</x-tex>. Since <x-tex>R'(100)</x-tex> can lie anywhere in <x-tex>[1.5,3]</x-tex>, the data cannot say whether <x-tex>C^*</x-tex> is above or below $100. Pinning it down requires a functional form.</p>
 <section class="ar-worked">
   <header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>An assumed concave curve through the three points</h4></header>
   <div class="ar-worked-body">
@@ -249,7 +204,7 @@
  "caption": "Scale while the <em>marginal</em> curve is above 2.5; it crosses at $75. The average crosses only at $150, where all the profit earned up to $75 has been given back. Plotted: <x-tex>R(C)/C=4-0.01C</x-tex> and <x-tex>R'(C)=4-0.02C</x-tex>."}</x-chart>
 </div></details>
 <h3>4. Platform gross profit can grow while customer profit falls</h3>
-<p>Now combine the two ledgers. Assume additionally that the platform always keeps 25% of the budget, that its direct service costs are always 5% of the budget, and that it keeps recognizing revenue net.</p>
+<p>Now combine the two ledgers. Assume the platform always keeps 25% of the budget, its direct service costs are always 5% of the budget, and it recognizes revenue net.</p>
 <div class="ar-table-wrap"><table><thead><tr><th scope="col">Metric</th><th scope="col">Ad budget $100</th><th scope="col">Ad budget $150</th></tr></thead><tbody>
 <tr><td data-label="Metric">Platform net revenue</td><td data-label="Ad budget $100">$25</td><td data-label="Ad budget $150">$37.50</td></tr>
 <tr><td data-label="Metric">Platform direct service costs</td><td data-label="Ad budget $100">$5</td><td data-label="Ad budget $150">$7.50</td></tr>
@@ -257,15 +212,10 @@
 <tr><td data-label="Metric">Platform gross margin</td><td data-label="Ad budget $100">80%</td><td data-label="Ad budget $150">80%</td></tr>
 <tr><td data-label="Metric"><strong>Advertiser contribution profit</strong></td><td data-label="Ad budget $100"><strong>$20</strong></td><td data-label="Ad budget $150"><strong>$0</strong></td></tr>
 </tbody></table></div>
-<p>Scaling up raises platform gross profit by $10 and cuts the advertiser's contribution profit by $20. This does not prove the platform harms customers deliberately; customer retention, competition and the prospect of future budgets all constrain it. It does prove that <strong>growth in the platform's current-period revenue, a high platform gross margin and growth in customer profit do not automatically move together.</strong></p>
-<p>Suppose the system objective is “maximize sales subject to cumulative iROAS ≥ 2.5.” The $150 plan satisfies the constraint, exactly at the boundary (the constraint is inclusive), and has higher sales, so the system chooses it. Maximizing advertiser contribution profit would choose the $100 plan instead. An algorithm can execute its objective flawlessly and still produce a commercially bad outcome.</p>
+<p>Scaling up raises platform gross profit by $10 and cuts the advertiser's profit by $20. Customer retention and competition constrain a platform from exploiting this, but <strong>platform revenue growth, a high gross margin and customer profit growth do not automatically move together.</strong> An objective such as “maximize sales subject to cumulative iROAS ≥ 2.5” picks the $150 plan, which meets the constraint exactly and has higher sales; maximizing advertiser profit picks the $100 plan. An algorithm can execute its objective flawlessly and still produce a commercially bad outcome.</p>
 <h3>5. The strongest assumption: revenue must be truly incremental</h3>
-<p>“The platform attributes the order to the ad” and “the order would not have happened without the ad” are different claims. Google's documentation likewise separates standard attributed conversions from incremental conversions measured in experiments. <a href="https://support.google.com/google-ads/answer/14102450?hl=en" rel="noopener noreferrer" target="_blank">Google Conversion Lift measurement definition</a></p>
-<p>Suppose attributed revenue is $300 but the revenue the ads actually caused is only $200. Then the first $100 of spend already loses money:</p>
-<div class="ar-math"><x-tex display>\text{incremental contribution profit} = \$200\times0.4-\$100 = -\$20.</x-tex></div>
-<p>The <x-tex>\kappa</x-tex> formula gives the same verdict: <x-tex>\kappa=200/300=2/3</x-tex>, so the break-even attributed ROAS is <x-tex>1/(0.4\times2/3)=3.75</x-tex>, above the reported 3.0.</p>
-<p>To judge a platform like AppLovin's Axon (see <a href="#chapter-8">the Axon chapter</a>), the useful question is: <strong>under the same measurement definition, contribution margin and budget, how much does it raise the customer's true incremental contribution profit, and how much of that advantage survives as the budget grows?</strong> The platform's accounting gross margin cannot answer it.</p>
+<p>“The platform attributes the order to the ad” and “the order would not have happened without the ad” are different claims. Suppose attributed revenue is <x-tex>A=\$300</x-tex> but the revenue the ads caused is only <x-tex>R=\$200</x-tex>. Then the first $100 of spend already loses money: <x-tex>0.4\times\$200-\$100=-\$20</x-tex>. In general, write <x-tex>\kappa=R/A</x-tex> for caused ÷ attributed revenue. Profit is <x-tex>mR-C=m\kappa A-C</x-tex>, so for <x-tex>m,\kappa&gt;0</x-tex> attributed ROAS must reach</p>
+<div class="ar-math"><x-tex display>\frac{A}{C}\ge\frac{1}{m\kappa}=\frac{1}{0.4\times2/3}=3.75,</x-tex></div>
+<p>above the reported 3.0. The ratio <x-tex>\kappa</x-tex> comes from a randomized experiment (<a href="#chapter-6">chapter 6</a>), not from the attribution report, and it can exceed 1 when attribution misses caused sales. To judge a platform such as Axon (<a href="#chapter-8">chapter 8</a>), ask: <strong>under the same measurement definition, margin and budget, how much does it raise the customer's incremental contribution profit, and how much of that survives as the budget grows?</strong> The platform's gross margin cannot answer it.</p>
 </section>
-
-<p>Your trading experience transfers directly to auditable P&amp;L, risk limits and capacity curves. One intuition does not transfer: that an impression is a homogeneous asset you can store and resell without loss. An impression perishes the instant it is served, its value depends on the advertiser and the creative, feedback arrives with a delay, and the counterfactual (what would have happened without the ad) is never directly observed. What gets called statistical arbitrage in advertising usually carries unhedged behavioral, attribution and settlement risk.</p>
 </article>
