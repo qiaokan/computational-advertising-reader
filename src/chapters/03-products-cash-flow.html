@@ -2,7 +2,7 @@
 <aside class="ar-callout ar-key"><p class="ar-callout-title">In this chapter</p><ul>
 <li>Describe any ad product by five separate choices: context, creative, how it is sold, what is billed and what is optimized.</li>
 <li>Distinguish the billable event, bidding strategy, and campaign KPI. Compare how conversion forecasts affect each party under CPM, CPC, CPA, oCPC and oCPM.</li>
-<li>Explain why CPA billing needs conversions the platform can verify, and why platforms selling oCPM or oCPC offer cost guarantees.</li>
+<li>Explain why CPA billing needs conversions the platform can verify, why oCPC and oCPM exist and differ only in who bears click-rate error, and why platforms selling them offer cost guarantees.</li>
 <li>Trace $100 of advertiser spend through net and gross revenue recognition: the same $20 gross profit shows as an 80% or a 20% gross margin.</li>
 <li>Decide whether to scale a budget by comparing the return on the <em>additional</em> spend with the break-even return, one over the contribution margin.</li>
 </ul></aside>
@@ -87,6 +87,28 @@
 The restored eCPM wins the same impressions at the same price under either auction rule, so the bill is unchanged and under-reporting buys nothing.</li>
 </ul>
 <p>The CPA gain lasts only while allocation ignores the reports. With an instant, advertiser-specific model, restoring allocation needs the price <x-tex>a/k</x-tex>, and the bill is back to <x-tex>(a/k)\,k\,q=a\,q</x-tex>.</p>
+<h3 id="ar-ocpc-vs-ocpm">oCPC and oCPM differ only in who bears click-rate error</h3>
+<p><strong>Optimized bidding exists because the advertiser wants to pay per conversion but the bill cannot follow conversions the advertiser reports; oCPC and oCPM both move the bid to the conversion and keep the bill on an event the platform observes, and they differ only in which event that is.</strong> The section above shows why the bill cannot sit on reported conversions. Moving only the bid still helps the advertiser: under plain CPC it had to convert its $30 purchase value into a click bid with one fixed guess of the purchase rate per click, while under oCPC or oCPM the platform supplies pCVR per impression from user features and the advertiser's conversion reports.</p>
+<div class="ar-table-wrap"><table>
+<thead><tr><th>Question</th><th>oCPC</th><th>oCPM</th></tr></thead>
+<tbody>
+<tr><td data-label="Question">What the advertiser states</td><td data-label="oCPC">Target cost per conversion, e.g. $30</td><td data-label="oCPM">Same</td></tr>
+<tr><td data-label="Question">Auction score</td><td data-label="oCPC">eCPM = 1000 × pCTR × pCVR × target, times the cost-control factor</td><td data-label="oCPM">Same</td></tr>
+<tr><td data-label="Question">Billable event</td><td data-label="oCPC">Click</td><td data-label="oCPM">Impression</td></tr>
+<tr><td data-label="Question">Charge if the runner-up's eCPM is $12</td><td data-label="oCPC">$12 ÷ (1000 × 0.01) = $1.20 per click</td><td data-label="oCPM">$12 per 1,000 impressions</td></tr>
+<tr><td data-label="Question">Who pays when pCTR is too high</td><td data-label="oCPC">The platform: fewer clicks, so fewer charges (scenario A: $7.50 per 1,000 impressions instead of $15)</td><td data-label="oCPM">The advertiser, until cost control lowers the bids or a cost guarantee pays (scenario A: $60 per purchase)</td></tr>
+<tr><td data-label="Question">Who pays when pCVR is too high</td><td data-label="oCPC">The advertiser (scenario B: $60 per purchase)</td><td data-label="oCPM">The advertiser</td></tr>
+<tr><td data-label="Question">Needs a click before the conversion</td><td data-label="oCPC">Yes; a conversion after a view without a click earns the platform nothing</td><td data-label="oCPM">No; works for video, rewarded ads and other formats without a meaningful click</td></tr>
+</tbody></table></div>
+<p>With the same model and the same target, both products rank every ad identically and win the same impressions; only the invoice differs. Which one a platform offers follows from who should hold click-rate risk:</p>
+<ul>
+<li><strong>Platform freedom.</strong> Under oCPM the platform is paid for every impression it serves, so it can buy impressions that lead to conversions without a click, and it knows its revenue at serving time. Under oCPC an impression without a click pays nothing.</li>
+<li><strong>Incentives on click rate.</strong> Under oCPC an advertiser that will not spend more gains nothing from a higher click rate: it pays per click however many impressions the clicks took, and may even prefer creatives that only interested users click. Under oCPM a higher click rate lowers its cost per conversion, so both sides want it.</li>
+<li><strong>Formats.</strong> Feeds, video and rewarded ads often have no click that signals interest; billing every format per impression puts them under one rule.</li>
+<li><strong>Trust.</strong> “Pay only when someone clicks” is easier to sell to an advertiser that distrusts the platform's models. In search the click is itself the signal of intent, and Google's Target CPA paid per click (above) is oCPC in all but name.</li>
+<li><strong>Fraud on ad networks.</strong> When publishers are separate companies, oCPM lets a publisher pad its impressions until the platform briefly overestimates conversions on its traffic, and the cost guarantee, which is computed per campaign, cannot be charged back to that publisher. oCPC makes fake impressions worthless; the publisher has to fake clicks, which is harder. This is one reason an ad network may keep offering oCPC after the same company's own inventory has moved to oCPM only.</li>
+</ul>
+<p>Either way the advertiser holds the conversion-rate risk, which is why the platforms offering these products also offer cost guarantees.</p>
 <h3>Cost guarantees for optimized bidding</h3>
 <p><strong>With optimized bidding, a contract may include a cost guarantee that compensates the advertiser when its cost per conversion exceeds the target by a specified amount.</strong> In scenario B an oCPC advertiser with a $30 target paid $60 per purchase because pCVR was biased. Overruns arise even with no bias, from selection: the auction buys the impressions where the estimate is highest, so even an unbiased model overpredicts on the impressions it wins (the <a href="#ar-winners-curse">winner's curse</a>, chapter 5). Realized cost per conversion runs above target on average, and the platform must correct its estimates on won traffic or pay out.</p>
 <h3>Dual bids limit variance while the model learns</h3>
