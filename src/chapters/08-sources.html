@@ -1,0 +1,141 @@
+<article class="ar-lesson" id="ar-chapter-7" data-nav="Sources and errata" data-time="Reference"><h1>References and review record</h1>
+<h2>A reproducible erratum in the original monograph</h2>
+<p><strong>This section uses the original book's own notation: </strong> <code>Z</code> is the competitive price, <code>l&gt;0</code> its upper bound, and <code>b</code> the bid per request, all three in the same currency / impression; <code>F(b)</code> is the win rate. <code>r</code> is the predicted click-through rate (the probability that each successful impression is clicked), not the monetary value of a click. This differs from the SAM paper’s <code>r</code> in Chapter 2, which denotes reward per conversion; <code>b(r)=ar</code> is a linear bid, and <code>a</code> is a coefficient with monetary units, not the calculator's CPA unit price. <code>T</code> is the total number of bid requests, and <code>B</code> the total media budget; <code>c(b)</code> is the original book's cost notation, whose conditional definition is examined below.</p>
+<p><code>E[·]</code> denotes expectation; <code>E[Z | Z≤b]</code> is the average payment given a win; <code>1_{Z≤b}</code> is the win indicator, 1 on a win and 0 on a loss. Hence <code>E[Z·1_{Z≤b}]</code> is the per-request average cost that also counts zero spend on losses. <code>Uniform</code> denotes the uniform distribution on the given interval.</p>
+<p>The arXiv v2 of “Display Advertising with Real-Time Bidding and Behavioural Targeting” has 122 pages, a version date of July 15, 2017, and a PDF title-page date of July 18. It provides a complete RTB main track, but the uniform-distribution second-price example in Section 5.3.4 mixes conditional and unconditional cost. <a href="https://arxiv.org/abs/1610.03013" rel="noopener noreferrer" target="_blank">arXiv metadata</a></p>
+<p>Eq 5.5 on PDF page 54 defines the conditional payment after a win; yet Eq 5.35 on page 58 writes <code>c(b)</code> as an integral not divided by the win rate, and the budget equation on page 59 multiplies by the win rate once more. The distinction here should be:</p>
+<div class="ar-math"><x-tex display>F(b)=\frac{b}{l},\qquad
+E[Z\mid Z\le b]=\frac{b}{2},\qquad
+E[Z\mathbf{1}_{Z\le b}]=\frac{b^2}{2l}.</x-tex></div>
+<p>If <code>Z~Uniform(0,l)</code>, predicted click-through rate <code>r~Uniform(0,1)</code>, and the two are independent, take <code>b(r)=ar</code>; in the unsaturated region <code>0≤a≤l</code> (no bid exceeds the price upper bound), the average spend per request is obtained by further averaging over <code>r</code>: <code>∫₀¹ (ar)²/(2l) dr = a²/(6l)</code>, and total expected spend is <code>Ta²/(6l)</code>. This is an example of maximizing expected clicks within budget; in the above region clicks increase with <code>a</code>. When the budget binds and <code>B/T≤l/6</code>:</p>
+<div class="ar-math"><x-tex display>a=\sqrt{\frac{6lB}{T}},\qquad
+b(r)=r\sqrt{\frac{6lB}{T}}.</x-tex></div>
+<p>If <code>b²/(2l)</code>, which is already an unconditional expectation, is multiplied again by the win rate <code>b/l</code>, the erroneous per-request “cost” becomes <code>b³/(2l²)</code>. Substituting <code>b(r)=ar</code> and integrating over uniform <code>r</code>, the erroneous budget equation, per request, is <code>a³/(8l²)=B/T</code>, which yields the original text's cube-root coefficient, denoted <code>a_paper</code> (the subscript only marks “as given in the original”):</p>
+<div class="ar-math"><x-tex display>a_{\mathrm{paper}}=2\left(\frac{l^2 B}{T}\right)^{1/3}.</x-tex></div>
+<p>The true expected cost per request is <code>a²/(6l)</code>, and the two can be checked directly by substitution.</p>
+<p>Checking with <code>l=1, B/T=0.01</code>, the correct coefficient is about 0.244949, and expected spend is exactly 0.01 per request. The original cube-root formula gives about 0.430887, which, substituted back into the true payment formula, gives 0.030944, about 3.094 times the budget; and the bid does not reach the saturation boundary, so the discrepancy cannot be explained by boundary conditions. The main text uses an independent derivation and does not copy this example. <a href="https://arxiv.org/pdf/1610.03013v2#page=54" rel="noopener noreferrer" target="_blank">Page with the definition</a>, <a href="https://arxiv.org/pdf/1610.03013v2#page=58" rel="noopener noreferrer" target="_blank">Page with the cost formula</a>, <a href="https://arxiv.org/pdf/1610.03013v2#page=59" rel="noopener noreferrer" target="_blank">Page with the budget formula</a></p>
+<h2>The shortest reading path after today</h2>
+<p>To fill in the main track, read Chapters 2, 3, 5, and 7 of the RTB monograph; to understand the probability definitions of industrial prediction, read the Google click prediction paper; to build real interfaces, go straight to OpenRTB and your counterparties' contracts; to judge customer value, read randomized advertising experiments. The explicit assumptions in papers are more worth recording than model names.</p>
+<div class="ar-table-wrap"><table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Resource"><a href="https://arxiv.org/pdf/1610.03013v2" rel="noopener noreferrer" target="_blank">RTB monograph, pinned v2</a></td>
+<td data-label="Purpose">Main track on mechanisms, auctions, bidding, and attribution; note the erratum above</td>
+</tr>
+<tr>
+<td data-label="Resource"><a href="https://arxiv.org/pdf/1602.01007" rel="noopener noreferrer" target="_blank">Optimal RTB Frameworks Discussion</a></td>
+<td data-label="Purpose">Check the difference between true second-price cost and the bid upper bound</td>
+</tr>
+<tr>
+<td data-label="Resource"><a href="https://research.google.com/pubs/archive/41159.pdf" rel="noopener noreferrer" target="_blank">Google Ad Click Prediction 2013</a></td>
+<td data-label="Purpose">Sampling, calibration, and industrial training issues</td>
+</tr>
+<tr>
+<td data-label="Resource"><a href="https://arxiv.org/pdf/1804.07931" rel="noopener noreferrer" target="_blank">ESMM</a></td>
+<td data-label="Purpose">Joint modeling of impressions, clicks, and post-click conversions</td>
+</tr>
+<tr>
+<td data-label="Resource"><a href="https://arxiv.org/pdf/2012.03245" rel="noopener noreferrer" target="_blank">Delayed feedback paper</a></td>
+<td data-label="Purpose">Label maturity and online freshness</td>
+</tr>
+<tr>
+<td data-label="Resource"><a href="https://proceedings.mlr.press/v202/wang23ao/wang23ao.pdf" rel="noopener noreferrer" target="_blank">ICML 2023 first-price budget paper</a></td>
+<td data-label="Purpose">Learning problems under budget and feedback conditions</td>
+</tr>
+<tr>
+<td data-label="Resource"><a href="https://arxiv.org/pdf/1506.03837" rel="noopener noreferrer" target="_blank">Statistical Arbitrage Mining</a></td>
+<td data-label="Purpose">Risk and optimization between CPA collections and CPM procurement</td>
+</tr>
+<tr>
+<td data-label="Resource"><a href="https://arxiv.org/pdf/1502.02362" rel="noopener noreferrer" target="_blank">Counterfactual risk minimization</a></td>
+<td data-label="Purpose">Logging policies, propensity probabilities, and offline estimation</td>
+</tr>
+<tr>
+<td data-label="Resource"><a href="https://www.kellogg.northwestern.edu/faculty/gordon_b/files/fb_comparison.pdf" rel="noopener noreferrer" target="_blank">Randomized advertising experiment research</a></td>
+<td data-label="Purpose">The gap between prediction and causal effect</td>
+</tr>
+<tr>
+<td data-label="Resource"><a href="https://github.com/InteractiveAdvertisingBureau/openrtb2.x/blob/main/2.6.md" rel="noopener noreferrer" target="_blank">OpenRTB 2.6</a></td>
+<td data-label="Purpose">Deadlines, units, objects, and notification semantics</td>
+</tr>
+<tr>
+<td data-label="Resource"><a href="https://developer.apple.com/app-store/ad-attribution/" rel="noopener noreferrer" target="_blank">Apple Ad Attribution</a></td>
+<td data-label="Purpose">Observability limits of privacy-preserving attribution</td>
+</tr>
+<tr>
+<td data-label="Resource"><a href="https://support.applovin.com/en/max/demand-partners/auction-dynamics" rel="noopener noreferrer" target="_blank">MAX auction flow</a></td>
+<td data-label="Purpose">A specific counterparty's flow and first-price mechanism</td>
+</tr>
+</tbody>
+</table></div>
+<p>The public table of contents of the third edition of “Computational Advertising: Market and Technology of Internet Commercial Monetization” was used to check whether the product scope omitted topics such as contracts, search, feeds, and systems. What was obtained this time was public metadata and the table of contents; <strong>the paid full text of the book was not consulted</strong>; this tutorial is not a summary of that book. <a href="https://www.dedao.cn/ebook/detail?id=donM9vjLM8m6d5YQ7lvJGVz2Xgaqb3pB480nBRyejENkP1KZo9rD4OApxpxkY7Ke" rel="noopener noreferrer" target="_blank">Dedao e-book table of contents</a>, <a href="https://detail.youzan.com/show/goods?alias=3f2qrgpf0m0jly7&amp;from_source=gbox_seo" rel="noopener noreferrer" target="_blank">Publisher's third-edition information</a></p>
+<h2>Glossary</h2>
+<div class="ar-table-wrap"><table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning as used in this text</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Term">RTB</td>
+<td data-label="Meaning as used in this text">Real-Time Bidding, real-time bidding on an individual ad opportunity</td>
+</tr>
+<tr>
+<td data-label="Term">DSP and SSP</td>
+<td data-label="Meaning as used in this text">Platform functions serving the demand/buy side and the publisher/supply side, respectively</td>
+</tr>
+<tr>
+<td data-label="Term">CPM and eCPM</td>
+<td data-label="Meaning as used in this text">Price or cost per thousand impressions, versus revenue or value converted to a per-thousand-impression basis</td>
+</tr>
+<tr>
+<td data-label="Term">CPC CPI CPA</td>
+<td data-label="Meaning as used in this text">Unit price billed per click, install, or agreed action; can also be used as an average cost metric, depending on context</td>
+</tr>
+<tr>
+<td data-label="Term">CTR and CVR</td>
+<td data-label="Meaning as used in this text">Click-through rate and conversion rate; CVR must specify its denominator and conditions</td>
+</tr>
+<tr>
+<td data-label="Term">tCPA and tROAS</td>
+<td data-label="Meaning as used in this text">Target average cost per action and target return on ad spend; not billing contracts that take effect automatically</td>
+</tr>
+<tr>
+<td data-label="Term">ROAS and iROAS</td>
+<td data-label="Meaning as used in this text">Return on ad spend under an agreed revenue definition, versus return on ad spend from incremental revenue</td>
+</tr>
+<tr>
+<td data-label="Term">LTV</td>
+<td data-label="Meaning as used in this text">Customer value over a specified period; must specify revenue, contribution profit, or other definition</td>
+</tr>
+<tr>
+<td data-label="Term">MMP and mediation</td>
+<td data-label="Meaning as used in this text">Mobile measurement partner, versus aggregation and scheduling of multiple ad demand sources</td>
+</tr>
+<tr>
+<td data-label="Term">pacing</td>
+<td data-label="Meaning as used in this text">Control of budget spend pacing, working together with hard-budget admission</td>
+</tr>
+<tr>
+<td data-label="Term">attribution and incrementality</td>
+<td data-label="Meaning as used in this text">Allocating conversion credit by rules, versus the change caused by an advertising intervention</td>
+</tr>
+<tr>
+<td data-label="Term">ITT and IPS</td>
+<td data-label="Meaning as used in this text">Treatment effect analyzed by random assignment, versus the inverse propensity scoring method</td>
+</tr>
+</tbody>
+</table></div>
+<h2>Review record</h2>
+<p>On November 11, 2026, a separate Claude Opus 5.5 review was conducted on the Chinese edition, covering all eight chapters, formulas, tables, exercises, and calculator code. The first round found no arithmetic or derivation errors, but pointed out gaps such as the incremental ROAS labeling, the successful-impression condition, symbol scoping, and definition before use, and judged that revisions were needed. The editor revised accordingly, and also used the original text to correct the review's misunderstanding of <code>r</code>: in the original monograph's example it is the predicted click-through rate, not a monetary value.</p>
+<p>Source verification and mathematical re-checking were conducted separately: Claude reviewed the provided website content and code without opening external links; the editor checked the original literature, including the original book's click-through-rate definition and the conditional/unconditional payment formulas. Derivations were additionally checked with independent numerical integration, grid search over the budget-feasible region, and recomputation of the worked examples. The review also covered the reachability of definitions in the main text, without relying on the advanced sections that are collapsed by default.</p>
+<p id="ar-review-current-status">The English edition was reviewed separately on November 12, 2026. Corrections addressed translation at inline boundaries, the pacing multiplier, the derivative variable, Axon data qualifiers, chapter references, and billing units. The revised text passed the second review; minor spacing and unit labels were then clarified. Review reports and corrections are recorded in the repository. The review covers the supplied text and code under the stated assumptions, not external source facts, browser rendering, or real-market validity.</p>
+</article>

@@ -1,0 +1,12 @@
+{
+  "name": "computational-advertising-reader",
+  "private": true,
+  "description": "An interactive guide to computational advertising: products, algorithms, measurement, and systems.",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node build.mjs --check && node tests/standalone-host.test.cjs && node tests/threshold-explorer.test.cjs"
+  },
+  "devDependencies": {
+    "katex": "^0.16.47"
+  }
+}
