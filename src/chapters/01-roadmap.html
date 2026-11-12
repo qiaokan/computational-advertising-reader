@@ -45,7 +45,7 @@
 </ol>
 <p>Expanding acronyms is not the goal. If all you can say is that DSP means demand-side platform (software that bids for impressions on behalf of advertisers), CTR means click-through rate (clicks per impression) and RTB means real-time bidding (a separate auction for each individual impression, run while the page or app loads), you have not met the day's goal.</p>
 <h2>A fictional campaign used throughout</h2>
-<p><strong>Two explicitly separate contracts.</strong> The CPA campaign below is used to study billing and conflicting incentives. Its advertiser economics are negative at the stated defaults. Chapter 3 first checks that outcome, then separately teaches advertiser bidding under direct/pass-through auction buying with no fees. Its main-line $4 CPM first-price optimum uses advertiser value <x-tex>w=\Delta qg=\$0.008</x-tex>; the $7.50 CPM network-spread optimum is confined to the optional appendix. Both use the same causal-value inputs but different payment contracts.</p>
+<p>The running campaign charges the advertiser for orders credited to its ads. Chapter 3 also considers direct buying, where the advertiser pays the auction cost. The two arrangements use the same assumptions about additional orders and different rules for the advertiser's bill.</p>
 <p><strong>Roles.</strong> The <strong>advertiser</strong> is a merchant that sells goods and pays for advertising. The <strong>publisher</strong> owns the app or website that provides ad slots. The <strong>ad network</strong> sits between them: it buys impressions from publishers and bills advertisers. Later chapters call it the <strong>platform</strong>; both words mean the same party here. (<a href="#chapter-2">Products and cash flow</a> splits the network into its functional roles.)</p>
 <p><strong>Events, in the order they occur.</strong></p>
 <ul>
@@ -121,7 +121,7 @@
 <ul>
 <li>Opportunities are homogeneous: every one has the same <x-tex>q</x-tex> and <x-tex>\Delta q</x-tex>.</li>
 <li>Every win produces a successful impression, so paying per win and paying per impression coincide. <a href="#chapter-5">Real-time advertising systems</a> drops this assumption.</li>
-<li>Conversion probability does not depend on the bid or on the competitive threshold (the highest competing bid). Winning a more contested auction does not change who the user is.</li>
+<li>Conversion probability does not depend on the bid or on the competitive threshold (the highest competing bid). This assumption holds the mix of conversion probabilities fixed as the bid rises.</li>
 <li>Opportunities are independent, and repeated exposure of the same user has no interaction effects.</li>
 </ul>
 <section class="ar-worked">
@@ -152,7 +152,7 @@
 <li>Advertiser break-even on the causal ledger: <x-tex display>\begin{aligned}\Delta q\,g\ge qa&amp;\iff\Delta q\ge\Delta q^{*}=\frac{qa}{g},\\ \Delta q^{*}&amp;=\frac{0.0005\times30}{40}=0.000375.\end{aligned}</x-tex></li>
 </ol>
 <p class="ar-result">Result: <strong>the report says the advertiser gains $5 per 1,000 impressions; it actually loses $7.</strong> The campaign pays for itself only if <x-tex>\Delta q\ge0.000375</x-tex>, almost twice the assumed 0.0002. <a href="#chapter-3">Prediction and bidding</a> derives the same threshold.</p>
-<p class="ar-check">Check: payments are transfers, so they cancel when the three causal ledgers are summed: <x-tex>(\$8-\$15)+(\$15-P)+P=\$8</x-tex>, exactly the incremental contribution, for any <x-tex>P</x-tex>. Summed on the attributed view, the ledgers show $20; the $12 difference is the over-credit <x-tex>1{,}000\,(q-\Delta q)\,g=1{,}000\times0.0003\times\$40</x-tex>.</p>
+<p class="ar-check">Check: payments are transfers, so they cancel when the three causal ledgers are summed: <x-tex>(\$8-\$15)+(\$15-P)+P=\$8</x-tex>, exactly the incremental contribution, for any <x-tex>P</x-tex>. Summed on the attributed view, the ledgers show $20; the $12 difference is the difference between credited and incremental contribution <x-tex>1{,}000\,(q-\Delta q)\,g=1{,}000\times0.0003\times\$40</x-tex>.</p>
 </div>
 </section>
 <x-chart>{"type": "bar", "title": "Running example per 1,000 impressions",
