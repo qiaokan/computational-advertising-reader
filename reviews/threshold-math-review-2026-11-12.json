@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-12",
+  "scope": "Competitive threshold subsection and new local explorer",
+  "model": [
+    "claude-opus-5-5"
+  ],
+  "review": "**PASS**\n\nI found no concrete errors in the math, units, event definitions, symbol introductions or widget behavior.\n\n**What I checked:**\n\n- **Event definition.** Z = max of competing bids, our bid excluded, no floor. The win event b ≥ Z is stated consistently in the formula, prose and widget. The widget's \"Lose: thresholds above $b\" matches the ≥ tie convention.\n- **Distribution.** With Z ~ Uniform(0, L), F(b) = b/L on [0, L], 0 below and 1 above. F(0) = 0, F(L) = 1. The density is 1/L and its area is 1. The integral derivation agrees with the interval-length argument.\n- **Arithmetic.** 2/20 = 10%. 6/20 = 30%. 14/20 = 70%. 0.006/0.02 = 0.30. 1,000,000 × 0.30 = 300,000.\n- **Units.** CPM = 1,000 × per-unit price, and the factor cancels in the ratio. The mixed-unit warning is correct, since 6 / 0.02 = 300 is not a probability. Billing basis is correctly separated from the win event.\n- **Expectation.** E[W] = N·F(b) uses linearity, so it needs only identical marginals, not independence. The caveat about finite-run fluctuation is correct.\n- **Symbols.** Z, b, L, max, ~, F, P, N, W, E[·], f and z are each defined before or at first use.\n- **Nonuniform remarks.** The 80% example is correct. A maximum of iid uniform bids is not generally uniform: its CDF is (z/L)ⁿ, which is uniform only when n = 1.\n- **Widget.**\n  - The input is clamped to [0, 20].\n  - pct = bid/20·100 matches F(b) with L = $20 CPM.\n  - The 0.5 step makes every percentage an exact multiple of 2.5, so win + lose always equals 100.\n  - The endpoints behave correctly: bid 0 gives 0%/100%, and bid 20 gives 100%/0%.\n  - The fill, marker, aria-valuetext, chart label and result text all use the same value.\n  - The initial static state (6, 30%, 70%, width and left at 30%) matches what the script computes.\n\n**Non-blocking observations (not errors):**\n\n- The static result text shows \"6 / 20\", but the script replaces it with \"6.0 / 20\" on load.\n- \"Default first-price contract\" and \"default 100% display-success rate\" rely on site-level defaults that this section doesn't define. Confirm they are stated elsewhere on the page.\n- The axis label spacing and the marker's position at 100% depend on CSS that wasn't supplied, so I couldn't verify them.",
+  "post_review_clarification": "Added explicit assumption of at least one competing bid and a definition of floor price. No mathematical result changed.",
+  "checks": [
+    "Explorer default, endpoints and fractional bids",
+    "CPM-to-per-unit probability equivalence",
+    "Expected win count",
+    "Native scrolling regression",
+    "Unique IDs and valid nesting",
+    "Main calculator and CSPs unchanged"
+  ],
+  "visual_inspection": "Not performed"
+}

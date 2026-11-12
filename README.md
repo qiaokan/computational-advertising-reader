@@ -30,3 +30,5 @@ All examples are synthetic unless explicitly attributed. Mathematical review cov
 ## Runtime regression check
 
 Run `node tests/standalone-host.test.cjs`. Standalone hosting uses a viewport-height sandboxed iframe with native scrolling, including chapters taller than 10,000 pixels. The reader has no external script dependencies.
+
+The competitive-threshold subsection includes a local bid explorer and a derivation of the uniform win probability. Run `node tests/threshold-explorer.test.cjs` to check it.
