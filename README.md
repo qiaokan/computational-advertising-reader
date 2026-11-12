@@ -26,3 +26,7 @@ The site is a standalone HTML export. Its reader runs in a sandboxed iframe. Pre
 Vercel serves `dist` directly, with no build step. The production branch is `main`.
 
 All examples are synthetic unless explicitly attributed. Mathematical review covers the assumptions stated in the text; it does not validate their applicability to a real advertising market.
+
+## Runtime regression check
+
+Run `node tests/standalone-host.test.cjs`. Standalone hosting uses a viewport-height sandboxed iframe with native scrolling, including chapters taller than 10,000 pixels. The reader has no external script dependencies.
