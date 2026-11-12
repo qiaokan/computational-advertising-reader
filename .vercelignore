@@ -1,0 +1,7 @@
+.git
+.openai
+.vercel
+.env*
+DEPLOYMENT.md
+node_modules
+*.tar.gz
