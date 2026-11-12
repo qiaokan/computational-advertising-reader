@@ -14,7 +14,7 @@ Live site: https://computational-advertising-reader.vercel.app
 6. Measurement: attribution, experiments, privacy and fraud
 7. Real-time serving, billing and budget systems (optional deep dive)
 8. AppLovin and Axon case study
-9. Ten exercises with worked answers
+9. Ten exercises with worked answers, in a gist set and a depth set
 10. Sources, errata, glossary, and review record
 
 ## Layout
