@@ -62,7 +62,7 @@ assert.equal(nodes.get('ar-adv-bid').textContent,'$4.4721 CPM');
 assert.equal(nodes.get('ar-adv-profit').textContent,'$1,288.85');
 // Pedagogical structure: network calculator, network charts, and spread lesson belong
 // to an optional closed appendix; main advertiser calculator precedes it.
-const chapter=read('src/chapters/03-prediction-bidding.html');
+const chapter=read('src/chapters/04-auctions-bidding.html');
 const start=chapter.indexOf('<details class="ar-exercise" id="ar-network-spread-appendix">');
 assert(start>0);
 assert(chapter.indexOf('id="ar-adv-budget"')<start);

@@ -1,4 +1,4 @@
-<article class="ar-lesson" id="ar-chapter-7" data-nav="Sources and errata" data-time="Reference"><h1>Sources, errata, and glossary</h1>
+<article class="ar-lesson" id="ar-chapter-9" data-nav="Sources and errata" data-time="Reference"><h1>Sources, errata, and glossary</h1>
 <aside class="ar-callout ar-key"><p class="ar-callout-title">In this chapter</p><ul>
 <li><strong>Erratum.</strong> The RTB monograph’s budget-constrained second-price bid counts the win rate twice. The correct coefficient is <x-tex>\sqrt{6LB/N}</x-tex>, valid for <x-tex>B/N\le L/6</x-tex>; the published one overspends the budget by at least 18% wherever the correct one applies (43.6% in the running example).</li>
 <li><strong>Sources.</strong> What to read next, and what each source is good for.</li>
@@ -10,16 +10,16 @@
 <details class="ar-exercise" id="ar-monograph-erratum-proof"><summary>Optional proof and numerical impact of the monograph erratum</summary><div class="ar-answer">
 <p>The monograph “Display Advertising with Real-Time Bidding (RTB) and Behavioural Targeting” by Wang, Zhang and Yuan (arXiv:1610.03013v2, 122 pages; arXiv date July 15, 2017, title page July 18) is a sound end-to-end account of RTB. One worked example in its Section 5.3.4 gets the budget equation wrong: it counts the win probability twice. This section re-derives the example, locates the slip and sizes the error. Equation and page numbers below refer to v2 and were checked against the PDF. <a href="https://arxiv.org/abs/1610.03013" rel="noopener noreferrer" target="_blank">arXiv metadata</a></p>
 <h3>Symbols</h3>
-<p>Notation follows <a href="#chapter-3">Prediction and bidding</a>. The monograph’s symbol, where different, is in brackets.</p>
+<p>Notation follows <a href="#chapter-4">Prediction and bidding</a>. The monograph’s symbol, where different, is in brackets.</p>
 <ul>
 <li><x-tex>Z</x-tex>: the <strong>competitive threshold</strong>, the highest competing bid on one bid request. We win if our bid is at least <x-tex>Z</x-tex> [market price <x-tex>z</x-tex>].</li>
 <li><x-tex>L&gt;0</x-tex>: the upper bound of <x-tex>Z</x-tex>, with <x-tex>Z\sim\mathrm{Uniform}(0,L)</x-tex> [<x-tex>l</x-tex>].</li>
 <li><x-tex>b\ge 0</x-tex>: our bid on one request. <x-tex>Z</x-tex>, <x-tex>L</x-tex> and <x-tex>b</x-tex> are dollars per impression (×1,000 for CPM).</li>
 <li><x-tex>F(b)=P(Z\le b)</x-tex>: the win rate at bid <x-tex>b</x-tex>; <x-tex>f=F'</x-tex> [<x-tex>w(b)</x-tex>, <x-tex>p_z</x-tex>].</li>
-<li><x-tex>r\in[0,1]</x-tex>: the request’s <strong>predicted click-through rate</strong> (pCTR), the probability that a won impression is clicked. Here <x-tex>r</x-tex> is a probability, not money. (In the SAM paper cited in <a href="#chapter-3">Prediction and bidding</a>, <x-tex>r</x-tex> is the reward per conversion; that chapter renames it <x-tex>a</x-tex>.)</li>
+<li><x-tex>r\in[0,1]</x-tex>: the request’s <strong>predicted click-through rate</strong> (pCTR), the probability that a won impression is clicked. Here <x-tex>r</x-tex> is a probability, not money. (In the SAM paper cited in <a href="#chapter-4">Prediction and bidding</a>, <x-tex>r</x-tex> is the reward per conversion; that chapter renames it <x-tex>a</x-tex>.)</li>
 <li><x-tex>b(r)</x-tex>: the <strong>bidding function</strong>, mapping pCTR to a bid.</li>
 <li><x-tex>N</x-tex>: bid requests over the campaign’s life [<x-tex>T</x-tex>]. <x-tex>B</x-tex>: total media budget in dollars. <x-tex>B/N</x-tex> is the budget per request.</li>
-<li><x-tex>C(b)=E[Z\,\mathbf{1}\{Z\le b\}]</x-tex>: expected payment <em>per request</em>, counting zero on a loss, as in <a href="#chapter-3">Prediction and bidding</a>. <x-tex>\mathbf{1}\{\cdot\}</x-tex> is the indicator; <x-tex>E</x-tex> is over <x-tex>Z</x-tex>. The monograph’s cost function <x-tex>c(b)</x-tex> (Eq. 5.5) is the expected payment <em>given a win</em>, <x-tex>c(b)=E[Z\mid Z\le b]</x-tex>, so <x-tex>C(b)=c(b)\,F(b)</x-tex>.</li>
+<li><x-tex>C(b)=E[Z\,\mathbf{1}\{Z\le b\}]</x-tex>: expected payment <em>per request</em>, counting zero on a loss, as in <a href="#chapter-4">Prediction and bidding</a>. <x-tex>\mathbf{1}\{\cdot\}</x-tex> is the indicator; <x-tex>E</x-tex> is over <x-tex>Z</x-tex>. The monograph’s cost function <x-tex>c(b)</x-tex> (Eq. 5.5) is the expected payment <em>given a win</em>, <x-tex>c(b)=E[Z\mid Z\le b]</x-tex>, so <x-tex>C(b)=c(b)\,F(b)</x-tex>.</li>
 <li><x-tex>\lambda&gt;0</x-tex>: the Lagrange multiplier on the budget. The objective counts clicks, so <x-tex>\lambda</x-tex> is clicks per dollar and <x-tex>1/\lambda</x-tex> is dollars per click.</li>
 </ul>
 <h3>Model and correct solution</h3>
@@ -44,7 +44,7 @@ C(b)&amp;=\int_0^b z\,\frac{dz}{L}=\frac{b^2}{2L}\\
 \end{aligned}</x-tex></div></li>
       <li>The Lagrangian separates across <x-tex>r</x-tex>. Maximize <x-tex>rF(b)-\lambda C(b)</x-tex> pointwise. Since <x-tex>C'(b)=b\,f(b)</x-tex>, the derivative is <x-tex>(r-\lambda b)\,f(b)</x-tex>: positive below <x-tex>r/\lambda</x-tex>, negative above. So
         <div class="ar-math"><x-tex display>b(r)=\min\!\left(\frac{r}{\lambda},\,L\right).</x-tex></div>
-        This is the monograph’s Eq. 5.32 and the second-price rule <x-tex>b=v/\lambda</x-tex> of <a href="#chapter-3">Prediction and bidding</a>, with value <x-tex>v=r</x-tex> measured in clicks.</li>
+        This is the monograph’s Eq. 5.32 and the second-price rule <x-tex>b=v/\lambda</x-tex> of <a href="#chapter-4">Prediction and bidding</a>, with value <x-tex>v=r</x-tex> measured in clicks.</li>
       <li>The budget binds. With <x-tex>r/\lambda\le L</x-tex> for all <x-tex>r</x-tex>, expected clicks are <x-tex>N\int_0^1 r\cdot\frac{r}{\lambda L}\,dr=\frac{N}{3\lambda L}</x-tex>, decreasing in <x-tex>\lambda</x-tex>; so the optimum spends the whole budget and the equality constraint is right.</li>
       <li>Solve the budget equation, writing <x-tex>c^*=1/\lambda^*</x-tex> for the bid coefficient:
         <div class="ar-math"><x-tex display>\begin{aligned}

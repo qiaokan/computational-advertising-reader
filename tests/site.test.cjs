@@ -16,10 +16,10 @@ assert.doesNotMatch(html, /<iframe\b/, 'no iframe wrapper');
 assert.doesNotMatch(html, /<x-tex\b/, 'all TeX rendered at build time');
 assert.doesNotMatch(html, /<x-chart\b/, 'all charts rendered at build time');
 
-// Eight chapters, only the first visible without JavaScript.
+// Ten chapters, only the first visible without JavaScript.
 const articles = [...html.matchAll(/<article class="ar-lesson" id="ar-chapter-(\d)"[^>]*>/g)];
-assert.deepEqual(articles.map((m) => m[1]), ['0', '1', '2', '3', '4', '5', '6', '7']);
-assert.deepEqual(articles.map((m) => /\shidden\b/.test(m[0])), [false, true, true, true, true, true, true, true]);
+assert.deepEqual(articles.map((m) => m[1]), ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']);
+assert.deepEqual(articles.map((m) => /\shidden\b/.test(m[0])), [false, true, true, true, true, true, true, true, true, true]);
 
 // Unique ids; every in-page link resolves.
 const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
@@ -28,7 +28,7 @@ check(dupes.length === 0, `duplicate ids: ${[...new Set(dupes)].join(', ')}`);
 const idSet = new Set(ids);
 for (const [, target] of html.matchAll(/href="#([^"]*)"/g)) {
   const m = /^chapter-(\d+)$/.exec(target);
-  check(m ? +m[1] >= 1 && +m[1] <= 8 : idSet.has(target), `broken in-page link #${target}`);
+  check(m ? +m[1] >= 1 && +m[1] <= 10 : idSet.has(target), `broken in-page link #${target}`);
 }
 
 // Mobile table layout: each data-label equals its column header.
@@ -56,4 +56,4 @@ if (failures.length) {
   console.error(`FAIL (${failures.length}):\n- ` + [...new Set(failures)].join('\n- '));
   process.exit(1);
 }
-console.log('PASS: self-contained page, eight chapters, unique ids, resolvable links, table labels, house style.');
+console.log('PASS: self-contained page, ten chapters, unique ids, resolvable links, table labels, house style.');
