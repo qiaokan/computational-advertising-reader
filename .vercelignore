@@ -4,4 +4,7 @@
 .env*
 DEPLOYMENT.md
 node_modules
+src
+tests
+reviews
 *.tar.gz

@@ -1,80 +1,181 @@
 <article class="ar-lesson" id="ar-chapter-0" data-nav="Learning roadmap" data-time="09:00–09:20 · 20 min"><h1>A one-day learning roadmap</h1>
-<p><strong>At its core, computational advertising is about pricing, allocating, and settling heterogeneous impression opportunities under constrained, delayed, and incomplete feedback.</strong> A model produces some conditional expectation; the product contract determines who pays for which event; auctions and budgets determine which opportunities can be bought; systems determine whether the decision can be executed in time and recorded accurately; and only experiments test whether advertising creates value that customers are willing to keep paying for. Calling any single one of these links the “ad engine” overlooks the constraints that actually affect profit.</p>
-<p>This tutorial is organized around your experience in computer science, distributed systems, machine learning platforms, and trading. You do not need to relearn gradient descent, indexing, or consensus protocols; what you need to build are the advertising domain's models of objective functions, event semantics, observability, and the division of economic benefit. The goal for the day is to be able to independently derive a simplified delivery strategy, review an advertising system, and identify evidentiary leaps in claims about AXON's moat. It does not promise to compress years of campaign experience into a single day.</p>
-<p>Company and product names in this text: AppLovin is the ad-tech company under discussion; Axon (also written AXON in the text) is its ad prediction and bidding engine; MAX is its media monetization and demand aggregation product; Adjust is an MMP (Mobile Measurement Partner) providing mobile measurement and attribution. The public facts about these products and the boundaries of their data use are checked separately in the “AppLovin and AXON” chapter.</p>
+<p><strong>Computational advertising prices, allocates and settles heterogeneous impression opportunities when feedback is constrained, delayed and incomplete.</strong> An <em>impression opportunity</em> is one chance to show one ad to one user in one slot at one moment. Five layers interact:</p>
+<ul>
+<li>A <strong>model</strong> estimates a conditional expectation, such as the probability that this impression leads to a purchase.</li>
+<li>The <strong>product contract</strong> decides who pays whom for which event.</li>
+<li><strong>Auctions and budgets</strong> decide which opportunities can be bought, and at what price.</li>
+<li><strong>Systems</strong> decide whether a decision executes before its deadline and is recorded correctly.</li>
+<li><strong>Experiments</strong> are the only layer that tests whether the advertising creates value customers will keep paying for.</li>
+</ul>
+<p>Calling any single layer “the ad engine” ignores the constraints that actually drive profit.</p>
+<p>This reader assumes your background in theoretical CS, distributed systems, ML platforms and trading. It does not re-teach gradient descent, indexing or consensus. What you lack is the domain's own models: what each party optimizes, what each logged event means, what can and cannot be observed, and how the money is split. By the end of the day you should be able to derive a simplified bidding policy on your own, review the design of an ad system, and spot where claims about Axon's moat run ahead of their evidence. One day will not substitute for years of running campaigns.</p>
+<p>Company and product names used throughout: <strong>AppLovin</strong> is the ad-tech company under discussion. <strong>Axon</strong> is its ad prediction and bidding engine. <strong>MAX</strong> is its mediation product for publishers: for each ad slot in a publisher's app, it runs an auction across many demand sources (ad networks and other buyers) and returns the winning ad. <strong>Adjust</strong> is AppLovin's MMP (mobile measurement partner): a third party that records app installs and in-app events and attributes them to the ads that preceded them. The public facts about these products, and the limits on how their data may be used, are checked in <a href="#chapter-6">AppLovin and Axon</a>.</p>
 <h2>An eight-hour schedule and six acceptance outcomes</h2>
-<p>Below is <strong>390 minutes of study plus 90 minutes of breaks, 8 hours in total</strong>. The main text is sufficient to complete the main track; external links are for verification or further reading later, and you are not expected to read them all today.</p>
+<p>The day is <strong>390 minutes of study plus 90 minutes of breaks, 8 hours in total</strong> (study blocks: 20 + 50 + 100 + 60 + 70 + 40 + 50 min; breaks: 10 + 60 + 10 + 10 min). The main text is enough for the whole track. External links are for later verification or further reading; you are not expected to open them today.</p>
 <div class="ar-table-wrap"><table>
 <thead>
 <tr>
 <th>Time</th>
 <th>Content</th>
-<th>On-the-spot output</th>
+<th>Deliverable</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td data-label="Time">09:00–09:20</td>
-<td data-label="Content">This section and the unified worked example</td>
-<td data-label="On-the-spot output">Write out the separate ledgers of advertiser, network, and publisher</td>
+<td data-label="Content">This chapter and the running example</td>
+<td data-label="Deliverable">Write separate ledgers (income and costs) for the advertiser, the ad network and the publisher</td>
 </tr>
 <tr>
 <td data-label="Time">09:20–10:10</td>
-<td data-label="Content">Products and cash flow</td>
-<td data-label="On-the-spot output">Distinguish transaction, billing, and optimization objectives</td>
+<td data-label="Content"><a href="#chapter-2">Products and cash flow</a></td>
+<td data-label="Deliverable">Distinguish the event that is traded, the event that is billed and the event the system optimizes for</td>
 </tr>
 <tr>
 <td data-label="Time">10:10–10:20</td>
 <td data-label="Content">Break</td>
-<td data-label="On-the-spot output">—</td>
+<td data-label="Deliverable">—</td>
 </tr>
 <tr>
 <td data-label="Time">10:20–12:00</td>
-<td data-label="Content">Prediction, auctions, budgets, and feedback</td>
-<td data-label="On-the-spot output">Derive first-price and second-price bids without looking at the text</td>
+<td data-label="Content"><a href="#chapter-3">Prediction, auctions, budgets and feedback</a></td>
+<td data-label="Deliverable">Derive the optimal first-price and second-price bids without looking at the text</td>
 </tr>
 <tr>
 <td data-label="Time">12:00–13:00</td>
-<td data-label="Content">Lunch and break</td>
-<td data-label="On-the-spot output">—</td>
+<td data-label="Content">Lunch</td>
+<td data-label="Deliverable">—</td>
 </tr>
 <tr>
 <td data-label="Time">13:00–14:00</td>
-<td data-label="Content">Attribution, experiments, and data</td>
-<td data-label="On-the-spot output">Explain why a high ROAS can still lose money</td>
+<td data-label="Content"><a href="#chapter-4">Attribution, experiments and data</a></td>
+<td data-label="Deliverable">Explain why a campaign with high ROAS can still lose money</td>
 </tr>
 <tr>
 <td data-label="Time">14:00–14:10</td>
 <td data-label="Content">Break</td>
-<td data-label="On-the-spot output">—</td>
+<td data-label="Deliverable">—</td>
 </tr>
 <tr>
 <td data-label="Time">14:10–15:20</td>
-<td data-label="Content">Real-time advertising systems</td>
-<td data-label="On-the-spot output">Draw the states and ledgers from request to settlement</td>
+<td data-label="Content"><a href="#chapter-5">Real-time advertising systems</a></td>
+<td data-label="Deliverable">Draw the event states and ledger entries from bid request to settlement</td>
 </tr>
 <tr>
 <td data-label="Time">15:20–15:30</td>
 <td data-label="Content">Break</td>
-<td data-label="On-the-spot output">—</td>
+<td data-label="Deliverable">—</td>
 </tr>
 <tr>
 <td data-label="Time">15:30–16:10</td>
-<td data-label="Content">AppLovin and AXON</td>
-<td data-label="On-the-spot output">Separate public facts, reasonable inferences, and unknowns</td>
+<td data-label="Content"><a href="#chapter-6">AppLovin and Axon</a></td>
+<td data-label="Deliverable">Sort claims into public facts, reasonable inferences and unknowns</td>
 </tr>
 <tr>
 <td data-label="Time">16:10–17:00</td>
-<td data-label="Content">Ten comprehensive exercises with answers</td>
-<td data-label="On-the-spot output">Score yourself, and identify definitions that remain ambiguous</td>
+<td data-label="Content"><a href="#chapter-7">Ten integrated exercises with answers</a></td>
+<td data-label="Deliverable">Score yourself and list the definitions you are still unsure of</td>
 </tr>
 </tbody>
 </table></div>
-<p>When you finish, you should be able to answer six questions: how much an opportunity is worth to whom; what contract makes the platform bear conversion risk; how to bid under a budget; why offline improvement does not imply online profitability; how to avoid conflating auction wins, billing, and attribution in the books; and what evidence suffices to support the claim that “the model creates a durable commercial advantage.” If you can only recite abbreviations such as DSP (demand-side platform), CTR (click-through rate), and RTB (real-time bidding on individual opportunities), you have not met the day's goal.</p>
+<p>Terms used in the table: <strong>ROAS</strong> (return on ad spend) is attributed revenue divided by ad spend; it ignores the cost of goods and ignores whether the ad caused the sale. In a <strong>first-price auction</strong> the winner pays its own bid; in a <strong>second-price auction</strong> the winner pays the highest competing bid (or the seller's floor price, if that is higher). <strong>Settlement</strong> is the final, contractually checked computation of who owes whom.</p>
+<p>When you finish, you should be able to answer six questions:</p>
+<ol>
+<li>How much is a given opportunity worth, and to whom?</li>
+<li>Which contract makes the platform bear conversion risk? (Under per-conversion billing the platform pays publishers per impression but is paid only when a conversion occurs, so it absorbs the variance.)</li>
+<li>How should you bid under a budget?</li>
+<li>Why does a model that improves offline (on held-out logs) not necessarily make more money online?</li>
+<li>How do you keep auction wins, billing and attribution from being conflated in the books?</li>
+<li>What evidence would suffice to support the claim that “the model creates a durable commercial advantage”?</li>
+</ol>
+<p>Expanding acronyms is not the goal. If all you can say is that DSP means demand-side platform (software that bids for impressions on behalf of advertisers), CTR means click-through rate (clicks per impression) and RTB means real-time bidding (a separate auction for each individual impression, run while the page or app loads), you have not met the day's goal.</p>
 <h2>A fictional campaign used throughout</h2>
-<p><strong>Events and roles in this example:</strong> The advertiser is a merchant that sells goods and pays for advertising; the publisher is the app or website that provides ad slots; the ad network connects the two and handles procurement and collection. A bid request is an invitation to buy an ad opportunity; a win means winning the auction; an impression means the ad is successfully displayed. A conversion is the agreed target action, which in this example is a purchase; attribution is crediting an order to an ad according to rules; a billable attributed conversion is an attributed order that passes contractual checks such as window, deduplication, refunds, and chargebacks and can therefore be billed, and in this example each is settled exactly once. Attribution does not equal causal incrementality.</p>
-<p><strong>Conventions for amounts and probabilities:</strong> Pre-advertising contribution per order is the amount left from sales revenue after deducting goods, fulfillment, and other non-advertising variable costs, before deducting ad spend and fixed costs. “Expected” denotes the average outcome over repeated campaigns of the same kind; the budget derivations in this text first constrain expected spend and do not automatically guarantee that each actual spend stays within the limit. Each section defines its symbols locally; when the same letter changes meaning across sections, the section's own definition governs.</p>
-<p>An ad network charges the advertiser per <strong>billable attributed conversion</strong>, at 30 dollars each; the network buys impressions from publishers. The advertiser's pre-advertising contribution per order is 40 dollars. There are 1 million similar bid opportunities per day; the click probability after a successful impression is 1%, and the probability of a billable attributed conversion after a click is 5%; only post-click conversions are counted here. The network's own media procurement budget is 2,000 dollars. Assume for now that a win always results in a successful impression billed according to the auction rules, and that the conversion probability does not vary with the bid or the competitive threshold; the systems chapter will relax this simplification.</p>
-<p>Thus the attributed conversion probability per impression is 0.01×0.05=0.0005. The network's expected revenue is 0.0005×30=0.015 dollars, and the advertiser's attributed contribution value is 0.0005×40=0.020 dollars. Separately, we directly set a teaching parameter: for each opportunity that meets this campaign's conditions, assume that the true causal difference in conversion probability between successfully showing the ad and not showing it for the same opportunity is <code>Δq=0.0002</code>, and assume that opportunities are independent, that there are no interaction effects from repeated exposure, and that this difference does not change with the competitive threshold or the bid. Then the advertiser's incremental contribution value is only 0.0002×40=0.008 dollars. This is a given opportunity-level causal parameter; it is not derived from attribution reports, nor can it be obtained by simply dividing an experimental estimate that “compares per-person outcomes between two groups randomized by eligibility” by the number of impressions; the experimental definition is developed in the “Attribution, experiments, and data” chapter. <strong>For the same impression, three values hold simultaneously; they answer three different questions.</strong></p>
-<p>All figures in the worked examples are teaching assumptions and do not represent AppLovin's or industry rates. Fractional conversion counts in the tables are expected values. In particular, remember: <strong>2,000 dollars is the network's media spend cap, not a cap on the advertiser's bill.</strong> The advertiser pays per conversion, so the bill may exceed this amount. If the advertiser sets its own budget, an independent set of constraints must be added.</p>
+<p><strong>Roles.</strong> The <strong>advertiser</strong> is a merchant that sells goods and pays for advertising. The <strong>publisher</strong> owns the app or website that provides ad slots. The <strong>ad network</strong> sits between them: it buys impressions from publishers and bills advertisers. Later chapters call it the <strong>platform</strong>; both words mean the same party here.</p>
+<p><strong>Events, in the order they occur.</strong></p>
+<ul>
+<li>A <strong>bid request</strong> is the publisher's invitation to bid on one ad opportunity.</li>
+<li>A <strong>win</strong> means the network won that auction.</li>
+<li>An <strong>impression</strong> means the ad was actually displayed. In general a win does not guarantee one (the ad can fail to load); this example assumes it does.</li>
+<li>A <strong>click</strong> means the user tapped the ad.</li>
+<li>A <strong>conversion</strong> is the agreed target action; here, a purchase.</li>
+<li><strong>Attribution</strong> credits an order to an ad according to fixed rules. Here only post-click orders count: an order is attributed only if the user clicked the ad first, within the contract's attribution window. The window's length is left unspecified; it does not change any number below.</li>
+<li>A <strong>billable attributed conversion</strong> is an attributed order that also passes the contract's checks (attribution window, deduplication, refunds, chargebacks) and can therefore be billed. In this example each one is billed exactly once.</li>
+</ul>
+<p>Attribution is a crediting rule, not a measurement of causal effect. An attributed order may have happened without the ad.</p>
+<p><strong>Conventions.</strong> <strong>Pre-advertising contribution</strong> per order is sales revenue minus the cost of goods, fulfillment and other variable non-advertising costs, before ad spend and fixed costs. “Expected” means the average over many repetitions of the same campaign. The budget derivations in later chapters constrain <em>expected</em> spend; that alone does not guarantee that realized spend stays under the cap (hard budgets are covered in <a href="#chapter-5">Real-time advertising systems</a>). All amounts are in US dollars; all counts and budgets are per day. Each chapter defines its own symbols; where a letter changes meaning between chapters, the local definition governs.</p>
+<p><strong>The campaign.</strong> The network charges the advertiser $30 per billable attributed conversion. This is a <strong>CPA</strong> (cost per action) contract: the price is per action, not per impression. The network buys impressions from publishers through auctions and pays for each one at the price the auction rule sets (first price by default; see <a href="#chapter-3">Prediction and bidding</a>). Each order is worth $40 of pre-advertising contribution to the advertiser. The network sees 1,000,000 similar bid opportunities per day and has a daily media budget of $2,000 for buying impressions.</p>
+<div class="ar-table-wrap"><table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-label="Symbol"><x-tex>N</x-tex></td>
+<td data-label="Value">1,000,000 per day</td>
+<td data-label="Meaning">Bid opportunities received; not the number of impressions bought</td>
+</tr>
+<tr>
+<td data-label="Symbol"><x-tex>B</x-tex></td>
+<td data-label="Value">$2,000 per day</td>
+<td data-label="Meaning">Network's cap on expected media spend (paid to publishers); not a cap on the advertiser's bill</td>
+</tr>
+<tr>
+<td data-label="Symbol"><x-tex>p_{\text{click}}</x-tex></td>
+<td data-label="Value">0.01</td>
+<td data-label="Meaning">Probability of a click given an impression</td>
+</tr>
+<tr>
+<td data-label="Symbol"><x-tex>p_{\text{conv}}</x-tex></td>
+<td data-label="Value">0.05</td>
+<td data-label="Meaning">Probability of a billable attributed conversion given a click</td>
+</tr>
+<tr>
+<td data-label="Symbol"><x-tex>q</x-tex></td>
+<td data-label="Value">0.0005</td>
+<td data-label="Meaning">Probability of a billable attributed conversion per impression; the denominator is impressions, not clicks</td>
+</tr>
+<tr>
+<td data-label="Symbol"><x-tex>a</x-tex></td>
+<td data-label="Value">$30 per conversion</td>
+<td data-label="Meaning">CPA price the advertiser pays the network; not the product's selling price</td>
+</tr>
+<tr>
+<td data-label="Symbol"><x-tex>g</x-tex></td>
+<td data-label="Value">$40 per order</td>
+<td data-label="Meaning">Advertiser's pre-advertising contribution per order</td>
+</tr>
+<tr>
+<td data-label="Symbol"><x-tex>v</x-tex></td>
+<td data-label="Value">$0.015 per impression</td>
+<td data-label="Meaning">Network's expected revenue per impression, <x-tex>v=qa</x-tex></td>
+</tr>
+<tr>
+<td data-label="Symbol"><x-tex>\Delta q</x-tex></td>
+<td data-label="Value">0.0002</td>
+<td data-label="Meaning">Causal lift in purchase probability per impression from showing the ad (a given teaching parameter)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Simplifying assumptions</strong> (later chapters relax some of them):</p>
+<ul>
+<li>Opportunities are homogeneous: every one has the same <x-tex>q</x-tex> and <x-tex>\Delta q</x-tex>.</li>
+<li>Every win produces a successful impression, so paying per win and paying per impression coincide. <a href="#chapter-5">Real-time advertising systems</a> drops this assumption.</li>
+<li>Conversion probability does not depend on the bid or on the competitive threshold (the highest competing bid). Winning a more contested auction does not change who the user is.</li>
+<li>Opportunities are independent, and repeated exposure of the same user has no interaction effects.</li>
+</ul>
+<p>The per-impression values follow directly:</p>
+<div class="ar-math"><x-tex display>\begin{aligned}
+q &amp;= p_{\text{click}}\,p_{\text{conv}} = 0.01 \times 0.05 = 0.0005,\\
+v &amp;= qa = 0.0005 \times \$30 = \$0.015 &amp;&amp; \text{(network's expected revenue)},\\
+qg &amp;= 0.0005 \times \$40 = \$0.020 &amp;&amp; \text{(advertiser's attributed contribution)},\\
+\Delta q\, g &amp;= 0.0002 \times \$40 = \$0.008 &amp;&amp; \text{(advertiser's incremental contribution)}.
+\end{aligned}</x-tex></div>
+<p>Per 1,000 impressions that is 10 clicks, 0.5 billable conversions, a $15 bill to the advertiser, $20 of attributed contribution and $8 of incremental contribution. In industry units, the network earns an <strong>eCPM</strong> (effective revenue per thousand impressions; CPM, cost per mille, is a price per 1,000 impressions) of $15.</p>
+<p><strong>About <x-tex>\Delta q</x-tex>.</strong> For each eligible opportunity, <x-tex>\Delta q</x-tex> is the difference in purchase probability between showing the ad and not showing it for that same opportunity. We set it by assumption. It is not derived from attribution reports. Nor can it be obtained by taking an experiment that randomizes users by eligibility, computing the per-user difference in outcomes between the two groups, and dividing by impressions per user; <a href="#chapter-4">Attribution, experiments and data</a> explains why. That <x-tex>\Delta q &lt; q</x-tex> here means attribution over-credits the ad. The gap <x-tex>q-\Delta q</x-tex> need not equal the rate of attributed-but-non-incremental orders, because attribution rules can also miss orders the ad did cause (here, any purchase without a prior click).</p>
+<p><strong>The same impression therefore carries three values, and each answers a different question:</strong> $0.015 is what the network expects to bill, $0.020 is what the attribution report credits to the advertiser, and $0.008 is what the ad actually adds to the advertiser's contribution. On the causal ledger the advertiser pays $0.015 in expectation for $0.008 of value, losing $0.007 per impression ($7 per 1,000), while the attribution report shows a $0.005 gain. The advertiser breaks even only if <x-tex>\Delta q \ge qa/g = 0.000375</x-tex>; <a href="#chapter-3">Prediction and bidding</a> derives this.</p>
+<p>All figures in the running example are teaching assumptions, not AppLovin's rates or industry benchmarks. Fractional conversion counts in tables are expected values. Above all, remember: <strong>$2,000 caps the network's media spend, not the advertiser's bill.</strong> The advertiser pays <x-tex>a=\$30</x-tex> per billable conversion, so its bill can exceed $2,000. An advertiser budget would be a second, independent constraint.</p>
 </article>

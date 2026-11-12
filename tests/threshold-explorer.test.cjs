@@ -3,8 +3,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const path = require('node:path');
 const source = fs.readFileSync(path.join(__dirname, '../dist/index.html'), 'utf8');
-const encoded = source.match(/data-srcdoc="([\s\S]*?)"/)[1];
-const inner = encoded.replace(/&(quot|lt|gt|amp|#x27|#39);/g, (_, x) => ({quot:'"',lt:'<',gt:'>',amp:'&','#x27':"'",'#39':"'"}[x]));
+const inner = source;
 const script = inner.match(/<script id="ar-threshold-script">([\s\S]*?)<\/script>/)[1];
 const nodes = new Map();
 for (const id of ['ar-threshold-explorer','ar-threshold-bid','ar-threshold-quote','ar-threshold-fill','ar-threshold-marker','ar-threshold-chart','ar-threshold-result']) {

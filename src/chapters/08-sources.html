@@ -1,21 +1,49 @@
-<article class="ar-lesson" id="ar-chapter-7" data-nav="Sources and errata" data-time="Reference"><h1>References and review record</h1>
-<h2>A reproducible erratum in the original monograph</h2>
-<p><strong>This section uses the original book's own notation: </strong> <code>Z</code> is the competitive price, <code>l&gt;0</code> its upper bound, and <code>b</code> the bid per request, all three in the same currency / impression; <code>F(b)</code> is the win rate. <code>r</code> is the predicted click-through rate (the probability that each successful impression is clicked), not the monetary value of a click. This differs from the SAM paper’s <code>r</code> in Chapter 2, which denotes reward per conversion; <code>b(r)=ar</code> is a linear bid, and <code>a</code> is a coefficient with monetary units, not the calculator's CPA unit price. <code>T</code> is the total number of bid requests, and <code>B</code> the total media budget; <code>c(b)</code> is the original book's cost notation, whose conditional definition is examined below.</p>
-<p><code>E[·]</code> denotes expectation; <code>E[Z | Z≤b]</code> is the average payment given a win; <code>1_{Z≤b}</code> is the win indicator, 1 on a win and 0 on a loss. Hence <code>E[Z·1_{Z≤b}]</code> is the per-request average cost that also counts zero spend on losses. <code>Uniform</code> denotes the uniform distribution on the given interval.</p>
-<p>The arXiv v2 of “Display Advertising with Real-Time Bidding and Behavioural Targeting” has 122 pages, a version date of July 15, 2017, and a PDF title-page date of July 18. It provides a complete RTB main track, but the uniform-distribution second-price example in Section 5.3.4 mixes conditional and unconditional cost. <a href="https://arxiv.org/abs/1610.03013" rel="noopener noreferrer" target="_blank">arXiv metadata</a></p>
-<p>Eq 5.5 on PDF page 54 defines the conditional payment after a win; yet Eq 5.35 on page 58 writes <code>c(b)</code> as an integral not divided by the win rate, and the budget equation on page 59 multiplies by the win rate once more. The distinction here should be:</p>
-<div class="ar-math"><x-tex display>F(b)=\frac{b}{l},\qquad
-E[Z\mid Z\le b]=\frac{b}{2},\qquad
-E[Z\mathbf{1}_{Z\le b}]=\frac{b^2}{2l}.</x-tex></div>
-<p>If <code>Z~Uniform(0,l)</code>, predicted click-through rate <code>r~Uniform(0,1)</code>, and the two are independent, take <code>b(r)=ar</code>; in the unsaturated region <code>0≤a≤l</code> (no bid exceeds the price upper bound), the average spend per request is obtained by further averaging over <code>r</code>: <code>∫₀¹ (ar)²/(2l) dr = a²/(6l)</code>, and total expected spend is <code>Ta²/(6l)</code>. This is an example of maximizing expected clicks within budget; in the above region clicks increase with <code>a</code>. When the budget binds and <code>B/T≤l/6</code>:</p>
-<div class="ar-math"><x-tex display>a=\sqrt{\frac{6lB}{T}},\qquad
-b(r)=r\sqrt{\frac{6lB}{T}}.</x-tex></div>
-<p>If <code>b²/(2l)</code>, which is already an unconditional expectation, is multiplied again by the win rate <code>b/l</code>, the erroneous per-request “cost” becomes <code>b³/(2l²)</code>. Substituting <code>b(r)=ar</code> and integrating over uniform <code>r</code>, the erroneous budget equation, per request, is <code>a³/(8l²)=B/T</code>, which yields the original text's cube-root coefficient, denoted <code>a_paper</code> (the subscript only marks “as given in the original”):</p>
-<div class="ar-math"><x-tex display>a_{\mathrm{paper}}=2\left(\frac{l^2 B}{T}\right)^{1/3}.</x-tex></div>
-<p>The true expected cost per request is <code>a²/(6l)</code>, and the two can be checked directly by substitution.</p>
-<p>Checking with <code>l=1, B/T=0.01</code>, the correct coefficient is about 0.244949, and expected spend is exactly 0.01 per request. The original cube-root formula gives about 0.430887, which, substituted back into the true payment formula, gives 0.030944, about 3.094 times the budget; and the bid does not reach the saturation boundary, so the discrepancy cannot be explained by boundary conditions. The main text uses an independent derivation and does not copy this example. <a href="https://arxiv.org/pdf/1610.03013v2#page=54" rel="noopener noreferrer" target="_blank">Page with the definition</a>, <a href="https://arxiv.org/pdf/1610.03013v2#page=58" rel="noopener noreferrer" target="_blank">Page with the cost formula</a>, <a href="https://arxiv.org/pdf/1610.03013v2#page=59" rel="noopener noreferrer" target="_blank">Page with the budget formula</a></p>
-<h2>The shortest reading path after today</h2>
-<p>To fill in the main track, read Chapters 2, 3, 5, and 7 of the RTB monograph; to understand the probability definitions of industrial prediction, read the Google click prediction paper; to build real interfaces, go straight to OpenRTB and your counterparties' contracts; to judge customer value, read randomized advertising experiments. The explicit assumptions in papers are more worth recording than model names.</p>
+<article class="ar-lesson" id="ar-chapter-7" data-nav="Sources and errata" data-time="Reference"><h1>Sources, errata, and glossary</h1>
+<h2>An erratum in the RTB monograph’s second-price example</h2>
+<p>The monograph “Display Advertising with Real-Time Bidding (RTB) and Behavioural Targeting” (arXiv v2: 122 pages, version dated July 15, 2017; the PDF title page says July 18) is a sound end-to-end account of RTB. One worked example in Section 5.3.4, however, gets its budget equation wrong: it counts the win probability twice. This section re-derives the example and quantifies the error. <a href="https://arxiv.org/abs/1610.03013" rel="noopener noreferrer" target="_blank">arXiv metadata</a></p>
+<h3>Symbols</h3>
+<p>Notation follows the “Prediction and bidding” chapter. Where the monograph uses a different symbol, it is given in brackets.</p>
+<ul>
+<li><x-tex>Z</x-tex>: the <strong>competitive threshold</strong>, the highest competing bid for one bid request. We win if our bid is at least <x-tex>Z</x-tex> [monograph: market price <x-tex>z</x-tex>].</li>
+<li><x-tex>L&gt;0</x-tex>: the upper bound of <x-tex>Z</x-tex>. We assume <x-tex>Z\sim\mathrm{Uniform}(0,L)</x-tex> [monograph: <x-tex>l</x-tex>].</li>
+<li><x-tex>b\ge 0</x-tex>: our bid for one request. <x-tex>Z</x-tex>, <x-tex>L</x-tex> and <x-tex>b</x-tex> are all in dollars per impression (multiply by 1,000 for CPM).</li>
+<li><x-tex>F(b)=P(Z\le b)</x-tex>: the win probability at bid <x-tex>b</x-tex>, and <x-tex>f=F'</x-tex> its density [monograph: <x-tex>w(b)</x-tex> and <x-tex>p_z</x-tex>].</li>
+<li><x-tex>\mathbf{1}\{Z\le b\}</x-tex>: the win indicator, 1 on a win and 0 on a loss. <x-tex>E[\cdot]</x-tex> is expectation over <x-tex>Z</x-tex>, and also over <x-tex>r</x-tex> where an integral over <x-tex>r</x-tex> is written.</li>
+<li><x-tex>r\in[0,1]</x-tex>: the <strong>predicted click-through rate (pCTR)</strong> of the request, i.e. the probability that a won impression is clicked. Here <x-tex>r</x-tex> is a probability, not money. (In the SAM paper cited in the “Prediction and bidding” chapter, <x-tex>r</x-tex> is the reward per conversion; that chapter renames it <x-tex>a</x-tex>.)</li>
+<li><x-tex>b(r)</x-tex>: the <strong>bidding function</strong>, which maps a request’s pCTR to a bid.</li>
+<li><x-tex>N</x-tex>: the number of bid requests the campaign receives over its lifetime [monograph: <x-tex>T</x-tex>]. <x-tex>B</x-tex>: the total media budget in dollars [monograph: <x-tex>B</x-tex>].</li>
+<li><x-tex>C(b)=E[Z\,\mathbf{1}\{Z\le b\}]</x-tex>: the expected payment <em>per request</em>, counting zero on a loss, as in the “Prediction and bidding” chapter. <x-tex>c(b)</x-tex> is the monograph’s cost function; its Eq. 5.5 defines it as the expected payment <em>given a win</em>, <x-tex>c(b)=E[Z\mid Z\le b]</x-tex>, so <x-tex>C(b)=c(b)\,F(b)</x-tex>.</li>
+<li><x-tex>\lambda&gt;0</x-tex>: the Lagrange multiplier on the budget [monograph: <x-tex>\lambda</x-tex>]. The objective here counts clicks, so <x-tex>\lambda</x-tex> is in clicks per dollar and <x-tex>1/\lambda</x-tex> is in dollars per click.</li>
+</ul>
+<h3>Model and correct solution</h3>
+<p>Assumptions (the monograph’s special case): an ideal second-price auction, so the winner pays <x-tex>Z</x-tex>, with no floor price, fees or bid increments; every win yields one billable impression; <x-tex>r\sim\mathrm{Uniform}(0,1)</x-tex>, independent of <x-tex>Z</x-tex>; and a risk-neutral buyer. For <x-tex>0\le b\le L</x-tex>:</p>
+<div class="ar-math"><x-tex display>F(b)=\frac{b}{L},\qquad
+c(b)=E[Z\mid Z\le b]=\frac{b}{2},\qquad
+C(b)=E[Z\,\mathbf{1}\{Z\le b\}]=\int_0^b \frac{z}{L}\,dz=\frac{b^2}{2L}.</x-tex></div>
+<p>The objective is to maximize expected clicks subject to expected spend equal to the budget (the monograph’s Eq. 5.11):</p>
+<div class="ar-math"><x-tex display>\max_{b(\cdot)}\; N\int_0^1 r\,F\bigl(b(r)\bigr)\,dr
+\quad\text{s.t.}\quad
+N\int_0^1 C\bigl(b(r)\bigr)\,dr=B.</x-tex></div>
+<p>The Lagrangian separates across <x-tex>r</x-tex>. Maximizing <x-tex>rF(b)-\lambda C(b)</x-tex> pointwise gives the first-order condition <x-tex>(r-\lambda b)\,f(b)=0</x-tex>, so <x-tex>b(r)=r/\lambda</x-tex> as long as <x-tex>r/\lambda\le L</x-tex>. This is the monograph’s Eq. 5.32, and it is the second-price rule <x-tex>b=v/\lambda</x-tex> from the “Prediction and bidding” chapter with value <x-tex>v=r</x-tex> measured in clicks. A linear bid is therefore <em>derived</em> here, not assumed. Expected clicks equal <x-tex>N/(3\lambda L)</x-tex>, which rise as <x-tex>\lambda</x-tex> falls, so the budget binds and the equality constraint is justified. Substituting into the constraint:</p>
+<div class="ar-math"><x-tex display>N\int_0^1 \frac{(r/\lambda)^2}{2L}\,dr=\frac{N}{6\lambda^2L}=B
+\;\Longrightarrow\;
+\frac{1}{\lambda^*}=\sqrt{\frac{6LB}{N}},\qquad
+b^*(r)=r\sqrt{\frac{6LB}{N}}.</x-tex></div>
+<p>The closed form holds only when no bid exceeds <x-tex>L</x-tex>, i.e. <x-tex>1/\lambda^*\le L</x-tex>, which is equivalent to <x-tex>B/N\le L/6</x-tex>. For <x-tex>L/6&lt;B/N&lt;L/2</x-tex> the optimal bid is <x-tex>\min(r/\lambda,L)</x-tex>, and <x-tex>\lambda</x-tex> solves a different budget equation. For <x-tex>B/N\ge L/2</x-tex> the budget never binds, because bidding <x-tex>L</x-tex> on every request costs <x-tex>E[Z]=L/2</x-tex> per request.</p>
+<h3>Where the monograph goes wrong</h3>
+<p>The monograph’s budget constraint (Eqs. 5.11 and 5.33) is <x-tex>N\int c(b(r))\,F(b(r))\,dr=B</x-tex>. That is correct, because Eq. 5.5 defines <x-tex>c</x-tex> as the conditional payment, so <x-tex>cF=C</x-tex>. But Eq. 5.35 (PDF page 58) evaluates <x-tex>c(b)</x-tex> as <x-tex>\int_0^b z/L\,dz=b^2/(2L)</x-tex>, without dividing by <x-tex>F(b)</x-tex>. That expression is <x-tex>C(b)</x-tex>, not <x-tex>c(b)</x-tex>. Eq. 5.36 (page 59) then multiplies it by <x-tex>F(b)=b/L</x-tex> again, so the per-request cost becomes <x-tex>b^3/(2L^2)</x-tex>. With <x-tex>b=r/\lambda</x-tex>:</p>
+<div class="ar-math"><x-tex display>\int_0^1\frac{(r/\lambda)^3}{2L^2}\,dr=\frac{1}{8\lambda^3L^2}=\frac{B}{N}
+\;\Longrightarrow\;
+\lambda_{\mathrm{paper}}=\frac12\left(\frac{N}{BL^2}\right)^{1/3},\qquad
+\frac{1}{\lambda_{\mathrm{paper}}}=2\left(\frac{L^2B}{N}\right)^{1/3}.</x-tex></div>
+<p>These are the monograph’s Eqs. 5.37 and 5.38 (subscript “paper” marks the published value). The linear form <x-tex>b=r/\lambda</x-tex> is unaffected; only the coefficient is wrong. The monograph’s first-price result in the same section, <x-tex>b(r)=r\sqrt{3LB/N}</x-tex> (Eq. 5.29), uses the per-request cost <x-tex>bF(b)=b^2/L</x-tex> correctly, so the slip is confined to the second-price case. <a href="https://arxiv.org/pdf/1610.03013v2#page=54" rel="noopener noreferrer" target="_blank">Page with Eq. 5.5</a>, <a href="https://arxiv.org/pdf/1610.03013v2#page=58" rel="noopener noreferrer" target="_blank">page with Eq. 5.35</a>, <a href="https://arxiv.org/pdf/1610.03013v2#page=59" rel="noopener noreferrer" target="_blank">page with Eqs. 5.36–5.38</a></p>
+<h3>Size of the error</h3>
+<p>At the published coefficient, the true expected spend per request is <x-tex>(1/\lambda_{\mathrm{paper}})^2/(6L)</x-tex>. Dividing by the budget per request gives the overspend factor</p>
+<div class="ar-math"><x-tex display>\frac{(1/\lambda_{\mathrm{paper}})^2/(6L)}{B/N}=\frac{2}{3}\left(\frac{LN}{B}\right)^{1/3}.</x-tex></div>
+<p>The published formula keeps every bid at or below <x-tex>L</x-tex> exactly when <x-tex>B/N\le L/8</x-tex>, and on that whole range the factor is at least <x-tex>\tfrac23\cdot 8^{1/3}=\tfrac43</x-tex>. Wherever the formula applies, it overspends by at least 33%, and the overspend grows as the budget tightens. Boundary effects cannot explain the gap.</p>
+<p><strong>Check with the “Prediction and bidding” chapter’s numbers:</strong> <x-tex>L=\$0.02</x-tex> per impression ($20 CPM), <x-tex>N=1{,}000{,}000</x-tex> requests and <x-tex>B=\$2{,}000</x-tex>, so <x-tex>B/N=\$0.002\le L/8=\$0.0025</x-tex>. The correct coefficient is <x-tex>\sqrt{6\times0.02\times0.002}=\$0.015492</x-tex> per click: a request with pCTR <x-tex>r</x-tex> gets a bid of <x-tex>r\times\$15.49</x-tex> CPM, and expected spend is exactly $2,000. The published coefficient is <x-tex>2(0.02^2\times0.002)^{1/3}=\$0.018566</x-tex> per click, and its true expected spend is $2,872.58, or 1.436 times the budget. With the unitless values <x-tex>L=1</x-tex>, <x-tex>B/N=0.01</x-tex>, the coefficients are 0.244949 and 0.430887 and the overspend factor is 3.094. The main text derives its budget results independently and does not reuse this example.</p>
+<h2>Where to read next</h2>
+<p>For the full RTB picture, read Chapters 2, 3, 5 and 7 of the RTB monograph. For how industrial click prediction defines and calibrates probabilities, read Google’s 2013 click-prediction paper. To build a real integration, work from OpenRTB and your counterparties’ contracts. To judge whether advertising creates value for customers, read the randomized advertising experiments. In every paper, record the explicit assumptions; they matter more than the model names.</p>
 <div class="ar-table-wrap"><table>
 <thead>
 <tr>
@@ -26,116 +54,162 @@ b(r)=r\sqrt{\frac{6lB}{T}}.</x-tex></div>
 <tbody>
 <tr>
 <td data-label="Resource"><a href="https://arxiv.org/pdf/1610.03013v2" rel="noopener noreferrer" target="_blank">RTB monograph, pinned v2</a></td>
-<td data-label="Purpose">Main track on mechanisms, auctions, bidding, and attribution; note the erratum above</td>
+<td data-label="Purpose">Main reference for RTB mechanics, auctions, bidding and attribution; see the erratum above</td>
 </tr>
 <tr>
-<td data-label="Resource"><a href="https://arxiv.org/pdf/1602.01007" rel="noopener noreferrer" target="_blank">Optimal RTB Frameworks Discussion</a></td>
-<td data-label="Purpose">Check the difference between true second-price cost and the bid upper bound</td>
+<td data-label="Resource"><a href="https://arxiv.org/pdf/1602.01007" rel="noopener noreferrer" target="_blank">Optimal Real-Time Bidding Frameworks Discussion</a></td>
+<td data-label="Purpose">Contrasts the true expected second-price cost with using the bid as a cost upper bound</td>
 </tr>
 <tr>
-<td data-label="Resource"><a href="https://research.google.com/pubs/archive/41159.pdf" rel="noopener noreferrer" target="_blank">Google Ad Click Prediction 2013</a></td>
-<td data-label="Purpose">Sampling, calibration, and industrial training issues</td>
+<td data-label="Resource"><a href="https://research.google.com/pubs/archive/41159.pdf" rel="noopener noreferrer" target="_blank">Google, Ad Click Prediction (2013)</a></td>
+<td data-label="Purpose">Sampling, calibration and other problems of training click models at production scale</td>
 </tr>
 <tr>
 <td data-label="Resource"><a href="https://arxiv.org/pdf/1804.07931" rel="noopener noreferrer" target="_blank">ESMM</a></td>
-<td data-label="Purpose">Joint modeling of impressions, clicks, and post-click conversions</td>
+<td data-label="Purpose">Joint modeling of impression → click → conversion to reduce selection bias in conversion-rate models</td>
 </tr>
 <tr>
-<td data-label="Resource"><a href="https://arxiv.org/pdf/2012.03245" rel="noopener noreferrer" target="_blank">Delayed feedback paper</a></td>
-<td data-label="Purpose">Label maturity and online freshness</td>
+<td data-label="Resource"><a href="https://arxiv.org/pdf/2012.03245" rel="noopener noreferrer" target="_blank">Delayed-feedback conversion modeling</a></td>
+<td data-label="Purpose">Conversion labels that arrive late, and the trade-off between label completeness and model freshness</td>
 </tr>
 <tr>
-<td data-label="Resource"><a href="https://proceedings.mlr.press/v202/wang23ao/wang23ao.pdf" rel="noopener noreferrer" target="_blank">ICML 2023 first-price budget paper</a></td>
-<td data-label="Purpose">Learning problems under budget and feedback conditions</td>
+<td data-label="Resource"><a href="https://proceedings.mlr.press/v202/wang23ao/wang23ao.pdf" rel="noopener noreferrer" target="_blank">ICML 2023, first-price bidding with budgets</a></td>
+<td data-label="Purpose">Learning to bid under a budget, with guarantees that depend on what feedback the bidder observes</td>
 </tr>
 <tr>
-<td data-label="Resource"><a href="https://arxiv.org/pdf/1506.03837" rel="noopener noreferrer" target="_blank">Statistical Arbitrage Mining</a></td>
-<td data-label="Purpose">Risk and optimization between CPA collections and CPM procurement</td>
+<td data-label="Resource"><a href="https://arxiv.org/pdf/1506.03837" rel="noopener noreferrer" target="_blank">Statistical Arbitrage Mining (SAM)</a></td>
+<td data-label="Purpose">Risk and optimization for a buyer that sells on CPA and buys on CPM</td>
 </tr>
 <tr>
 <td data-label="Resource"><a href="https://arxiv.org/pdf/1502.02362" rel="noopener noreferrer" target="_blank">Counterfactual risk minimization</a></td>
-<td data-label="Purpose">Logging policies, propensity probabilities, and offline estimation</td>
+<td data-label="Purpose">Logging policies, propensities and offline evaluation of new policies</td>
 </tr>
 <tr>
-<td data-label="Resource"><a href="https://www.kellogg.northwestern.edu/faculty/gordon_b/files/fb_comparison.pdf" rel="noopener noreferrer" target="_blank">Randomized advertising experiment research</a></td>
-<td data-label="Purpose">The gap between prediction and causal effect</td>
+<td data-label="Resource"><a href="https://www.kellogg.northwestern.edu/faculty/gordon_b/files/fb_comparison.pdf" rel="noopener noreferrer" target="_blank">Gordon et al., randomized ad experiments at Facebook</a></td>
+<td data-label="Purpose">How far observational ad measurement departs from randomized estimates of causal effect</td>
 </tr>
 <tr>
 <td data-label="Resource"><a href="https://github.com/InteractiveAdvertisingBureau/openrtb2.x/blob/main/2.6.md" rel="noopener noreferrer" target="_blank">OpenRTB 2.6</a></td>
-<td data-label="Purpose">Deadlines, units, objects, and notification semantics</td>
+<td data-label="Purpose">Response deadlines, price units, request and response objects, and win, billing and loss notices</td>
 </tr>
 <tr>
-<td data-label="Resource"><a href="https://developer.apple.com/app-store/ad-attribution/" rel="noopener noreferrer" target="_blank">Apple Ad Attribution</a></td>
-<td data-label="Purpose">Observability limits of privacy-preserving attribution</td>
+<td data-label="Resource"><a href="https://developer.apple.com/app-store/ad-attribution/" rel="noopener noreferrer" target="_blank">Apple ad attribution</a></td>
+<td data-label="Purpose">What privacy-preserving attribution (AdAttributionKit, SKAdNetwork) lets an advertiser observe, and what it hides</td>
 </tr>
 <tr>
-<td data-label="Resource"><a href="https://support.applovin.com/en/max/demand-partners/auction-dynamics" rel="noopener noreferrer" target="_blank">MAX auction flow</a></td>
-<td data-label="Purpose">A specific counterparty's flow and first-price mechanism</td>
+<td data-label="Resource"><a href="https://support.applovin.com/en/max/demand-partners/auction-dynamics" rel="noopener noreferrer" target="_blank">MAX auction dynamics</a></td>
+<td data-label="Purpose">One mediation platform’s concrete first-price auction flow and notice sequence</td>
 </tr>
 </tbody>
 </table></div>
-<p>The public table of contents of the third edition of “Computational Advertising: Market and Technology of Internet Commercial Monetization” was used to check whether the product scope omitted topics such as contracts, search, feeds, and systems. What was obtained this time was public metadata and the table of contents; <strong>the paid full text of the book was not consulted</strong>; this tutorial is not a summary of that book. <a href="https://www.dedao.cn/ebook/detail?id=donM9vjLM8m6d5YQ7lvJGVz2Xgaqb3pB480nBRyejENkP1KZo9rD4OApxpxkY7Ke" rel="noopener noreferrer" target="_blank">Dedao e-book table of contents</a>, <a href="https://detail.youzan.com/show/goods?alias=3f2qrgpf0m0jly7&amp;from_source=gbox_seo" rel="noopener noreferrer" target="_blank">Publisher's third-edition information</a></p>
-<h2>Glossary</h2>
+<p>The public table of contents of the third edition of “Computational Advertising: Market and Technology of Internet Commercial Monetization” (in Chinese) was used only to check that this reader’s product scope does not omit major topics such as guaranteed contracts, search, feeds and systems. Only public metadata and the table of contents were consulted; <strong>the paid full text was not read</strong>, and this reader is not a summary of that book. <a href="https://www.dedao.cn/ebook/detail?id=donM9vjLM8m6d5YQ7lvJGVz2Xgaqb3pB480nBRyejENkP1KZo9rD4OApxpxkY7Ke" rel="noopener noreferrer" target="_blank">Dedao e-book table of contents</a>, <a href="https://detail.youzan.com/show/goods?alias=3f2qrgpf0m0jly7&amp;from_source=gbox_seo" rel="noopener noreferrer" target="_blank">publisher’s third-edition listing</a></p>
+<h2 id="glossary">Glossary</h2>
+<p>This is the reader’s canonical glossary, in alphabetical order. Definitions give the sense used in this reader; individual contracts and platforms may define a term differently, and the contract wins.</p>
 <div class="ar-table-wrap"><table>
 <thead>
 <tr>
 <th>Term</th>
-<th>Meaning as used in this text</th>
+<th>Definition</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td data-label="Term">RTB</td>
-<td data-label="Meaning as used in this text">Real-Time Bidding, real-time bidding on an individual ad opportunity</td>
-</tr>
-<tr>
-<td data-label="Term">DSP and SSP</td>
-<td data-label="Meaning as used in this text">Platform functions serving the demand/buy side and the publisher/supply side, respectively</td>
-</tr>
-<tr>
-<td data-label="Term">CPM and eCPM</td>
-<td data-label="Meaning as used in this text">Price or cost per thousand impressions, versus revenue or value converted to a per-thousand-impression basis</td>
-</tr>
-<tr>
-<td data-label="Term">CPC CPI CPA</td>
-<td data-label="Meaning as used in this text">Unit price billed per click, install, or agreed action; can also be used as an average cost metric, depending on context</td>
-</tr>
-<tr>
-<td data-label="Term">CTR and CVR</td>
-<td data-label="Meaning as used in this text">Click-through rate and conversion rate; CVR must specify its denominator and conditions</td>
-</tr>
-<tr>
-<td data-label="Term">tCPA and tROAS</td>
-<td data-label="Meaning as used in this text">Target average cost per action and target return on ad spend; not billing contracts that take effect automatically</td>
-</tr>
-<tr>
-<td data-label="Term">ROAS and iROAS</td>
-<td data-label="Meaning as used in this text">Return on ad spend under an agreed revenue definition, versus return on ad spend from incremental revenue</td>
-</tr>
-<tr>
-<td data-label="Term">LTV</td>
-<td data-label="Meaning as used in this text">Customer value over a specified period; must specify revenue, contribution profit, or other definition</td>
-</tr>
-<tr>
-<td data-label="Term">MMP and mediation</td>
-<td data-label="Meaning as used in this text">Mobile measurement partner, versus aggregation and scheduling of multiple ad demand sources</td>
-</tr>
-<tr>
-<td data-label="Term">pacing</td>
-<td data-label="Meaning as used in this text">Control of budget spend pacing, working together with hard-budget admission</td>
-</tr>
-<tr>
-<td data-label="Term">attribution and incrementality</td>
-<td data-label="Meaning as used in this text">Allocating conversion credit by rules, versus the change caused by an advertising intervention</td>
-</tr>
-<tr>
-<td data-label="Term">ITT and IPS</td>
-<td data-label="Meaning as used in this text">Treatment effect analyzed by random assignment, versus the inverse propensity scoring method</td>
-</tr>
+<tr><td data-label="Term">A/B test</td><td data-label="Definition">A randomized experiment that assigns users (or requests) to treatment or control so that the difference in outcomes estimates a causal effect.</td></tr>
+<tr><td data-label="Term">Ad exchange</td><td data-label="Definition">A marketplace that receives bid requests from sellers, runs the auction among buyers and sets the clearing price.</td></tr>
+<tr><td data-label="Term">Ad group</td><td data-label="Definition">The level below a campaign that carries finer targeting, bids or creative combinations; the hierarchy differs across platforms.</td></tr>
+<tr><td data-label="Term">Ad load</td><td data-label="Definition">How many ads are shown per session or per unit of content; raising it trades user retention for short-term revenue.</td></tr>
+<tr><td data-label="Term">Ad network</td><td data-label="Definition">An intermediary that aggregates publishers’ inventory and sells it to advertisers, often buying in one pricing unit (e.g. CPM) and selling in another (e.g. CPA) and keeping the spread.</td></tr>
+<tr><td data-label="Term">Ad opportunity</td><td data-label="Definition">One chance to show one ad to one user in one slot at one moment; also called an impression opportunity.</td></tr>
+<tr><td data-label="Term">Ad request</td><td data-label="Definition">An app’s or page’s request for an ad to fill one slot; mediation or an SSP may fan one ad request out into many bid requests.</td></tr>
+<tr><td data-label="Term">Ad server</td><td data-label="Definition">The system that selects which ad to show for a request, delivers it and logs the result.</td></tr>
+<tr><td data-label="Term">AdAttributionKit</td><td data-label="Definition">Apple’s privacy-preserving attribution framework (iOS 17.4 and later), successor to SKAdNetwork; it reports conversions in delayed, crowd-anonymized postbacks without user-level identifiers.</td></tr>
+<tr><td data-label="Term">ads.txt / app-ads.txt</td><td data-label="Definition">A file the publisher hosts on its own domain listing the ad systems authorized to sell its inventory (app-ads.txt is the app variant).</td></tr>
+<tr><td data-label="Term">Advertiser</td><td data-label="Definition">The buyer: the business that pays for impressions, clicks or actions in order to reach users.</td></tr>
+<tr><td data-label="Term">ATT</td><td data-label="Definition">App Tracking Transparency: Apple’s iOS permission prompt, required before an app tracks a user across other companies’ apps and websites or reads the IDFA.</td></tr>
+<tr><td data-label="Term">Attribution</td><td data-label="Definition">Rule-based assignment of credit for a conversion to earlier ad interactions (commonly last-touch); it is an accounting rule, not a causal estimate.</td></tr>
+<tr><td data-label="Term">Attribution window</td><td data-label="Definition">The maximum delay between an ad interaction and a conversion for the conversion to be credited; click-through and view-through windows are set separately. Also called a lookback window.</td></tr>
+<tr><td data-label="Term">Axon</td><td data-label="Definition">AppLovin’s ad prediction and bidding engine.</td></tr>
+<tr><td data-label="Term">Bid</td><td data-label="Definition">The price a buyer offers for one opportunity; most interfaces quote it in CPM.</td></tr>
+<tr><td data-label="Term">Bid request</td><td data-label="Definition">The message, usually in OpenRTB format, by which a seller invites buyers to bid on one ad opportunity before a response deadline.</td></tr>
+<tr><td data-label="Term">Bid shading</td><td data-label="Definition">Bidding below one’s value in a first-price auction, trading win probability for a lower payment; at an interior optimum <x-tex>b=v-F(b)/f(b)</x-tex>.</td></tr>
+<tr><td data-label="Term">Billable event</td><td data-label="Definition">The event that triggers payment under a given contract: a win, a rendered impression, a click, an install or a qualifying action.</td></tr>
+<tr><td data-label="Term">burl</td><td data-label="Definition">OpenRTB billing notice URL: the exchange calls it when the impression becomes billable under the exchange’s policy.</td></tr>
+<tr><td data-label="Term">Calibration</td><td data-label="Definition">The property that predicted probabilities match observed frequencies (among requests with pCTR 2%, about 2% are clicked); bidding needs it because bids multiply value by probability.</td></tr>
+<tr><td data-label="Term">Campaign</td><td data-label="Definition">An advertiser’s unit of budget, objective, schedule and targeting.</td></tr>
+<tr><td data-label="Term">Censoring (winning prices)</td><td data-label="Definition">Partial observation of the competitive threshold: on a win in a second-price auction it is observed, on a loss we know only that it exceeded our bid, so regression on wins alone is biased.</td></tr>
+<tr><td data-label="Term">Clearing price</td><td data-label="Definition">The price the auction winner actually pays.</td></tr>
+<tr><td data-label="Term">Competitive threshold</td><td data-label="Definition">The highest competing bid for an opportunity (or the floor, if higher): the bid needed to win, written <x-tex>Z</x-tex>. The RTB monograph calls it the market price.</td></tr>
+<tr><td data-label="Term">Contribution</td><td data-label="Definition">In this reader, pre-advertising contribution per order: sales revenue minus cost of goods, fulfillment and other variable non-advertising costs.</td></tr>
+<tr><td data-label="Term">Conversion</td><td data-label="Definition">The advertiser’s target action after an ad, such as an install, purchase or registration.</td></tr>
+<tr><td data-label="Term">CPA</td><td data-label="Definition">Cost per action: the price paid per agreed conversion; as a metric, spend divided by conversions.</td></tr>
+<tr><td data-label="Term">CPC</td><td data-label="Definition">Cost per click: the price paid per click; as a metric, spend divided by clicks.</td></tr>
+<tr><td data-label="Term">CPI</td><td data-label="Definition">Cost per install: the price paid per attributed app install.</td></tr>
+<tr><td data-label="Term">CPM</td><td data-label="Definition">Cost per mille: the price per 1,000 impressions. A $6 CPM bid is $0.006 for one impression; auctions still sell one impression at a time.</td></tr>
+<tr><td data-label="Term">CTR / pCTR</td><td data-label="Definition">Click-through rate: clicks divided by impressions. pCTR is a model’s predicted probability that one impression is clicked.</td></tr>
+<tr><td data-label="Term">CVR / pCVR</td><td data-label="Definition">Conversion rate; the denominator (per click, per impression or per install) must be stated. pCVR is the model’s predicted value.</td></tr>
+<tr><td data-label="Term">Deal types</td><td data-label="Definition">Direct deal (negotiated by hand, fixed price and volume); programmatic guaranteed (fixed price, reserved volume, automated execution); preferred deal (fixed price, first look, no volume commitment); private auction (invitation-only); open auction (any qualified buyer).</td></tr>
+<tr><td data-label="Term">Delayed feedback</td><td data-label="Definition">Conversions arriving hours to days after the impression, so recent training examples carry incomplete labels: a negative may still convert.</td></tr>
+<tr><td data-label="Term">Demand source</td><td data-label="Definition">Any buyer that can fill an ad request: an ad network, a DSP or a direct campaign.</td></tr>
+<tr><td data-label="Term">DSP</td><td data-label="Definition">Demand-side platform: software that bids on impressions across exchanges on behalf of advertisers.</td></tr>
+<tr><td data-label="Term">eCPM</td><td data-label="Definition">Effective CPM: revenue or value per 1,000 impressions, whatever the pricing unit (e.g. CPC × CTR × 1,000); it puts bids priced in different units on one scale.</td></tr>
+<tr><td data-label="Term">Fill rate</td><td data-label="Definition">The share of ad requests that receive an ad.</td></tr>
+<tr><td data-label="Term">First-price auction</td><td data-label="Definition">An auction in which the winner pays its own bid.</td></tr>
+<tr><td data-label="Term">Floor price</td><td data-label="Definition">The seller’s minimum acceptable price for an opportunity; bids below it lose. Also called a reserve price.</td></tr>
+<tr><td data-label="Term">Ghost ads</td><td data-label="Definition">An experiment design that logs, for control users, the impressions the campaign would have won, so the effect on users who would actually be exposed can be estimated without placebo ads.</td></tr>
+<tr><td data-label="Term">Gross spread</td><td data-label="Definition">A term defined in this reader: an ad network’s collections from advertisers minus its media procurement cost.</td></tr>
+<tr><td data-label="Term">Gross vs net revenue</td><td data-label="Definition">Revenue recognition: a platform that controls the service before it reaches the customer (a principal under IFRS 15 and ASC 606) books the full advertiser spend as revenue (gross); an agent books only its fee (net).</td></tr>
+<tr><td data-label="Term">GSP</td><td data-label="Definition">Generalized second-price auction for several ranked slots, as in search ads: each winner pays roughly the minimum bid needed to keep its position. Bidding one’s value is not an equilibrium in general.</td></tr>
+<tr><td data-label="Term">Guaranteed delivery</td><td data-label="Definition">A contract that commits the seller to deliver a fixed volume of qualifying impressions, with a remedy for shortfall.</td></tr>
+<tr><td data-label="Term">Holdout</td><td data-label="Definition">A randomly selected group withheld from ads (or from a campaign or feature) to serve as the control when measuring incrementality.</td></tr>
+<tr><td data-label="Term">IAB</td><td data-label="Definition">Interactive Advertising Bureau, the industry body whose Tech Lab publishes OpenRTB, ads.txt and sellers.json.</td></tr>
+<tr><td data-label="Term">IDFA</td><td data-label="Definition">Identifier for Advertisers: the per-device iOS advertising identifier, readable only after ATT consent.</td></tr>
+<tr><td data-label="Term">Impression</td><td data-label="Definition">One rendered display of an ad. A “successful impression” here means the display event the contract counts actually completed; a won auction can still fail to render.</td></tr>
+<tr><td data-label="Term">Incrementality</td><td data-label="Definition">The change in an outcome caused by showing ads, measured against a randomized counterfactual; also called lift. Contrast with attribution.</td></tr>
+<tr><td data-label="Term">Interstitial</td><td data-label="Definition">A full-screen ad shown at a natural break, such as between game levels.</td></tr>
+<tr><td data-label="Term">IPS</td><td data-label="Definition">Inverse propensity scoring: an off-policy estimator that reweights each logged reward by <x-tex>\pi(a\mid x)/\mu(a\mid x)</x-tex>, the ratio of the new policy’s to the logging policy’s action probability.</td></tr>
+<tr><td data-label="Term">iROAS</td><td data-label="Definition">Incremental ROAS: revenue caused by the ads (treatment minus control) divided by ad spend.</td></tr>
+<tr><td data-label="Term">ITT</td><td data-label="Definition">Intent-to-treat effect: the average effect of being assigned to treatment, whether or not the user was actually exposed.</td></tr>
+<tr><td data-label="Term">LTV</td><td data-label="Definition">Lifetime value: the value a user generates over a stated horizon. State whether it is revenue or contribution, the horizon, the discounting and whether acquisition cost is already subtracted.</td></tr>
+<tr><td data-label="Term">lurl</td><td data-label="Definition">OpenRTB loss notice URL: the exchange calls it when the bid loses, optionally with a loss-reason code.</td></tr>
+<tr><td data-label="Term">MAX</td><td data-label="Definition">AppLovin’s mediation platform for app publishers.</td></tr>
+<tr><td data-label="Term">Mediation</td><td data-label="Definition">Software in a publisher’s app that decides which of several demand sources fills each ad request, by a bidding auction, a waterfall or both.</td></tr>
+<tr><td data-label="Term">MMP</td><td data-label="Definition">Mobile measurement partner (e.g. Adjust, AppsFlyer): a third party whose SDK records installs and in-app events and attributes them to ad networks.</td></tr>
+<tr><td data-label="Term">nurl</td><td data-label="Definition">OpenRTB win notice URL: the exchange calls it when the bid wins. On its own it does not mean the ad rendered or is billable.</td></tr>
+<tr><td data-label="Term">OpenRTB</td><td data-label="Definition">The IAB Tech Lab protocol for bid requests, bid responses and notices; this reader cites version 2.6.</td></tr>
+<tr><td data-label="Term">Pacing</td><td data-label="Definition">Online control of the spend rate over the budget period, e.g. by adjusting a bid multiplier toward a target spend trajectory; it works alongside, and does not replace, a hard budget cap.</td></tr>
+<tr><td data-label="Term">Postback</td><td data-label="Definition">A server-to-server message that reports a conversion, and possibly its value, to the ad network or MMP.</td></tr>
+<tr><td data-label="Term">Programmatic</td><td data-label="Definition">Buying and selling ad opportunities through automated systems, one opportunity at a time.</td></tr>
+<tr><td data-label="Term">PSA</td><td data-label="Definition">Public-service ad: a placebo ad shown to control users in older experiment designs; biased when an optimizer chooses who sees ads.</td></tr>
+<tr><td data-label="Term">Publisher</td><td data-label="Definition">The owner of the app or website whose ad slots are sold.</td></tr>
+<tr><td data-label="Term">Retrieval and ranking</td><td data-label="Definition">The stages of ad selection: retrieval picks a small candidate set worth scoring; ranking then estimates response probabilities and value for each candidate.</td></tr>
+<tr><td data-label="Term">Rewarded video</td><td data-label="Definition">A video ad the user opts into in exchange for an in-app reward.</td></tr>
+<tr><td data-label="Term">ROAS</td><td data-label="Definition">Return on ad spend: attributed revenue divided by ad spend. It ignores cost of goods and does not measure incrementality.</td></tr>
+<tr><td data-label="Term">RPM</td><td data-label="Definition">Revenue per 1,000 ad requests (also called request eCPM); if each filled request yields one impression, RPM = fill rate × impression eCPM.</td></tr>
+<tr><td data-label="Term">RTB</td><td data-label="Definition">Real-time bidding: an auction run separately for each ad opportunity while the user’s page or app waits, typically within about 100 ms.</td></tr>
+<tr><td data-label="Term">SDK</td><td data-label="Definition">Software development kit: a library embedded in an app, e.g. by an ad network, mediation platform or MMP.</td></tr>
+<tr><td data-label="Term">Second-price auction</td><td data-label="Definition">An auction in which the winner pays the highest competing bid, or the floor if higher. “Ideal second-price” in this reader ignores floors, bid increments and fees.</td></tr>
+<tr><td data-label="Term">sellers.json / SupplyChain object</td><td data-label="Definition">sellers.json is a file each SSP or exchange publishes listing the sellers it pays; the OpenRTB SupplyChain object lists every intermediary a bid request passed through.</td></tr>
+<tr><td data-label="Term">Settlement</td><td data-label="Definition">The final, contractually checked computation of who owes whom.</td></tr>
+<tr><td data-label="Term">SKAdNetwork</td><td data-label="Definition">Apple’s earlier privacy-preserving install-attribution API (SKAN), succeeded by AdAttributionKit.</td></tr>
+<tr><td data-label="Term">SSP</td><td data-label="Definition">Supply-side platform: software that sells a publisher’s inventory to many buyers and exchanges and manages floor prices.</td></tr>
+<tr><td data-label="Term">Statistical arbitrage</td><td data-label="Definition">Here, buying impressions on CPM while selling outcomes on CPA: profitable in expectation, but exposed to conversion, attribution and payment risk.</td></tr>
+<tr><td data-label="Term">Take rate</td><td data-label="Definition">The platform’s net revenue divided by the gross advertiser spend that flows through it.</td></tr>
+<tr><td data-label="Term">tCPA</td><td data-label="Definition">Target CPA: the average cost per action an advertiser asks the bidder to aim for; a bidding goal, not a billing price.</td></tr>
+<tr><td data-label="Term">TOT / CACE</td><td data-label="Definition">Treatment effect on the treated / complier average causal effect: the effect on users actually exposed; with one-sided noncompliance, the ITT divided by the exposure rate in the treatment group.</td></tr>
+<tr><td data-label="Term">tROAS</td><td data-label="Definition">Target ROAS: the return on ad spend an advertiser asks the bidder to aim for; a bidding goal, not a billing contract.</td></tr>
+<tr><td data-label="Term">View-through conversion</td><td data-label="Definition">A conversion credited to an impression that was not clicked; a click-through conversion follows a click.</td></tr>
+<tr><td data-label="Term">Waterfall</td><td data-label="Definition">A mediation method that calls demand sources one at a time in a configured priority order until one fills the request.</td></tr>
+<tr><td data-label="Term">Win rate</td><td data-label="Definition">The probability of winning at bid <x-tex>b</x-tex>, <x-tex>F(b)=P(Z\le b)</x-tex>; as a metric, wins divided by bids.</td></tr>
 </tbody>
 </table></div>
 <h2>Review record</h2>
-<p>On November 11, 2026, a separate Claude Opus 5.5 review was conducted on the Chinese edition, covering all eight chapters, formulas, tables, exercises, and calculator code. The first round found no arithmetic or derivation errors, but pointed out gaps such as the incremental ROAS labeling, the successful-impression condition, symbol scoping, and definition before use, and judged that revisions were needed. The editor revised accordingly, and also used the original text to correct the review's misunderstanding of <code>r</code>: in the original monograph's example it is the predicted click-through rate, not a monetary value.</p>
-<p>Source verification and mathematical re-checking were conducted separately: Claude reviewed the provided website content and code without opening external links; the editor checked the original literature, including the original book's click-through-rate definition and the conditional/unconditional payment formulas. Derivations were additionally checked with independent numerical integration, grid search over the budget-feasible region, and recomputation of the worked examples. The review also covered the reachability of definitions in the main text, without relying on the advanced sections that are collapsed by default.</p>
-<p id="ar-review-current-status">The English edition was reviewed separately on November 12, 2026. Corrections addressed translation at inline boundaries, the pacing multiplier, the derivative variable, Axon data qualifiers, chapter references, and billing units. The revised text passed the second review; minor spacing and unit labels were then clarified. Review reports and corrections are recorded in the repository. The review covers the supplied text and code under the stated assumptions, not external source facts, browser rendering, or real-market validity.</p>
+<p><strong>November 11, 2026 (Chinese edition).</strong> An independent Claude Opus 5.5 review covered all eight chapters, formulas, tables, exercises and calculator code. It found no arithmetic or derivation errors but flagged gaps: incremental-ROAS labelling, the successful-impression condition, symbol scope, and definitions used before they were given. The editor revised accordingly and, from the source monograph, corrected one misreading in the review: there <x-tex>r</x-tex> is the predicted click-through rate, not a monetary value. Derivations were also checked by numerical integration, grid search over the budget-feasible region, and recomputation of every worked example.</p>
+<p><strong>November 12, 2026 (English edition, first pass).</strong> Corrections to translation at inline boundaries, the pacing multiplier, the derivative variable, Axon data qualifiers, chapter references and billing units.</p>
+<p id="ar-review-current-status"><strong>November 12, 2026 (English edition, close-reading revision).</strong> Each chapter was re-derived and rewritten by a separate reviewer, then cross-checked by the editor.</p>
+<ul>
+<li><strong>Math.</strong> No numerical errors were found in the original worked examples. Fixed: the validity range of the corrected budget-bid coefficient (<x-tex>B/N\le L/6</x-tex>, not a condition on <x-tex>T</x-tex>); inconsistent rounding between text and calculator; one confidence interval stated two ways (chapters 4 and 7 now use the same binomial standard error). Added: KKT derivation of the calculator bid with its shadow prices, second-order and boundary checks, pacing as projected dual subgradient descent, the first- and second-price censored likelihoods, the sampling correction in odds form, and an uncertainty analysis showing that the chapter 4 experiment establishes a positive lift but not the sign of the profit.</li>
+<li><strong>Definitions.</strong> Every symbol, acronym and ad-domain term is now defined at or before first use in each chapter, or linked to where it is defined. Parameters that were defined only inside collapsed sections are restated where used. The <a href="#glossary">glossary</a> is the canonical reference.</li>
+<li><strong>Facts (chapter 6).</strong> Claims were spot-checked against AppLovin's 2025 10-K and its MAX and Axon documentation: net (agent) revenue recognition with dynamically set prices, the MAX fee on bidding-network revenue, win/loss notices sent to every bidder, and the apps-business sale. Every claim is labelled public fact, inference or unknown.</li>
+<li><strong>Notation and style.</strong> US dollars throughout; one symbol set across chapters 3, 7 and 8 (<x-tex>L</x-tex>, <x-tex>N</x-tex>, <x-tex>B</x-tex>, <x-tex>F</x-tex>); all mathematics typeset with KaTeX.</li>
+</ul>
+<p>The review covers the text and code under their stated assumptions. It does not establish that those assumptions hold in any real market. Source page and equation numbers for the RTB monograph were not re-verified in this pass.</p>
 </article>

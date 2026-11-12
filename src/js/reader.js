@@ -101,18 +101,21 @@
   const money = (x) => (x < -0.00001 ? '−$' : '$') + Math.abs(x).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const plain = (x, d = 2) => x.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
 
-  // Teaching model: Z ~ Uniform(0, L) per unit. First price pays b on a win; second price pays Z.
-  // Display-based billing ("render") charges only successful displays (probability rho per win).
+  // Teaching model (chapter 3, Extension B): Z ~ Uniform(0, L) in $ per billable event, i.i.d. across N opportunities.
+  // k = 1 (first price, pay b) or 2 (ideal second price, pay Z; E[Z | Z <= b] = b/2).
+  // alpha = probability a win is billed: rho for display-based ("render") billing, 1 for win-based billing.
+  // Expected cost C(b) = N*alpha*b^2/(k*L); spread M(b) = (N/L)(rho*v*b - alpha*b^2/k);
+  // b* = min{ k*rho*v/(2*alpha), sqrt(k*B*L/(N*alpha)), L }.
   function calculate(s) {
-    const N = 1000000, L = 0.02, v = 0.015, q = 0.0005, margin = 40;
+    const N = 1000000, L = 0.02, q = 0.0005, a = 30, g = 40, v = q * a;
     const alpha = s.billing === 'render' ? s.rho : 1;
-    const factor = s.auction === 'first' ? 1 : 2;
-    const unconstrained = Math.min(L, (s.auction === 'first' ? 0.5 : 1) * s.rho * v / alpha);
-    const budgetLimit = Math.sqrt(factor * s.budget * L / (N * alpha));
+    const k = s.auction === 'first' ? 1 : 2;
+    const unconstrained = Math.min(L, k * s.rho * v / (2 * alpha));
+    const budgetLimit = Math.sqrt(k * s.budget * L / (N * alpha));
     const b = Math.min(unconstrained, budgetLimit, L), win = b / L;
-    const cost = N * alpha * b * b / (factor * L);
-    const rendered = N * win * s.rho, conversions = rendered * q, receipts = conversions * 30;
-    const spread = receipts - cost, adprofit = rendered * (s.delta / 10000) * margin - receipts;
+    const cost = N * alpha * b * b / (k * L);
+    const rendered = N * win * s.rho, conversions = rendered * q, receipts = conversions * a;
+    const spread = receipts - cost, adprofit = rendered * (s.delta / 10000) * g - receipts;
     return { b, win, cost, rendered, conversions, receipts, spread, adprofit, binding: budgetLimit < unconstrained - 1e-10 };
   }
 
@@ -130,7 +133,7 @@
     $('ar-adprofit').classList.toggle('ar-negative', r.adprofit < -0.00001);
     $('ar-adprofit').classList.toggle('ar-positive', r.adprofit > 0.00001);
     $('ar-lab-status').textContent = `Win rate ${plain(r.win * 100)}% · ${plain(r.conversions)} attributed conversions · `
-      + (r.binding ? 'budget constraint binding' : 'profit-maximizing bid reached before the budget cap; budget left unspent');
+      + (r.binding ? 'budget binding: bid capped by the budget' : 'budget slack: spread-maximizing bid reached; budget left unspent');
   }
 
   for (const [id, key] of [['ar-budget', 'budget'], ['ar-rho', 'rho'], ['ar-delta', 'delta']]) {

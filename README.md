@@ -1,34 +1,48 @@
 # Computational Advertising: A One-Day Reader
 
-An English, interactive guide to computational advertising products, algorithms, measurement, and systems, with worked examples tailored to evaluating advertising platforms and their economics.
+An interactive guide to computational advertising: ad products and cash flow, prediction, auctions, bidding and budgets, attribution and experiments, real-time systems, and an AppLovin/Axon case study. It is written for readers fluent in CS, probability and trading who are new to ad tech.
 
 Live site: https://computational-advertising-reader.vercel.app
 
 ## Contents
 
-1. A one-day learning route and common example
+1. A one-day learning roadmap and the running example
 2. Products, contracts, and cash flow
-3. Prediction, auctions, bidding, and budgets
+3. Prediction, auctions, bidding, and budgets (with a threshold explorer and profit calculator)
 4. Attribution, causal experiments, and data
 5. Real-time serving, billing, and budget systems
 6. AppLovin and Axon case study
-7. Exercises with worked answers
-8. Primary sources, errata, and review scope
+7. Ten exercises with worked answers
+8. Sources, errata, glossary, and review record
 
-## Local preview
+## Layout
 
-Run `python3 -m http.server 8000 --directory dist`, then visit http://localhost:8000.
+```
+src/template.html        page shell (header, hero, sidebar, pagination)
+src/chapters/NN-*.html   one <article> per chapter
+src/css/reader.css       theme (light/dark tokens, layout, components)
+src/js/reader.js         chapter routing, outline, theme toggle, profit calculator
+src/js/threshold.js      bid/win-probability explorer (chapter 3)
+build.mjs                assembles dist/index.html, renders TeX with KaTeX, inlines fonts
+dist/index.html          the deployed, self-contained page (committed)
+```
 
-The site is a standalone HTML export. Its reader runs in a sandboxed iframe. Preserve the iframe sandbox and both Content Security Policies when editing. The escaped `data-srcdoc` payload contains the reader and calculator; the outer script loads it into the iframe.
+Authoring conventions in chapter files:
 
-## Deployment
+- Inline math `<x-tex>F(b)=b/L</x-tex>`; display math `<x-tex display>…</x-tex>`. Write HTML-escaped TeX (`&lt;`, `&amp;`). The build fails on invalid TeX.
+- `<!-- script: threshold.js -->` inlines `src/js/threshold.js` at that position.
+- `<h2>` headings get stable ids (`c3-…`) for deep links and the "On this page" outline. Link to a chapter with `#chapter-N`, or to any element id with `#id`.
+- In tables, every `<td data-label>` must equal its column header (used for the phone layout).
 
-Vercel serves `dist` directly, with no build step. The production branch is `main`.
+## Build, test, preview
 
-All examples are synthetic unless explicitly attributed. Mathematical review covers the assumptions stated in the text; it does not validate their applicability to a real advertising market.
+```
+npm install
+npm run build     # writes dist/index.html
+npm test          # dist up to date + static site checks + threshold explorer
+python3 -m http.server 8000 --directory dist
+```
 
-## Runtime regression check
+The page is a single self-contained HTML file with no external requests (KaTeX fonts are inlined). Vercel serves `dist/` directly with no build step, so commit `dist/index.html` after building. The production branch is `main`.
 
-Run `node tests/standalone-host.test.cjs`. Standalone hosting uses a viewport-height sandboxed iframe with native scrolling, including chapters taller than 10,000 pixels. The reader has no external script dependencies.
-
-The competitive-threshold subsection includes a local bid explorer and a derivation of the uniform win probability. Run `node tests/threshold-explorer.test.cjs` to check it.
+All examples are synthetic unless explicitly attributed. Mathematical review covers the stated assumptions; it does not validate their applicability to any real advertising market.
