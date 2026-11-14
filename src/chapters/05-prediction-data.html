@@ -42,6 +42,29 @@
 </section>
 <p>Take 10 ads with the same true value <x-tex>V</x-tex>. Each prediction is <x-tex>V(1+0.2\,\varepsilon_i)</x-tex> with independent standard normal <x-tex>\varepsilon_i</x-tex>: unbiased, with 20% noise. The winner's prediction is <x-tex>V(1+0.2\,M)</x-tex>, where <x-tex>M=\max_i\varepsilon_i</x-tex>. Since <x-tex>P(M\le m)=\Phi(m)^{10}</x-tex>, with <x-tex>\Phi</x-tex> the standard normal CDF and <x-tex>\varphi</x-tex> its density, <x-tex>M</x-tex> has density <x-tex>10\,\varphi(m)\,\Phi(m)^9</x-tex>, and</p>
 <div class="ar-math"><x-tex display>\mathbb{E}[M]=\int_{-\infty}^{\infty} m\cdot 10\,\varphi(m)\,\Phi(m)^{9}\,dm\approx1.5388 .</x-tex></div>
+<details class="ar-exercise" id="ar-expected-maximum-calculation"><summary>How to calculate 1.5388 with numerical integration</summary><div class="ar-answer">
+<p><strong>Start with the probability that the maximum is below a cutoff.</strong> For one standard normal draw, <x-tex>\Phi(m)</x-tex> is the probability of drawing a value at or below <x-tex>m</x-tex>. All ten independent draws must meet the cutoff for their maximum to meet it. For example, <x-tex>\Phi(0)=1/2</x-tex>, so the probability that all ten draws are at or below zero is <x-tex>(1/2)^{10}=1/1024</x-tex>.</p>
+<p><strong>Turn that cumulative probability into a weighted average.</strong> Differentiating <x-tex>\Phi(m)^{10}</x-tex> gives the density <x-tex>10\Phi(m)^9\varphi(m)</x-tex>. A narrow interval of width <x-tex>\Delta m</x-tex> near <x-tex>m</x-tex> contains approximately this density times <x-tex>\Delta m</x-tex> in probability. Multiply by <x-tex>m</x-tex> to get that interval’s contribution to the mean. The integrand is therefore <x-tex>g(m)=10m\varphi(m)\Phi(m)^9</x-tex>. Negative values contribute negatively.</p>
+<p><strong>Evaluate the integral on a grid.</strong> Use the range −8 to +8 and split it into 1,600 equal intervals, so the spacing <x-tex>h=16/1600=0.01</x-tex>. At each grid point <x-tex>m_j=-8+jh</x-tex>, evaluate <x-tex>g(m_j)</x-tex>. Composite Simpson’s rule fits a quadratic over each pair of intervals and integrates it. In the combined sum, the endpoint weights are 1 and the interior weights alternate 4 and 2. Multiply the weighted sum by <x-tex>h/3</x-tex>.</p>
+<p>The omitted tails contribute at most <x-tex>20\varphi(8)\approx1.01\times10^{-13}</x-tex> in absolute value. This follows from <x-tex>|g(m)|\le10|m|\varphi(m)</x-tex> and <x-tex>\int_8^\infty m\varphi(m)\,dm=\varphi(8)</x-tex>. Halving the grid spacing to 0.005 gives the same result to ten decimal places.</p>
+<p>This Python code reproduces the calculation using the standard library. <code>erfc</code> is the complementary error function. Here it evaluates the normal cumulative probability as <x-tex>\Phi(m)=\tfrac12\operatorname{erfc}(-m/\sqrt2)</x-tex>.</p>
+<pre><code>from math import erfc, exp, fsum, pi, sqrt
+
+def integrand(m):
+    phi = exp(-m * m / 2) / sqrt(2 * pi)
+    Phi = erfc(-m / sqrt(2)) / 2
+    return 10 * m * phi * Phi**9
+
+def expected_maximum(intervals):
+    h = 16 / intervals
+    odd = fsum(integrand(-8 + j * h) for j in range(1, intervals, 2))
+    even = fsum(integrand(-8 + j * h) for j in range(2, intervals, 2))
+    return h / 3 * (integrand(-8) + 4 * odd + 2 * even + integrand(8))
+
+print(f"{expected_maximum(1600):.10f}")  # 1.5387527308
+print(f"{expected_maximum(3200):.10f}")  # 1.5387527308</code></pre>
+<p>Rounding the expected maximum <strong>1.5387527308</strong> to four decimal places gives <strong>1.5388</strong>. This maximum is measured in standard deviations of the prediction error. Since one standard deviation is 20% of the true value in this example, the average winning estimate is about <strong>30.775% above true value</strong>.</p>
+</div></details>
 <p>Numerical integration gives 1.5388. The winning prediction therefore averages <x-tex>V(1+0.2\times1.5388)\approx1.308\,V</x-tex>, about 31% above true value in this example. If the winner pays its own bid and that bid equals the target cost per conversion times the predicted conversion probability, a $30 target implies about <x-tex>\$30\times1.30776=\$39.23</x-tex> in total spend per conversion over many auctions. This calculation assumes the same true conversion probability for every ad and bids that use the prediction directly.</p>
 <p><strong>What offline calibration can detect.</strong> A check that compares only the overall average prediction with the overall average outcome can miss the error. In the two-ad example, predictions average $10 CPM before selection, while the $8 and $12 score groups each have a true value of $10 CPM. A calibration check by score would reveal both errors if the offline data had representative outcomes for both groups. Logs collected under an earlier bidding policy may cover a different set of impressions. To measure calibration on the traffic the current policy buys, compare its predictions with observed conversion rates after the conversion window closes, grouped by score and relevant traffic segments. To reduce the effect, shrink noisy predictions toward a well-estimated baseline and test the resulting bids.</p>
 <x-chart>{"title": "Winner's average overprediction vs number of competing ads",
