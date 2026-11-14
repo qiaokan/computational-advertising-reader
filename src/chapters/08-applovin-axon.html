@@ -4,6 +4,7 @@
 <li>Say what Axon, AppLovin Ads and MAX each are, and trace one MAX auction from ad request to billing, including what the publisher, the winning bidder and AppLovin each earn.</li>
 <li>Separate what every MAX bidder learns from what only the auctioneer sees, and both from what AppLovin says Axon is allowed to train on.</li>
 <li>Explain how an advertiser's two settings, a ROAS goal and a daily budget, become one bid per impression, and read which of the two is binding.</li>
+<li>Explain how Axon can predict a user's day-7 revenue before the install, from revenue postbacks and pre-install signals, and why that is harder than predicting clicks.</li>
 <li>Explain how a prediction advantage turns into retained profit, and why a sharper model can raise profit with no change in win rate.</li>
 <li>Name the evidence that would distinguish a real moat from metrics that merely look good, and read AppLovin's net revenue for what it can and cannot tell you.</li>
 </ul></aside>
@@ -108,6 +109,28 @@
 </ol>
 <p class="ar-check">Check: in the worked example <x-tex>1/R=2.5</x-tex>. A $5,000 budget allows a bid of $0.0158, so <x-tex>\kappa_B=0.0158/0.01=1.58</x-tex>; then <x-tex>\kappa=1.58</x-tex> and <x-tex>\lambda=0.4\times1.58=0.632</x-tex> ✓. Two caveats: the bid is exactly proportional to value only because competition is uniform, and real first-price bidders shade by the shape of the competing-bid distribution; in a second-price auction one multiplier is exactly optimal without that assumption (Aggarwal, Badanidiyuru and Mehta, 2019).</p>
 </div></details>
+<h2 id="ar-axon-revenue-prediction">Axon can predict revenue, not just clicks, because revenue labels come back to it</h2>
+<p><strong>A model can predict any outcome it receives labels for. Clicks are simply the label an ad network observes by itself; for app campaigns, installs and revenue come back too, because the advertiser's measurement partner sends them.</strong> The value <x-tex>v_i</x-tex> in the bid above is therefore a prediction like any other, only with rarer, later and noisier labels.</p>
+<p><strong>Public fact.</strong> A campaign in AppLovin's API names its measurement partner (the <code>tracking_method</code> field, for example Adjust or AppsFlyer). Such a partner (an MMP; <a href="#chapter-6">chapter 6</a>) sends the ad network a postback for each install it credits to that network and for the later in-app events the advertiser chooses to forward, typically including purchases with their value. <strong>Inference.</strong> If the advertiser's own app also shows ads through MAX, AppLovin sees the ad revenue each of its users generates directly.</p>
+<p>Each install then becomes one training example, labelled with the revenue its user generates in the 7 days after install. The label is final only a week later, which is the delayed-label problem of <a href="#chapter-5">chapter 5</a>. Because most users never pay and a few pay a lot, the value is usually modelled in two steps:</p>
+<div class="ar-math"><x-tex display>v_i=P(\text{install}\mid i)\times P(\text{pays within 7 days}\mid\text{install},\,i)\times\mathbb E[\text{amount}\mid\text{payer},\,i].</x-tex></div>
+<p>With a 0.5% install rate, 4% of installs paying within the week and $50 per payer, <x-tex>v=0.005\times0.04\times\$50=\$0.01</x-tex> per impression, the value used in the example above.</p>
+<p>At bid time no install has happened yet, so the model can use only what exists before the impression. AppLovin's published list of Axon's inputs (below) maps onto three kinds of signal:</p>
+<ul>
+<li><strong>Device and network:</strong> device model and price tier, operating system, country, carrier or connection type. Spending differs sharply between a new flagship phone and a budget Android.</li>
+<li><strong>Context:</strong> the app showing the ad, the placement (rewarded or interstitial) and the time of day.</li>
+<li><strong>Engagement history:</strong> where a device identifier is available, how the device responded to past ads, such as which apps it installed through AppLovin and what those installs later earned according to postbacks from other advertisers' campaigns. This lets one game's labels inform the value of a user to another game. Whether every postback may be pooled across advertisers is a question of contracts and permissions, taken up in the next section.</li>
+</ul>
+<p>Revenue is much harder to predict than clicks:</p>
+<div class="ar-table-wrap"><table>
+<thead><tr><th>Property</th><th>Click prediction</th><th>D7 revenue prediction</th></tr></thead>
+<tbody>
+<tr><td data-label="Property">How often the label is positive</td><td data-label="Click prediction">About 1 click per 100 impressions</td><td data-label="D7 revenue prediction">About 1 payer per 5,000 impressions (0.5% × 4%)</td></tr>
+<tr><td data-label="Property">Label delay</td><td data-label="Click prediction">Seconds</td><td data-label="D7 revenue prediction">7 days</td></tr>
+<tr><td data-label="Property">Label shape</td><td data-label="Click prediction">Yes or no</td><td data-label="D7 revenue prediction">Mostly zero with a heavy tail; one large spender can be most of a cohort's revenue</td></tr>
+<tr><td data-label="Property">Needs a device identifier</td><td data-label="Click prediction">No</td><td data-label="D7 revenue prediction">Largely, to link a device's history; on iOS, Apple's ATT prompt removes it for most users</td></tr>
+</tbody></table></div>
+<p>Three consequences follow. Noisier estimates make the <a href="#ar-winners-curse">winner's curse</a> stronger, because the auction keeps the users whose value was overestimated most. On iOS, without the identifier, the network gets Apple's coarse, delayed SKAN postbacks instead of per-user revenue (<a href="#chapter-6">chapter 6</a>), so predictions lean on device and context and become blurrier. And scale matters most here: a network with more installs and more revenue postbacks has more payers from which to learn the tail, which is the plausible core of a prediction advantage.</p>
 <h2>Seeing data is not the same as being allowed to train on it</h2>
 <p>Keep three sets apart: what every bidder learns, what only the auctioneer sees, and what its own bidder may train on.</p>
 <p><strong>Public fact (company statement).</strong> AppLovin's Axon page lists the inputs it says Axon uses: device and network information; engagement data about apps, ads and other digital properties, collected by AppLovin or shared by partners; advertisers' own user data, if they choose to share it; and win/loss notices from MAX, which the page says all bidders receive. The page says the models do not ingest other bidders' bid information or user data. Separately, the 10-K describes a flywheel: as more advertisers use its solutions, AppLovin gains "access to more data regarding users and user engagement", and as distribution grows it gains "better insights for Axon AI". <a href="https://legal.applovin.com/about-applovins-axon-ai/" rel="noopener noreferrer" target="_blank">Axon data description</a>, <a href="https://www.sec.gov/Archives/edgar/data/1751008/000175100826000010/app-20251231.htm" rel="noopener noreferrer" target="_blank">AppLovin 2025 10-K, Business section</a></p>
