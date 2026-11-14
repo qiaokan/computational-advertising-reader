@@ -12,7 +12,7 @@
 <li>The <strong>product contract</strong> decides who pays whom for which event, and so who bears which risk (<a href="#chapter-3">Products and cash flow</a>).</li>
 <li><strong>Auctions and budgets</strong> decide which opportunities are bought, and at what price (<a href="#chapter-4">Auctions and bidding</a>).</li>
 <li><strong>Systems</strong> execute each decision before its deadline and record it exactly once (<a href="#chapter-7">Real-time systems</a>).</li>
-<li><strong>Experiments</strong> are the only layer that tests whether the advertising caused sales that would not otherwise have happened (<a href="#chapter-6">Measurement</a>).</li>
+<li><strong>Experiments</strong> can test whether the advertising caused sales that would not otherwise have happened (<a href="#chapter-6">Measurement</a>).</li>
 </ul>
 <p>Profit depends on all five; a gain in one layer can be undone by another. <a href="#chapter-2">The landscape</a> places them in the industry: ad formats, who sells to whom, and where the money is. The case study, <a href="#chapter-8">AppLovin and Axon</a>, uses three product names: <strong>Axon</strong> is AppLovin's prediction and bidding engine; <strong>MAX</strong> is its mediation product, which runs an auction among ad networks for each ad slot in a publisher's app; <strong>Adjust</strong> is a mobile measurement partner (MMP) that AppLovin owns; MMPs are normally independent third parties that record app installs and in-app events and credit them to ads.</p>
 <h2>Two reading paths</h2>
@@ -94,7 +94,7 @@
 <p class="ar-check">Check: count first, then price. 10 clicks × 0.05 = 0.5 conversions; 0.5 × $30 = $15 billed and 0.5 × $40 = $20 credited, matching steps 2–3. The ratio of contribution from attributed orders to ad spend is <x-tex>g/a=40/30=4/3</x-tex>, and $20/$15 = 4/3.</p>
 </div>
 </section>
-<p><strong>The causal lift <x-tex>\Delta q</x-tex> is assumed here because no routine report reveals it.</strong> It is the difference in purchase probability between showing the ad and not showing it, for the same opportunity. Attribution credits every post-click order whether or not the ad caused it; estimating <x-tex>\Delta q</x-tex> takes a randomized experiment (<a href="#chapter-6">chapter 6</a>). Here <x-tex>\Delta q&lt;q</x-tex>, so attribution over-credits the ad. In general it can also miss orders the ad did cause (here, purchases without a click), so the gap <x-tex>q-\Delta q</x-tex> is a net figure.</p>
+<p><strong>The causal lift <x-tex>\Delta q</x-tex> is assumed here because no routine report reveals it.</strong> It is the difference in purchase probability between showing the ad and not showing it, for the same opportunity. Attribution credits every post-click order whether or not the ad caused it; estimating <x-tex>\Delta q</x-tex> takes a randomized experiment (<a href="#chapter-6">chapter 6</a>). Here <x-tex>\Delta q&lt;q</x-tex>, so the attributed count exceeds estimated incremental lift. The example assumes the same definition of a valid purchase for both measures and that attributed purchases meet the billing rules. In general it can also miss orders the ad did cause (here, purchases without a click), so the gap <x-tex>q-\Delta q</x-tex> is a net figure.</p>
 <section class="ar-worked">
 <header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>Ad spend, publisher payment, and advertiser profit</h4></header>
 <div class="ar-worked-body">
