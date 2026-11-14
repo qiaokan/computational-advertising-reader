@@ -31,10 +31,25 @@
 <p>A <strong>95% confidence interval</strong> is built by a procedure that would cover the fixed true effect in about 95 out of 100 repetitions, under the assumptions of the calculation. Each repetition produces its own estimate and interval. In this test, the interval runs from about 109 to 291 additional purchases per 100,000 assigned users. That describes uncertainty about the campaign’s average effect. A prediction for the observed purchase difference in a future test would require a separate calculation.</p>
 <ol>
 <li><strong>Compute the estimate.</strong> Equal group sizes let us subtract the purchase counts directly. The estimated lift is 1,200 − 1,000 = 200 purchases.</li>
-<li><strong>Estimate the noise.</strong> One user contributes either zero or one purchase, with variance <x-tex>p(1-p)</x-tex> at purchase probability <x-tex>p</x-tex>. Multiply by the number of users to get each group’s count variance, using the observed purchase rates of 1.2% and 1.0%. Both counts can fluctuate independently, so their variances add even though we subtract the counts. Take the square root to get a standard error of <x-tex>\sqrt{1{,}185.6+990}\approx46.64</x-tex> purchases.</li>
+<li><strong>Estimate how much each count can fluctuate.</strong> One user contributes either zero or one purchase. At purchase probability <x-tex>p</x-tex>, the variance of that outcome is <x-tex>p(1-p)</x-tex>. Each group’s count adds 100,000 independent user outcomes, so its variance is 100,000 times the variance for one user. Use the observed purchase rate to estimate <x-tex>p</x-tex> in each group:
+<x-tex display>\begin{aligned}
+\text{Treatment:}\quad 100{,}000(0.012)(1-0.012)&amp;=1{,}185.6,\\
+\text{Control:}\quad 100{,}000(0.010)(1-0.010)&amp;=990.
+\end{aligned}</x-tex>
+</li>
+<li><strong>Add the variances of the two counts.</strong> If the treatment count comes in 30 higher, estimated lift goes up by 30. If the control count comes in 30 higher, estimated lift goes down by 30. Both fluctuations contribute uncertainty. Let <x-tex>X_T</x-tex> and <x-tex>X_C</x-tex> be the treatment and control counts. Variance squares the size of a fluctuation, so the control count’s coefficient contributes <x-tex>(-1)^2=1</x-tex>. The covariance term is zero because the counts are independent in this model:
+<x-tex display>\operatorname{Var}(X_T-X_C)=\operatorname{Var}(X_T)+\operatorname{Var}(X_C).</x-tex>
+The estimated variance is <x-tex>1{,}185.6+990=2{,}175.6</x-tex> purchases squared. Taking the square root puts the standard error back in purchases: <x-tex>\sqrt{2{,}175.6}\approx46.64</x-tex>.</li>
 <li><strong>Compute the margin of error.</strong> With large independent groups, the sampling error is approximately normal. The middle 95% of a standard normal lies between −1.96 and +1.96. Multiply <x-tex>1.96\times46.64\approx91.4</x-tex> purchases, then subtract and add that margin to 200 to get approximately [108.6, 291.4].</li>
 </ol>
-<p><strong>Compare the interval with the decision threshold.</strong> Zero purchases is the threshold for a positive sales effect. Break-even is 250 purchases because each extra order contributes $20 before ads and the test spent $5,000. The interval clears zero and spans 250. The data support a positive sales effect, while both a loss and a profit remain compatible with the test at this confidence level.</p>
+<p><strong>Use the interval to compare the estimate with a decision threshold.</strong> The margin of error gives the distance from the point estimate to either endpoint in this calculation. The endpoints let you compare the same experiment with two different business thresholds:</p>
+<div class="ar-table-wrap"><table>
+<thead><tr><th scope="col">Business question</th><th scope="col">Threshold</th><th scope="col">What the interval supports</th></tr></thead>
+<tbody>
+<tr><td data-label="Business question">Did the ads generate additional purchases?</td><td data-label="Threshold">0 purchases</td><td data-label="What the interval supports">The whole interval is above zero. The test supports a positive sales effect.</td></tr>
+<tr><td data-label="Business question">Did the ads pay for themselves?</td><td data-label="Threshold">$5,000 ÷ $20 = 250 purchases</td><td data-label="What the interval supports">The interval spans 250. Both a loss and a profit are compatible with the test at this confidence level.</td></tr>
+</tbody></table></div>
+<p>At the point estimate, 200 additional purchases contribute $4,000 before ads, so the campaign loses $1,000 after ad spend. Applying the same calculation to the unrounded interval endpoints gives a profit interval of about −$2,828 to +$828.</p>
 <section class="ar-worked">
   <header class="ar-worked-head"><span class="ar-worked-tag">Worked example</span><h4>Holdout experiment: from attributed ROAS to a decision</h4></header>
   <div class="ar-worked-body">
